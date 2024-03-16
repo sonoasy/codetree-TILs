@@ -8,18 +8,17 @@ using namespace std;
 
 typedef pair<int,int> ci; 
 
-//우하상좌 대각선 
+//우하상좌 대각선  ->좌상임 !!!
 
-int dr[8]={0,1,-1,0,-1,-1,1,1};
-int dc[8]={1,0,0,-1,-1,1,1,-1};
+int dr[8]={0,1,0,-1,-1,-1,1,1};
+int dc[8]={1,0,-1,0,-1,1,1,-1};
 
 vector<vector<int>>arr;
 vector<vector<int>>goturn;
 vector<vector<int>>damagedturn;
-//완전히 부서진 곳 -> arr<=0 
-deque<ci>des; 
 vector<vector<bool>>visited; 
-vector<vector<ci>>way;
+int xway[10][10];
+int yway[10][10]; 
 vector<ci>info;
 
 int n,m,k;
@@ -54,28 +53,7 @@ bool cmpGo(ci a,ci b){
    return arr[x1][y1]<arr[x2][y2];
    
 }
-/*
-bool cmpDest(ci a, ci b){
- //1. 공격력 가장 높음
- //2. 공격한지 가장 오래된
- //3. 행열 합 가장 작은 
- //4. 열 값 가장 작은 
-   int x1=a.first; int y1=a.second;
-   int x2=b.first; int y2=b.second;
-   
-   if(arr[x1][y1]==arr[x2][y2]){
-     if(damagedturn[x1][y1]==damagedturn[x2][y2]){
-       if((x1+y1)==(x2+y2)){
-         return y1<y2; 
-       }      
-       return (x1+y1)<(x2+y2);
-     }   
-     return damagedturn[x1][y1]<damagedturn[x2][y2]; //damagedturn 값이 커야 가장 최근에 공격받음  
-   }
-   return arr[x1][y1]>arr[x2][y2];
-    
-}
-*/
+
 //공격자 선정 
 void calGo(int a){
    
@@ -85,10 +63,7 @@ void calGo(int a){
    minc=info[0].second; 
    destr=info[info.size()-1].first;
    destc=info[info.size()-1].second;
-  // cout<<minr<<' '<<minc<<'\n';
- //  cout<<destr<<' '<<destc<<'\n';
-
-
+  
    //공격력 M+N 증가 
    arr[minr][minc]=arr[minr][minc]+(n+m);
    mingo=arr[minr][minc];
@@ -104,8 +79,7 @@ void bfs(int curr,int curc){
    //bfs로 visited 탐색하면서 탐색 
    //역추적에서 경로 작은거는 어떻게 알음? 
    queue<ci>q; 
-   way.assign(n,vector<ci>(m,{-1,-1}));
-
+ 
    visited[curr][curc]=true;   
    
    q.push({curr,curc}); 
@@ -131,7 +105,8 @@ void bfs(int curr,int curc){
         if(!visited[nr][nc] && arr[nr][nc]>0){
           
             visited[nr][nc]=true; //? 
-            way[nr][nc]={cr,cc};
+            xway[nr][nc]=cr;
+            yway[nr][nc]=cc; 
             q.push({nr,nc}); //왜 안돼 
         }
      
@@ -144,6 +119,7 @@ void bfs(int curr,int curc){
 void potan(int a){ // -> 단순 구현 
  //1. 공격 대상에게 공격자 공격력만큼 피해
   arr[destr][destc]-=mingo; 
+  if(arr[destr][destc]<0)arr[destr][destc]=0;
   //damagedturn 표시
   damagedturn[destr][destc]=a;
 
@@ -153,8 +129,10 @@ void potan(int a){ // -> 단순 구현
 
   for(int i=0;i<8;i++){
      int nr=(destr+dr[i]+n)%n;
-     int nc=(destc+dc[i]+m)%m; 
+     int nc=(destc+dc[i]+m)%m;
+     if(nr==minr && nc==minc)continue; //이부분!!!
      arr[nr][nc]-=subgo; 
+     if(arr[nr][nc]<0)arr[nr][nc]=0;
      damagedturn[nr][nc]=a;         
   }
 
@@ -173,25 +151,24 @@ void rager(int a){
     potan(a);
     return; 
   }
-  //2. 공격 대상에게 공격자 공격력만큼 피해,  -> 안막히면 일단 dfs? 해서 되면 return 하기 
-  //레이저 경로에 있는것은 (공격자 공격력)/2 만큼 피해 
-  //cout<<"레이저공격함"<<'\n';
+
    arr[destr][destc]-=mingo;
+   if(arr[destr][destc]<0)arr[destr][destc]=0;
    damagedturn[destr][destc]=a;
 
    int subgo=(mingo)/2; 
    
-    int x=way[destr][destc].first; 
-    int y=way[destr][destc].second;
+    int x=xway[destr][destc]; 
+    int y=yway[destr][destc];
 
    while(1){
 
        if(x==minr && y==minc)break;
        damagedturn[x][y]=a;
        arr[x][y]-=subgo; 
-       
-       int nx=way[x][y].first;
-       int ny=way[x][y].second; 
+        if(arr[x][y]<0)arr[x][y]=0;
+       int nx=xway[x][y];
+       int ny=yway[x][y]; 
        x=nx;
        y=ny; //왜?
 
@@ -219,14 +196,16 @@ int maxNum(){
    int maxs=0; 
    for(int i=0;i<n;i++){
     for(int j=0;j<m;j++){
+      //  cout<<'('<<arr[i][j]<<')';
         maxs=max(maxs,arr[i][j]);
     }
+   // cout<<'\n';
    }
    return maxs; 
 }
 
 void arrcout(){
-     cout<<'\n';
+     
      for(int i=0;i<n;i++){
         for(int j=0;j<m;j++){
            cout<<'('<<arr[i][j]<<')';
@@ -255,37 +234,29 @@ int main() {
       flag=false; 
       visited.assign(n,vector<bool>(m,0));
       info=tt;
+   
       for(int i=0;i<n;i++){
         for(int j=0;j<m;j++){
-           if(arr[i][j]>0)info.push_back({i,j});
+           if(arr[i][j]>0){
+            info.push_back({i,j});
+           }
+  
         }
        }
-     //  cout<<"턴: "<<a<<'\n';
-      //1.공격자 선정 
-       calGo(a);  //-> damagedturn 이 맞는지 모르겠음 , 완전히 부서진곳 체크했나 확인, 일단 (O)
-    //   cout<<"공격자 및 공격대상 선정\n";
-     //  arrcout();  
-       //2-1 공격 대상 선정  
-      // calDest(); //-> damagedturn 이 맞는지 모르겠음 ,  완전히 부서진곳 체크했나 확인,일단 (O)
+       if(info.size()==1)break; //이부분 
 
-       //2-2. 레이저 공격 
-       rager(a);  //하긴 했는데... 세모 
-       //2-3. 레이저 공격 안되면 포탄 공격 
-       //potan(a); //일단 (O)
-     //  arrcout();
-       //3. 포탄 부서짐 -> 완전히 부서진곳 체크했나 확인 
-       //totaldamaged(); //일단(O)
-     //  cout<<"포탄공격"<<'\n';
-    //   arrcout();
-     //  //4. 포탄 정비 
-       //공격자-공격받은자 둘다 아니면 포탑의 공격력+1 
-         
-       recover(a);  //일단 (O)_
-     //  cout<<"포탄정비"<<'\n'; 
-     //  arrcout();
-
+       
+       
+       calGo(a);  
       
+       rager(a);  
+      
+       recover(a);  
+ 
+
     }
+    
+
     cout<<maxNum();
     return 0;
 }
