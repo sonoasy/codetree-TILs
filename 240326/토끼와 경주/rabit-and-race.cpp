@@ -162,7 +162,7 @@ int main() {
         }
         //점프한 토끼 하나 s 더해주기 
         dist[pq2.top().number].second+=s;
-  
+
     }
     
      if(cmd==300){ //이동거리 l배 
@@ -179,8 +179,6 @@ int main() {
          return 0; 
      }
    }
-    
-
 
     return 0;
 }
