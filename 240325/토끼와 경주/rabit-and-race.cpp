@@ -2,19 +2,12 @@
 #include <vector>
 #include<map>
 #include<algorithm>
+#include<queue>
 
 using namespace std;
 
-map<int,int>dist; 
-int nextr,nextc; 
-int n,m,p,q,cmd,num,a,l,k,s;
-//하상우좌 
-int dr[4]={1,-1,0,0};
-int dc[4]={0,0,1,-1}; 
- //점프 횟수, 토끼의 점수, 토끼의 위치, 고유번호
 struct info{
      int jump; 
-     int score;
      int r;
      int c; 
      int number;
@@ -22,38 +15,43 @@ struct info{
 
 typedef pair<int,int>ci; 
 vector<info>arr;
-//점프 횟수 적은 -> 행+열 -> 행 -> 열 -> 고유번호 
-bool cmp1(info a,info b){
-   
-   if(a.jump==b.jump){
-       if((a.r+a.c)==(b.r+b.c)){
+map<int,pair<int,int>>dist; 
+map<int,int>score; 
+int nextr,nextc; 
+int n,m,p,q,cmd,num,a,l,k,s;
+//하상우좌 
+int dr[4]={1,-1,0,0};
+int dc[4]={0,0,1,-1}; 
+ //점프 횟수, 토끼의 점수, 토끼의 위치, 고유번호
+
+//옮길 토끼 
+struct cmp{
+   bool operator()(info a, info b){
+     
+     if(a.jump==b.jump){
+        if((a.r+a.c)==(b.r+b.c)){
             if(a.r==b.r){
                 if(a.c==b.c){
-                    return a.number<b.number;
+                    return a.number>b.number;
                 }     
-                return a.c<b.c;
+                return a.c>b.c;
             }
-            return a.r<b.r;
-       }
-       return (a.r+a.c)<(b.r+b.c);
+            return a.r>b.r;
+        }
+        return (a.r+a.c)>(b.r+b.c);
+    }
+
+    return a.jump>b.jump;
+
    }
 
-    return a.jump<b.jump;
-}
+};
 
-//행+열 ->행 -> 열 
-bool cmp2(ci a,ci b){
-   if((a.first+a.second)==(b.first+b.second)){
-            if(a.first==b.first){  
-                return a.second>b.second;
-            }
-            return a.first>b.first;
-       }
-       return (a.first+a.second)>(b.first+b.second);
-}
-//행+열 -> 행 -> 열 -> 고유번호 
-bool cmp3(info a,info b){
-  
+
+
+//s 더해줄 토끼 게싼 - 점프 했을때만 
+bool cmp2(info a,info b){
+   
        if((a.r+a.c)==(b.r+b.c)){
             if(a.r==b.r){
                 if(a.c==b.c){
@@ -67,9 +65,26 @@ bool cmp3(info a,info b){
  
 }
 
-void move(int curr,int curc,int curn){
-     vector<ci>location;
-          
+struct cmp3{
+    bool operator()(info a,info b){
+        if((a.r+a.c)==(b.r+b.c)){
+            if(a.r==b.r){
+                if(a.c==b.c){
+                    return a.number>b.number;
+                }     
+                return a.c<b.c;
+            }
+            return a.r<b.r;
+       }
+       return (a.r+a.c)<(b.r+b.c);
+    }
+};
+
+//선택한 토끼 움직일 다음 좌표 계산 - cmp2 사용 
+info move(info select){
+
+     int curr=select.r; int curc=select.c; int curn=dist[select.number].first;
+     vector<info>location;
      for(int i=0;i<4;i++){
         int nr=curr;
         int nc=curc;
@@ -87,81 +102,83 @@ void move(int curr,int curc,int curn){
             }
             nr+=drr; nc+=dcc;
         }
-        location.push_back({nr,nc});
+       
+        location.push_back({select.jump,nr,nc,select.number});
     }
 
-    sort(location.begin(),location.end(),cmp2); 
-    nextr=location[0].first;
-    nextc=location[0].second;   
+    sort(location.begin(),location.end(),cmp2);   
+    select.r=location[0].r;
+    select.c=location[0].c; 
  
+    //점프횟수 추가 
+    select.jump+=1; 
+
     //토끼 이동 
-    arr[0].r=nextr; arr[0].c=nextc;
+    return select;
 }
+
 
 int main() {
     
    cin>>q;
   
    cin>>cmd>>n>>m>>p;
-   
+   priority_queue<info,vector<info>,cmp>pq;   
    for(int i=0;i<p;i++){
      cin>>num>>a; 
-     arr.push_back({0,0,0,0,num});
-     dist[num]=a;
+     pq.push({0,0,0,num}); //점프 , r, c, 고유번호 
+     dist[num]={a,0}; // 이동 거리 , 점수 
    }
    q--;
  
-   while(q--){
+   while(q--){ //4000 
      cin>>cmd; 
+    
+     //pq 로 할때 시간복잡도? 
 
      if(cmd==200){ //경주 진행 
          cin>>k>>s; 
-         for(int kk=1;kk<=k;kk++){
+         priority_queue<info,vector<info>,cmp3>pq2;
 
-           sort(arr.begin(),arr.end(),cmp1);
-           info target=arr[0]; 
-           arr[0].jump+=1; 
+         for(int kk=1;kk<=k;kk++){ //2000 
          
-           int curr=target.r;
-           int curc=target.c;
-           int curn=dist[target.number];
+          //토끼 하나 정하기 - cmp  
+          info select=pq.top();pq.pop(); 
            
-           //토끼 움직이기 
-           move(curr,curc,curn);
+         //움직이기 
+          select=move(select); pq2.push(select);
+       
 
-           //나머지 토끼 점수 주기  r+1 ,c+1 
-           int add=(nextr+1+nextc+1);
-           for(int i=1;i<p;i++){
-              arr[i].score+=add;  
-           }
+          pq.push(select); 
+
+         //나머지 토끼 점수 더해주기 
+          int selected_number=select.number; 
+          int add=select.r+select.c+2;
+          
+          for(auto it=dist.begin();it!=dist.end();it++){
+            if(it->first!=selected_number)it->second.second+=add; 
+          }
+         
         }
-        //k턴이 끝나고 점수 S 더해주기 
-        vector<info>candidate; 
-        for(int i=0;i<p;i++){
-            if(arr[i].jump>0)candidate.push_back(arr[i]);
-        }  
-        sort(candidate.begin(),candidate.end(),cmp3); 
-        int best_candidate=candidate[0].number; 
-        for(int i=0;i<arr.size();i++){
-            if(arr[i].number==best_candidate)arr[i].score+=s; 
-            arr[i].jump=0;
-         }    
+        
+        //점프한 토끼 하나 s 더해주기 
+        dist[pq2.top().number].second+=s;
+  
+
     }
     
      if(cmd==300){ //이동거리 l배 
         cin>>num>>l;
-        dist[num]*=l; 
+        dist[num].first*=l; 
      }
    
      if(cmd==400){ //최고의 토끼 선정 
-          //가장 점수 높은 토끼의 점수 출력 
-         int ans=0; 
-         for(int i=0;i<p;i++){
-            if(ans<arr[i].score)ans=arr[i].score;
-         }
-         cout<<ans;
-
-          return 0; 
+        int ans=0; 
+        for(auto it=dist.begin();it!=dist.end();it++){
+            ans=max(ans,it->second.second);
+        }
+        cout<<ans;
+         return 0; 
      }
    }
     
