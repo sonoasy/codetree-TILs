@@ -15,7 +15,7 @@ struct info{
 
 typedef pair<int,int>ci; 
 vector<info>arr;
-map<int,pair<int,int>>dist; 
+map<int,pair<int,long long>>dist; 
 map<int,int>score; 
 int nextr,nextc; 
 int n,m,p,q,cmd,num,a,l,k,s;
@@ -130,7 +130,7 @@ int main() {
      dist[num]={a,0}; // 이동 거리 , 점수 
    }
    q--;
-   int total=0; 
+   long long total=0; 
    while(q--){ //4000 
      cin>>cmd; 
     
@@ -171,7 +171,7 @@ int main() {
      }
    
      if(cmd==400){ //최고의 토끼 선정 
-        int ans=0; 
+        long long ans=0; 
         for(auto it=dist.begin();it!=dist.end();it++){
             ans=max(ans,it->second.second+total);
         }
