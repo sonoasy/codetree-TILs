@@ -85,6 +85,9 @@ info move(info select){
 
      int curr=select.r; int curc=select.c; int curn=dist[select.number].first;
      vector<info>location;
+
+     int min_r,min_c;
+
      for(int i=0;i<4;i++){
         int nr=curr;
         int nc=curc;
@@ -102,13 +105,31 @@ info move(info select){
             }
             nr+=drr; nc+=dcc;
         }
-       
-        location.push_back({select.jump,nr,nc,select.number});
+        if(i==0){
+            min_r=nr; min_c=nc; 
+        }
+        else{
+            if((min_r+min_c)<(nr+nc)){
+                min_r=nr; min_c=nc;
+            }
+            else if((min_r+min_c)==(nr+nc)){
+                if(min_r<nr){
+                   min_r=nr; min_c=nc; 
+                }
+                else if(min_r==nr){
+                  if(min_c<nc){
+                    min_r=nr; min_c=nc; 
+                  }
+                }
+            }
+
+        }
+        //location.push_back({select.jump,nr,nc,select.number});
     }
 
-    sort(location.begin(),location.end(),cmp2);   
-    select.r=location[0].r;
-    select.c=location[0].c; 
+    //sort(location.begin(),location.end(),cmp2);   
+    select.r=min_r;
+    select.c=min_c; 
  
     //점프횟수 추가 
     select.jump+=1; 
@@ -148,7 +169,9 @@ int main() {
           info select=pq.top();pq.pop(); 
            
          //움직이기 
-          select=move(select); pq2.push(select);
+          //1억 = 100,000,000
+          select=move(select);  //4000*2000*16?  = 80,000,000
+          pq2.push(select);
        
 
           pq.push(select); 
