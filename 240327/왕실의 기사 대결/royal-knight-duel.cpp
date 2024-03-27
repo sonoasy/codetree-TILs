@@ -43,6 +43,7 @@ bool Move(int num,int dir){
     
     //2. 벽이거나 넘어가면 x 
     if(nr<=0 || nc<=0 || nr>l || nc>l)return false; 
+    if((nr+knight_arr[cnum].h-1)>l || (nc+knight_arr[cnum].w-1)>l)return false;
     //움직이려는데 
     //벽있으면 빼기 
     for(int i=nr;i<=nr+knight_arr[cnum].h-1;i++){
