@@ -64,6 +64,7 @@ bool Move(int num,int dir){
     //바꾼다는것도 표시 
     for(int i=1;i<=n;i++){
       if(i==cnum)continue; 
+      if(knight_arr[i].damage)continue; //이거!!!
       if(knight_arr[i].r>nr+knight_arr[cnum].h-1 || (knight_arr[i].r+knight_arr[i].h-1)<nr)continue; 
       if(knight_arr[i].c>nc+knight_arr[cnum].w-1 || (knight_arr[i].c+knight_arr[i].w-1)<nc)continue; 
       q.push(i);  
