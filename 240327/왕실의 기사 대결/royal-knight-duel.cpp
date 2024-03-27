@@ -30,7 +30,8 @@ vector<pair<int,int>>change_num;
 vector<bool>moved; 
 
 bool Move(int num,int dir){
-
+  
+  if(knight_arr[num].damage)return false;
   queue<int>q;  
   q.push(num);
 
