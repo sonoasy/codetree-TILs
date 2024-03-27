@@ -1,218 +1,127 @@
 #include <iostream>
 #include<vector>
 #include<map>
-#include<set>
+#include<queue>
 
 using namespace std;
 
-int dr[4]={-1,0,1,0};
-int dc[4]={0,1,0,-1};
-
-int l,n,q; 
+//지금 맞닿아 있는거로 구하나 했는데
+//움직였을때 그 범위에 있는거군 
+int l,n,q;
+vector<vector<int>>arr; 
 int r,c,h,w,k; 
-int num,d; 
-vector<vector<int>>arr;
-vector<vector<int>>knight_arr;
+int num,dir; 
 
-struct knight{
+int dr[4]={-1,0,1,0};
+int dc[4]={0,1,0,-1}; 
+
+struct info{
    int r;
    int c;
    int h;
    int w;
-   int power;
-   int damage;
-   bool destroy; 
+   int power; 
+   int damage_amount;
+   bool damage; 
 };
-vector<knight>info(n+1); 
-//info 기반 기사 배치 knight_arr
-void knightArr(){
+vector<info>knight_arr;
+vector<int>next_damage;
+vector<pair<int,int>>change_num;
+vector<bool>moved; 
 
-   for(int i=1;i<=n;i++){
-       int curr=info[i].r; 
-       int curc=info[i].c; 
-       int curh=info[i].h;
-       int curw=info[i].w;
-       
+bool Move(int num,int dir){
+
+  queue<int>q;  
+  q.push(num);
+
+  while(!q.empty()){
+
+    int cnum=q.front();q.pop(); 
     
-       for(int j=curr;j<=curr+curh-1;j++){
-         for(int k=curc;k<=curc+curw-1;k++){
-            knight_arr[j][k]=i; 
+    int nr=knight_arr[cnum].r+dr[dir]; 
+    int nc=knight_arr[cnum].c+dc[dir]; 
+    
+    //2. 벽이거나 넘어가면 x 
+    if(nr<=0 || nc<=0 || nr>l || nc>l)return false; 
+    //움직이려는데 
+    //벽있으면 빼기 
+    for(int i=nr;i<=nr+knight_arr[cnum].h-1;i++){
+      for(int j=nc;j<=nc+knight_arr[cnum].w-1;j++){
+         if(arr[i][j]==2)return false; 
+         //1. 함정있으면 체력빼주기 
+         
+         //미는 사람은 안 뺴줌!!!!!
+         if(cnum!=num && arr[i][j]==1){
+           next_damage[cnum]++; 
          }
-       }
-   }
-
-}
-
-void moveAndgetDamage(set<int>move_list,int d){ 
-
-  //list에 있는거 지우기 
-  for(auto it:move_list){
-    int r=info[it].r; int c=info[it].c; 
-    for(int i=r;i<=r+h-1;i++){
-        for(int j=c;j<=c+w-1;j++){
-            knight_arr[i][j]=0; 
-        }
+      }
     }
+
+    moved[cnum]=true; 
+    change_num[cnum]={nr,nc}; 
+     //중간에 안되면? - 계속 바꾸는게 아니라 끝까지 true이면 저장된걸 바꿔주기 
+    //바꾼다는것도 표시 
+    for(int i=1;i<=n;i++){
+      if(i==cnum)continue; 
+      if(knight_arr[i].r>nr+knight_arr[cnum].h-1 || (knight_arr[i].r+knight_arr[i].h-1)<nr)continue; 
+      if(knight_arr[i].c>nc+knight_arr[cnum].w-1 || (knight_arr[i].c+knight_arr[i].w-1)<nc)continue; 
+      q.push(i);  
+    }
+
   }
-
-
-  //움직이기 
-  for(auto it:move_list){
-    info[it].r+=dr[d];
-    info[it].c+=dc[d]; 
-  }
-
-  //함정 있으면 그만큼 데미지, 체력 깍기 , 사라지기  
-   for(auto it:move_list){
-    int r=info[it].r; int c=info[it].c; 
-    int damaged=0;
-    for(int i=r;i<=r+h-1;i++){
-        for(int j=c;j<=c+w-1;j++){
-            if(arr[i][j]==1)damaged++; 
-            knight_arr[i][j]=it; 
-        }
-    }
-    info[it].power-=damaged; 
-    info[it].damage+=damaged;
-    //0이하면 격자에서 지우기 
-    for(int i=r;i<=r+h-1;i++){
-        for(int j=c;j<=c+w-1;j++){
-            
-            knight_arr[i][j]=0; 
-        }
-    }
-  }
- 
-
+   
+   return true; 
 }
 
-void canMove(int num,int d){
-   
-   //d방향 가장 밑부분 쪽에 있는 기사 번호 
+int main(){
 
-   //여기부터 여기까지 있는 번호 체크  
-     //나 포함 밀리는 기사 번호 목록 저장 
-   int fcur; int lcur;  
-   int fcuc; int lcuc;
-   int h=info[num].h;
-   int w=info[num].w;
-   //상 
-   if(d==0){
-      if(info[num].r==0)return; 
-      fcur=0; lcur=info[num].r-1; 
-      fcuc=info[num].c; lcuc=info[num].c+w-1; 
-       
-      
-   }
-   //우
-   if(d==1){
-     if((info[num].c+w)>l)return;
-     fcur=info[num].r; lcur=info[num].r+h-1; 
-     fcuc=info[num].c+w; lcuc=l; 
-   } 
-   //하
-   if(d==2){
-   
-    if((info[num].r+h)>l)return;
-   
-     fcur=info[num].r+h; lcur=l;  
-     fcuc=info[num].c; lcuc=info[num].c+w-1; 
-    
-   }
-   //좌 
-   if(d==3){
-     if(info[num].c==0)return; 
-     fcur=info[num].r; lcur=info[num].r+h-1;
-     fcuc=0; lcuc=info[num].c-1; 
-     
-   }  
-  
-   //d 방향으로 밀렸을때 맨끝에 자리 있는가? 
-   //기사 번호들 수집 + 맨끝에 있는 기사 위치 
-   set<int>move_list; 
-   move_list.insert(num);
-   
-
-   for(int i=fcur;i<=lcur;i++){
-    for(int j=fcuc;j<=lcuc;j++){
-        //마지막 칸 바로 직전 
-        
-        move_list.insert(knight_arr[i][j]); 
-    }
-   }
-
-
-   if(move_list.size()==0)return;
-   else{
-     moveAndgetDamage(move_list,d); 
-   }
-   
-}
-
-//num 기사 d 방향으로 이동 
-void move(int num,int d){
-
-  canMove(num,d); 
- 
-}
-
-//생존한 기사들의 받은 데미지 합 
-int damageAmount(){
-   
-   int sum=0; 
-   for(int i=1;i<=n;i++){
-    if(!info[i].destroy){
-        sum+=info[i].damage; 
-    }
-   } 
-   return sum;
-}
-
-void print(){
-    for(int i=1;i<=l;i++){
-        for(int j=1;j<=l;j++){
-            cout<<knight_arr[i][j];
-        }
-        cout<<'\n';
-    }
-    cout<<'\n';
-}
-
-int main() {
-  
-   cin>>l>>n>>q; 
-   arr.assign(l+1,vector<int>(l+1));
-   knight_arr.assign(l+1,vector<int>(l+1,0));
-   
-   //체스판 
-   for(int i=1;i<=l;i++){
+  cin>>l>>n>>q; 
+  change_num.assign(n+1,{0,0});
+  moved.assign(n+1,0); 
+  next_damage.assign(n+1,0); 
+  arr.assign(l+1,vector<int>(l+1,0));
+  for(int i=1;i<=l;i++){
     for(int j=1;j<=l;j++){
-        cin>>arr[i][j];
-     }
-   }
+      cin>>arr[i][j]; 
+    }
+  }
+   
+  knight_arr.push_back({0,0,0,0,0,0,0});
+  for(int i=1;i<=n;i++){
+    cin>>r>>c>>h>>w>>k; 
+    knight_arr.push_back({r,c,h,w,k,0,0}); 
+  }
+   
+  for(int i=0;i<q;i++){
+    cin>>num>>dir; 
+    if(Move(num,dir)){
+     for(int j=1;j<=n;j++){
+       if(moved[j] && !knight_arr[j].damage){
+          knight_arr[j].r=change_num[j].first;
+          knight_arr[j].c=change_num[j].second; 
+          knight_arr[j].power-=next_damage[j]; 
+          knight_arr[j].damage_amount+=next_damage[j]; 
+          if(knight_arr[j].power<=0)knight_arr[j].damage=true; 
+        }   
+        moved[j]=false; 
+        next_damage[j]=0; 
+      }
+    } 
+    
+  //  cout<<i+1<<" 명령 끝나고 현황\n";
+    for(int ss=1;ss<=n;ss++){
+    //  cout<<ss<<" 의 위치: "<<knight_arr[ss].r<<' '<<knight_arr[ss].c<<' '<<knight_arr[ss].power;
+     // cout<<' '<<knight_arr[ss].damage<<'\n';
+    }
 
-   //기사 위치 
-   for(int i=1;i<=n;i++){
-     cin>>r>>c>>h>>w>>k; 
-     info[i].r=r;info[i].c=c;
-     info[i].h=h;info[i].w=w;
-     info[i].power=k; info[i].damage=0;
-     info[i].destroy=false;  
-   }
-   //기사 배치 
-   knightArr(); 
-   print();
-   //명령 : num 기사 방향 d로 이동 
-   for(int i=0;i<q;i++){
-     cin>>num>>d;  
-     move(num,d);
-     cout<<i+1<<" 번째 명령\n";
-     print();
-   }
+  }
+  int sum=0; 
+  for(int i=1;i<=n;i++){
+    if(!knight_arr[i].damage)sum+=knight_arr[i].damage_amount;
+  }
+  
+  cout<<sum;
 
-    //생존한 기사들이 받은 대미지 합 
-   int ans=damageAmount(); 
-   cout<<ans; 
+  return 0; 
 
-    return 0;
 }
