@@ -32,6 +32,13 @@ vector<bool>moved;
 
 bool Move(int num,int dir){
   
+  for(int j=1;j<=n;j++){
+    moved[j]=false; 
+    next_damage[j]=0; 
+   //이거도!!
+    moved[j]={0,0};
+  }
+     
   queue<int>q;  
   q.push(num);
   moved[num]=true; 
@@ -42,8 +49,7 @@ bool Move(int num,int dir){
    // cout<<"큐:"<<cnum<<' ';
     int nr=knight_arr[cnum].r+dr[dir]; 
     int nc=knight_arr[cnum].c+dc[dir]; 
-    change_num[cnum]={nr,nc}; 
-    
+   
     //2. 벽이거나 넘어가면 x 
     if(nr<=0 || nc<=0 || nr>l || nc>l)return false; 
     if(arr[nr][nc]==2)return false;
@@ -62,6 +68,8 @@ bool Move(int num,int dir){
       }
     }
     moved[cnum]=true;  
+    change_num[cnum]={nr,nc}; 
+    
      //중간에 안되면? - 계속 바꾸는게 아니라 끝까지 true이면 저장된걸 바꿔주기 
     //바꾼다는것도 표시 
     for(int i=1;i<=n;i++){
@@ -114,22 +122,18 @@ int main(){
         
       }
      
-      for(int j=1;j<=n;j++){
-            moved[j]=false; 
-            next_damage[j]=0; 
-            //이거도!!
-            moved[j]={0,0};
-       }
-     
     }
     /*
+    if(i>=0 && i<=5){
     cout<<i<<" 명령 끝나고 현황\n";
     for(int ss=1;ss<=n;ss++){
     // cout<<knight_arr[ss].damage<<' '<<knight_arr[ss].power<<' '<<knight_arr[ss].damage_amount<<'\n';
      cout<<"위치: "<<knight_arr[ss].r<<' '<<knight_arr[ss].c<<' '<<knight_arr[ss].power<<'\n';
     }
     cout<<'\n';
-   */
+    
+  }
+  */
   }
   //cout<<i<<" 명령 끝나고 현황\n";
     //for(int ss=1;ss<=n;ss++){
