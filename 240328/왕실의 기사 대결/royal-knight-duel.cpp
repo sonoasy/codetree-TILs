@@ -49,7 +49,7 @@ bool Move(int num,int dir){
    // cout<<"큐:"<<cnum<<' ';
     int nr=knight_arr[cnum].r+dr[dir]; 
     int nc=knight_arr[cnum].c+dc[dir]; 
-   
+    if(knight_arr[cnum].damage)return false;
     //2. 벽이거나 넘어가면 x 
     if(nr<=0 || nc<=0 || nr>l || nc>l)return false; 
     if(arr[nr][nc]==2)return false;
@@ -123,8 +123,8 @@ int main(){
       }
      
     }
-    /*
-    if(i>=0 && i<=5){
+  /*  
+    if(i>=5){
     cout<<i<<" 명령 끝나고 현황\n";
     for(int ss=1;ss<=n;ss++){
     // cout<<knight_arr[ss].damage<<' '<<knight_arr[ss].power<<' '<<knight_arr[ss].damage_amount<<'\n';
@@ -132,7 +132,7 @@ int main(){
     }
     cout<<'\n';
     
-  }
+    }
   */
   }
   //cout<<i<<" 명령 끝나고 현황\n";
