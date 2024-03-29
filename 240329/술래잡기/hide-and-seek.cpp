@@ -26,6 +26,7 @@ struct catcher{
    int score; 
 };
 catcher catchrunner;
+
 void Run(){
    //모든 도망자들에 대해 
    for(int i=0;i<m;i++){
@@ -33,13 +34,13 @@ void Run(){
       //술래와의 거리 계산 
       int dist=abs(catchrunner.r-runner[i].r)+abs(catchrunner.c-runner[i].c);
       if(dist<=3){
-       // cout<<i<<"이동해야함";
+      
          int cur=runner[i].r;
          int cuc=runner[i].c;
          //보고있는 방향 격자 안벗어나면 
          int nr=cur+dr[runner[i].dir]; 
          int nc=cuc+dc[runner[i].dir];
-       //  cout<<runner[i].dir<<' '<<nr<<' '<<nc<<'\n';
+       
          if(nr<=0 || nc<=0 || nr>n || nc>n){
               //방향을 틀음 
               if(runner[i].dir==0)runner[i].dir=1;
@@ -48,7 +49,7 @@ void Run(){
               else if(runner[i].dir==3)runner[i].dir=2; 
           
               nr=cur+dr[runner[i].dir];
-              nc=cur+dc[runner[i].dir];
+              nc=cuc+dc[runner[i].dir];
               //술래가 없을때만 이동      
               if(!(catchrunner.r==nr && catchrunner.c==nc)){
                 //이동 
@@ -63,8 +64,7 @@ void Run(){
             }
          }
       }
-  //    cout<<"변화후 ";
-  // cout<<runner[i].r<<' '<<runner[i].c<<'\n';
+    //cout<<runner[i].catched<<'\n';
    } 
    
 }
@@ -75,7 +75,7 @@ void Catch(int turn){
       //이동방향으로 이동하기 
    catchrunner.r+=dr[catchrunner.dir];
    catchrunner.c+=dc[catchrunner.dir]; 
-   catchrunner.dir=(turn)%dirnum.size(); 
+   catchrunner.dir=dirnum[(turn)%dirnum.size()]; 
    //cout<<"술래 위치: "<<catchrunner.r<<' '<<catchrunner.c<<'\n';
    int nr1= catchrunner.r;
    int nc1= catchrunner.c; 
@@ -86,6 +86,7 @@ void Catch(int turn){
    //현재칸 포함 3칸 보기
    int cnt=0;  
    for(int i=0;i<m;i++){
+    if(runner[i].catched)continue; //예외처리!!!!!!
       if(!arr[runner[i].r][runner[i].c]){ //나무가 없어야함  
        if((runner[i].r==nr1 && runner[i].c==nc1) || (runner[i].r==nr2 && runner[i].c==nc2) ||(runner[i].r==nr3 && runner[i].c==nc3)){
            runner[i].catched=true; 
@@ -93,8 +94,9 @@ void Catch(int turn){
        }
       }
    }
-   //cout<<turn<<' '<<cnt<<'\n';
+
    catchrunner.score+=(turn*cnt); 
+//   cout<<turn<<' '<<catchrunner.score<<'\n'; 
 }
 
 int main() {
@@ -146,18 +148,16 @@ int main() {
    
 
    for(int i=1;i<=k;i++){
-
-      for(int j=0;j<m;j++){
-        //if(!runner[j].catched)cout<<runner[j].r<<','<<runner[j].c<<'\n';
-      }
+      
+      
       Run(); //도망자들 움직이기 
-      //도망자들 위치 
     
-    //  cout<<'\n';
-     // cout<<'\n';
       //술래의 방향 정해주기 
       Catch(i); //술래 움직이고 잡기 
-
+      
+    // cout<<runner[0].r<<' '<<runner[0].c<<'\n'; 
+    // cout<<i<<" ";
+      // cout<<catchrunner.dir<<' '<<catchrunner.r<<' '<<catchrunner.c<<'\n';
    }
    cout<<catchrunner.score; 
 
