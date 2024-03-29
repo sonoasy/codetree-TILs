@@ -5,7 +5,7 @@ using namespace std;
 
 vector<vector<int>>arr;  
 vector<int>dirnum; 
-//1 2 
+//좌우하상 
 int dr[4]={0,0,1,-1};
 int dc[4]={-1,1,0,0};   
 int n,m,h,k; 
@@ -33,19 +33,20 @@ void Run(){
       //술래와의 거리 계산 
       int dist=abs(catchrunner.r-runner[i].r)+abs(catchrunner.c-runner[i].c);
       if(dist<=3){
+       // cout<<i<<"이동해야함";
          int cur=runner[i].r;
          int cuc=runner[i].c;
          //보고있는 방향 격자 안벗어나면 
          int nr=cur+dr[runner[i].dir]; 
-         int nc=cur+dc[runner[i].dir];
-
+         int nc=cuc+dc[runner[i].dir];
+       //  cout<<runner[i].dir<<' '<<nr<<' '<<nc<<'\n';
          if(nr<=0 || nc<=0 || nr>n || nc>n){
               //방향을 틀음 
               if(runner[i].dir==0)runner[i].dir=1;
               else if(runner[i].dir==1)runner[i].dir=0;
               else if(runner[i].dir==2)runner[i].dir=3;
               else if(runner[i].dir==3)runner[i].dir=2; 
-
+          
               nr=cur+dr[runner[i].dir];
               nc=cur+dc[runner[i].dir];
               //술래가 없을때만 이동      
@@ -62,7 +63,10 @@ void Run(){
             }
          }
       }
+  //    cout<<"변화후 ";
+  // cout<<runner[i].r<<' '<<runner[i].c<<'\n';
    } 
+   
 }
 
 void Catch(int turn){
@@ -89,6 +93,7 @@ void Catch(int turn){
        }
       }
    }
+   //cout<<turn<<' '<<cnt<<'\n';
    catchrunner.score+=(turn*cnt); 
 }
 
@@ -141,8 +146,15 @@ int main() {
    
 
    for(int i=1;i<=k;i++){
- 
+
+      for(int j=0;j<m;j++){
+        //if(!runner[j].catched)cout<<runner[j].r<<','<<runner[j].c<<'\n';
+      }
       Run(); //도망자들 움직이기 
+      //도망자들 위치 
+    
+    //  cout<<'\n';
+     // cout<<'\n';
       //술래의 방향 정해주기 
       Catch(i); //술래 움직이고 잡기 
 
