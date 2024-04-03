@@ -28,8 +28,9 @@ void dfs(int i,int j,int cnt,map<int,int>&info){
         dfs(nr,nc,cnt,info); 
     }
 }
+
 //맞닿아 있는거
-int calline(int a,int b){
+int calline(int a,int b){ //한번만? 
    int cnt=0; 
    //오른쪽, 아래 확인 
    for(int i=0;i<n;i++){
@@ -66,17 +67,35 @@ int calArt(map<int,int>&info,map<int,int>&num){
     //그룹중 2개씩 정해서 점수 더하기 - 조합 뭐였더라 
     //cnt-1번까지 있음 
      int total=0; 
-     for(int i=0;i<cnt-1;i++){
+
+     for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+           
+           for(int k=0;k<4;k++){
+             int tmp_sum=0; 
+             int nr=i+dr[k];
+             int nc=j+dc[k]; 
+             if(nr<0 || nc<0 || nr>=n || nc>=n)continue; 
+             if(arr[i][j]==arr[nr][nc])continue;
+             tmp_sum+=(info[group[i][j]]+info[group[nr][nc]]);
+             tmp_sum*=(num[group[i][j]]*num[group[nr][nc]]);    
+             total+=tmp_sum; 
+           }
+        }
+     }
+     //??? 
+    /* for(int i=0;i<cnt-1;i++){
         for(int j=i+1;j<=cnt-1;j++){
             int sum=0; 
             sum+=info[i]+info[j]; 
             sum*=(num[i]*num[j]); 
-            sum*=calline(i,j); 
+            sum*=calline(i,j);  
             total+=sum; 
         }
      }
+     */
 
-    return total; 
+    return total/2; 
 }
 //격자 회전하기 
 
@@ -140,7 +159,7 @@ int main() {
     map<int,int>num1;
 
     totalart+=calArt(info1,num1); 
-    
+   // cout<<totalart<<'\n';
     for(int i=0;i<3;i++){
        visited.assign(n,vector<bool>(n,0));
        group.assign(n,vector<int>(n,0));
@@ -149,7 +168,7 @@ int main() {
        map<int,int>num; 
 
        int sum=calArt(info,num); 
-
+      // cout<<sum<<'\n';
        totalart+=sum;
     }
 
