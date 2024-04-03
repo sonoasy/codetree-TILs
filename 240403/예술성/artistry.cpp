@@ -14,16 +14,6 @@ int totalart=0;
 int dr[4]={0,1,-1,0};
 int dc[4]={1,0,0,-1}; 
 
-void print(){
-    for(int i=0;i<n;i++){
-        for(int j=0;j<n;j++){
-            cout<<arr[i][j];
-        }
-        cout<<'\n';
-    }
-    cout<<'\n';
-}
-
 void dfs(int i,int j,int cnt,map<int,int>&info){
     visited[i][j]=true; 
     group[i][j]=cnt; 
@@ -60,7 +50,7 @@ int calline(int a,int b){
 }
 
 //예술 점수 계산 
-int calArt(map<int,int>&info,map<int,int>&num){
+int calArt(map<int,int>&info,map<int,int>&num){ 
 
     //그룹 생성 - 숫자, 속한 칸 수, 위치정보 저장 ? 
     int cnt=0; 
@@ -80,7 +70,6 @@ int calArt(map<int,int>&info,map<int,int>&num){
         for(int j=i+1;j<=cnt-1;j++){
             int sum=0; 
             sum+=info[i]+info[j]; 
-    
             sum*=(num[i]*num[j]); 
             sum*=calline(i,j); 
             total+=sum; 
@@ -103,10 +92,9 @@ void rotate(){
    }
    for(int i=0;i<n;i++){
     arr[(n-1)/2][i]=tmp1[i]; //가로에 세로를 
-   } 
-   for(int i=0;i<n;i++){
     arr[i][(n-1)/2]=tmp2[i]; //세로에 가로를 
-   }
+   } 
+  
    //정사각형 4개 회전 
    int size=(n-1)/2; 
    int r,c; 
@@ -156,15 +144,12 @@ int main() {
     for(int i=0;i<3;i++){
        visited.assign(n,vector<bool>(n,0));
        group.assign(n,vector<int>(n,0));
-       //info,num 초기화하기 
        rotate(); 
-     //  print();
        map<int,int>info; 
        map<int,int>num; 
 
        int sum=calArt(info,num); 
-      // cout<<sum<<'\n';
-       //442 이어야되는데 811이 나옴 
+
        totalart+=sum;
     }
 
