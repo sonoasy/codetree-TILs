@@ -33,6 +33,7 @@ void getGun(int i){
        //  cout<<i<<"총획득함"<<players[i].gun<<'\n';
     }
     else{
+        //이미 총을 가지고 있고, 획득할 총이 있는경우 
         if(gun_info[{players[i].x,players[i].y}].size()>=1){
             if(mygun<gun_info[{players[i].x,players[i].y}].top()){
                 players[i].gun=gun_info[{players[i].x,players[i].y}].top();
@@ -46,6 +47,7 @@ void getGun(int i){
 
 
 void Fight(int i,int fightnum){
+  //  cout<<i<<' '<<fightnum<<"싸움\n";
    int num1=players[i].firstpower+players[i].gun; 
    int num2=players[fightnum].firstpower+players[fightnum].gun; 
    int winner,loser;
@@ -74,28 +76,32 @@ void Fight(int i,int fightnum){
    if(players[loser].gun>0){
       gun_info[{players[loser].x,players[loser].y}].push(players[loser].gun); 
       players[loser].gun=0; 
+   }
       //이동하고 총 줍기 - 벽이면 오른쪼 90도 이동 
       int nr,nc; 
+      //루저 이동 
       for(int i=0;i<4;i++){
         nr=players[loser].x+dr[players[loser].dir];
         nc=players[loser].y+dc[players[loser].dir];
-        bool flag=true;
-        if(nr>0 && nc>0 && n<=n && nc<=n){
+        
+        if(nr>0 && nc>0 && nr<=n && nc<=n){
           //해당위치에 플레이어 없어야됨 
+          bool flag=true;
           for(int i=0;i<m;i++){
             if(players[i].x==nr && players[i].y==nc){
                 flag=false; break;
             } 
           }
-        }
-        if(flag){
+          if(flag){
             players[loser].x=nr; players[loser].y=nc; 
+           // cout<<"루저 "<<loser<<' '<<nr<<','<<nc<<"로이동\n";
             getGun(loser);break; 
-        } 
+          } 
+        }
         players[loser].dir=(players[loser].dir+1)%4; 
       }
-     
-   }
+      
+   
    //winner은 총버리고간거 포함에서 총바꾸기 
    getGun(winner); 
 }
@@ -168,12 +174,20 @@ int main() {
     
     for(int i=0;i<k;i++){ //왜 라운드 한번만함?
      //cout<<"라운드"<<i<<'\n';
+     //포인트 초기화? 
        Round(); 
+       for(int j=0;j<m;j++){
+      //  cout<<players[j].x<<' '<<players[j].y<<' '<<players[j].gun<<'\n';
+       }
+    //   cout<<'\n';
+       //cout<<"라운드종료 포인트 현황\n";
+       
+    //  cout<<'\n';
     }
-
-    for(int i=0;i<m;i++){
-        cout<<players[i].point<<' ';
-    }
+       for(int j=0;j<m;j++){
+        cout<<players[j].point<<' ';
+       }
+    
     
     return 0;
 }
