@@ -6,7 +6,6 @@
 using namespace std; 
 
 int n,m,p,c,d; //게임판 크기,게임 턴, 산타 수, 루돌프 힘,산타 힘 
-vector<vector<int>>arr; 
 int Rx,Ry; 
 int Rdir; 
 int sx,sy;
@@ -47,18 +46,23 @@ bool cmp(santa a,santa b){
     return calDistance(a.x,a.y,Rx,Ry)<calDistance(b.x,b.y,Rx,Ry);
 }
 
+bool cmp2(santa a,santa b){
+    return a.num<b.num;
+}
+
 void Interact(int movedsanta,int movedir,int kind){
 
   queue<int>q; 
+  q.push(movedsanta);
    //차례로 1칸씩 밀려남 
-   for(int i=0;i<p;i++){
+  /* for(int i=0;i<p;i++){
     if(i==movedsanta)continue; 
     if(!santas[i].isout && santas[movedsanta].x==santas[i].x && santas[movedsanta].y==santas[i].y){
         q.push(i); break; 
     }
    }
-   
-
+  }
+*/
    while(!q.empty()){
      int curn=q.front();
      int cur=santas[curn].x; 
@@ -76,8 +80,11 @@ void Interact(int movedsanta,int movedir,int kind){
      }
     
      santas[curn].x=nr; santas[curn].y=nc; 
-     if(nr<0 || nc<0 || nr>n || nc>n)santas[curn].isout=true; 
-    // cout<<curn<<"산타 "<<nr<<' '<<nc<<"로 밀림\n";
+     if(nr<0 || nc<0 || nr>n || nc>n){
+    //    cout<<curn<<"아웃\n";
+        santas[curn].isout=true; continue;
+     }
+   //  cout<<curn<<"산타 "<<nr<<' '<<nc<<"로 밀림\n";
      //이 위치에 산타가 있으면 또 밀기 
      for(int j=0;j<p;j++){
         if(j==curn)continue;
@@ -106,10 +113,10 @@ void Collision(int movedsanta,int kind,int movedir,int turn){
      santas[movedsanta].x=nr; 
      santas[movedsanta].y=nc; 
      if(nr<0 || nc<0 || nr>n || nc>n){
-        santas[movedsanta].isout=true; 
+        santas[movedsanta].isout=true; //cout<<movedsanta<<"아웃2\n";
         return;
      }
-    // cout<<"루돌프때문"<<movedsanta<<"여기로 이동"<<nr<<' '<<nc<<'\n';
+ //    if(turn>=5)cout<<"루돌프때문"<<movedsanta<<"여기로 이동"<<nr<<' '<<nc<<'\n';
      //아니면 위치, 상호작용 여부 
      for(int i=0;i<p;i++){
         //자기 자신이면 지나가기 
@@ -132,15 +139,22 @@ void Collision(int movedsanta,int kind,int movedir,int turn){
      santas[movedsanta].x=nr;
      santas[movedsanta].y=nc; 
      if(nr<0 || nc<0 || nr>n || nc>n){
-        santas[movedsanta].isout=true; 
+      //  santas[movedsanta].isout=true; cout<<movedsanta<<"아웃3\n";
         return; 
      }//이 위치에 누가 있으면 상호작용 
-   //  cout<<"산타때문"<<movedsanta<<"여기로 이동"<<nr<<' '<<nc<<'\n';
+  //   if(turn>=5)cout<<"산타때문"<<movedsanta<<"여기로 이동"<<nr<<' '<<nc<<'\n';
    
     //자기 자신이면 지나가기
      //싱호작용이 일어남 - moveddir방향으로 1칸씩 연쇄적으로 밀려남 
-     Interact(movedsanta,movedir,1); 
-        
+    //Interact(movedsanta,movedir,1); 
+         for(int i=0;i<p;i++){
+        //자기 자신이면 지나가기 
+        if(i==movedsanta)continue;
+        if(nr==santas[i].x && nc==santas[i].y){
+            //싱호작용이 일어남 - moveddir방향으로 1칸씩 연쇄적으로 밀려남 
+            Interact(i,movedir,0); 
+        }
+     }
      
    }
 }
@@ -157,9 +171,6 @@ void RMove(int turn){
    }
    sort(candidate.begin(),candidate.end(),cmp); 
    //그 산타 향해서 8방향중 가까워지는 방향으로 한칸 이동 
-   for(int i=0;i<candidate.size();i++){
- //   cout<<candidate[i].x<<' '<<candidate[i].y<<'\n'; 
-   }
 
    int selectedx=candidate[0].x;
    int selectedy=candidate[0].y;  
@@ -183,17 +194,17 @@ void RMove(int turn){
 
    //충돌이 일어났는지 확인 
    for(int i=0;i<p;i++){
-      if(santas[i].x==Rx && santas[i].y==Ry){
+      if(!santas[i].isout && santas[i].x==Rx && santas[i].y==Ry){
         //루돌프가 움직여서 일어난 충돌 
          Collision(i,0,go,turn); 
       }
    }
- //  cout<<"루돌프 여기로이동: "<<Rx<<' '<<Ry<<'\n'; 
+//  if(turn>=5)cout<<"루돌프 여기로이동: "<<Rx<<' '<<Ry<<'\n'; 
 }
 void SantaMove(int turn){
    
    //기절한거 깨우기 
-   for(int i=0;i<m;i++){
+   for(int i=0;i<p;i++){
      if(santas[i].isout)continue; 
      if(!santas[i].isout && santas[i].sleep && santas[i].sleep_until<turn){
         santas[i].sleep=false; 
@@ -237,12 +248,12 @@ void SantaMove(int turn){
         //산타 이동 
         santas[i].x+=dr[ggo];
         santas[i].y+=dc[ggo]; 
-        //충돌이 있는가? -산타가 일으킨 충돌  
-       //  cout<<i<<" 산타 여기로이동: "<<santas[i].x<<' '<<santas[i].y<<'\n'; 
+     //   //충돌이 있는가? -산타가 일으킨 충돌  
+   //     if(turn>=5)cout<<i<<" 산타 여기로이동: "<<santas[i].x<<' '<<santas[i].y<<'\n'; 
 
        if(santas[i].x==Rx && santas[i].y==Ry){
         // ggo의 반대방향으로 D칸 이동 
-       //  cout<<i<<santas[i].x<<','<<santas[i].y<<i<<"가 일으킨 충돌 발생\n";
+        // cout<<i<<santas[i].x<<','<<santas[i].y<<i<<"가 일으킨 충돌 발생\n";
          Collision(i,1,ggo,turn);
          
        }
@@ -280,13 +291,16 @@ int main() {
       cin>>num>>sx>>sy; 
       santas.push_back({num,sx,sy,0,0,0,0,0}); 
     } 
+    //산타 번호 순대로 정렬 
+    sort(santas.begin(),santas.end(),cmp2);  
 
     for(int i=0;i<m;i++){
-     //  cout<<i+1<<"턴\n";
+    //   cout<<i+1<<"턴\n";
        RMove(i); 
-
        SantaMove(i); 
        Plus(); 
+     //  print();
+     //  cout<<'\n';
     }
     print(); 
 
