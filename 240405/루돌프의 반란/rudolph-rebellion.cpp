@@ -72,7 +72,7 @@ void Interact(int movedsanta,int movedir,int kind){
      }
     
      santas[curn].x=nr; santas[curn].y=nc; 
-     if(nr<0 || nc<0 || nr>n || nc>n){
+     if(nr<=0 || nc<=0 || nr>n || nc>n){
     //    cout<<curn<<"아웃\n";
         santas[curn].isout=true; continue;
      }
@@ -96,23 +96,29 @@ void Collision(int movedsanta,int kind,int movedir,int turn){
    santas[movedsanta].sleep_until=turn+1; 
 
    if(kind==0){ //루돌프가 일으킨 충돌 
-  // cout<<"루돌프가 일으킨 충돌 with"<<movedsanta<<"\n"; 
+ //  cout<<"루돌프가 일으킨 충돌 with"<<movedsanta<<"\n"; 
      santas[movedsanta].score+=c; 
      //산타 이동시키기 - movedir방향으로 C만큼 밀려남  
      int nr=santas[movedsanta].x+c*dr[movedir];
      int nc=santas[movedsanta].y+c*dc[movedir]; 
      //위치가 게임밖이면 탈락 
-     santas[movedsanta].x=nr; 
-     santas[movedsanta].y=nc; 
-     if(nr<0 || nc<0 || nr>n || nc>n){
+     if(nr<=0 || nc<=0 || nr>n || nc>n){
+        santas[movedsanta].x=nr; 
+        santas[movedsanta].y=nc; 
         santas[movedsanta].isout=true; //cout<<movedsanta<<"아웃2\n";
         return;
      }
- //    if(turn>=5)cout<<"루돌프때문"<<movedsanta<<"여기로 이동"<<nr<<' '<<nc<<'\n';
+     
+     santas[movedsanta].x=nr; 
+     santas[movedsanta].y=nc; 
+     
+     //cout<<"루돌프때문"<<movedsanta<<"여기로 이동"<<nr<<' '<<nc<<'\n';
+
      //아니면 위치, 상호작용 여부 
      for(int i=0;i<p;i++){
         //자기 자신이면 지나가기 
         if(i==movedsanta)continue;
+        if(santas[i].isout)continue;
         if(nr==santas[i].x && nc==santas[i].y){
             //싱호작용이 일어남 - moveddir방향으로 1칸씩 연쇄적으로 밀려남 
             Interact(i,movedir,0); 
@@ -130,11 +136,11 @@ void Collision(int movedsanta,int kind,int movedir,int turn){
      
      santas[movedsanta].x=nr;
      santas[movedsanta].y=nc; 
-     if(nr<0 || nc<0 || nr>n || nc>n){
+     if(nr<=0 || nc<=0 || nr>n || nc>n){
         santas[movedsanta].isout=true; //cout<<movedsanta<<"아웃3\n";
         return; 
      }//이 위치에 누가 있으면 상호작용 
-  //   if(turn>=5)cout<<"산타때문"<<movedsanta<<"여기로 이동"<<nr<<' '<<nc<<'\n';
+     //cout<<"산타때문"<<movedsanta<<"여기로 이동"<<nr<<' '<<nc<<'\n';
    
     //자기 자신이면 지나가기
      //싱호작용이 일어남 - moveddir방향으로 1칸씩 연쇄적으로 밀려남 
@@ -142,6 +148,7 @@ void Collision(int movedsanta,int kind,int movedir,int turn){
      for(int i=0;i<p;i++){
         //자기 자신이면 지나가기 
         if(i==movedsanta)continue;
+        if(santas[i].isout)continue;
         if(nr==santas[i].x && nc==santas[i].y){
             //싱호작용이 일어남 - moveddir방향으로 1칸씩 연쇄적으로 밀려남 
             Interact(i,movedir,1); 
@@ -174,11 +181,13 @@ void RMove(int turn){
      int nr=Rx+dr[i];
      int nc=Ry+dc[i]; 
      if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
+
      if(calDistance(nr,nc,selectedx,selectedy)<maxs){
         maxs=calDistance(nr,nc,selectedx,selectedy);
         go=i; 
      }
    }
+
    //go 방향으로 루돌프 이동 
    Rx=Rx+dr[go];
    Ry=Ry+dc[go];
@@ -191,8 +200,9 @@ void RMove(int turn){
          Collision(i,0,go,turn); 
       }
    }
-//  if(turn>=5)cout<<"루돌프 여기로이동: "<<Rx<<' '<<Ry<<'\n'; 
+//cout<<"루돌프 여기로이동: "<<Rx<<' '<<Ry<<'\n'; 
 }
+
 void SantaMove(int turn){
    
    //기절한거 깨우기 
@@ -217,7 +227,7 @@ void SantaMove(int turn){
         int nr=santas[i].x+dr[j];
         int nc=santas[i].y+dc[j]; 
         //게임판 밖이나 산타가 있는 방향은 가지 않음 
-        if(nr<0 || nc<0 || nr>n || nc>n)continue; 
+        if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
         bool cango=true; 
         for(int k=0;k<p;k++){
             if(k==i)continue; 
@@ -241,11 +251,11 @@ void SantaMove(int turn){
         santas[i].x+=dr[ggo];
         santas[i].y+=dc[ggo]; 
      //   //충돌이 있는가? -산타가 일으킨 충돌  
-   //     if(turn>=5)cout<<i<<" 산타 여기로이동: "<<santas[i].x<<' '<<santas[i].y<<'\n'; 
+   //cout<<i<<" 산타 여기로이동: "<<santas[i].x<<' '<<santas[i].y<<'\n'; 
 
        if(santas[i].x==Rx && santas[i].y==Ry){
         // ggo의 반대방향으로 D칸 이동 
-        // cout<<i<<santas[i].x<<','<<santas[i].y<<i<<"가 일으킨 충돌 발생\n";
+       // cout<<i<<santas[i].x<<','<<santas[i].y<<i<<"가 일으킨 충돌 발생\n";
          Collision(i,1,ggo,turn);
          
        }
@@ -272,7 +282,13 @@ void print(){
    }
 
 }
-
+bool check(){
+  int flag=true;
+  for(int i=0;i<p;i++){
+    if(!santas[i].isout)flag=false; 
+  }
+  return flag;
+}
 
 int main() {
 
@@ -288,11 +304,11 @@ int main() {
 
     for(int i=0;i<m;i++){
     //   cout<<i+1<<"턴\n";
+       if(check())break; 
        RMove(i); 
        SantaMove(i); 
        Plus(); 
-     //  print();
-     //  cout<<'\n';
+      
     }
     print(); 
 
