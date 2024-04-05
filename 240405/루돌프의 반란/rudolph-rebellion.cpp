@@ -139,12 +139,12 @@ void Collision(int movedsanta,int kind,int movedir,int turn){
     //자기 자신이면 지나가기
      //싱호작용이 일어남 - moveddir방향으로 1칸씩 연쇄적으로 밀려남 
     //Interact(movedsanta,movedir,1); 
-         for(int i=0;i<p;i++){
+     for(int i=0;i<p;i++){
         //자기 자신이면 지나가기 
         if(i==movedsanta)continue;
         if(nr==santas[i].x && nc==santas[i].y){
             //싱호작용이 일어남 - moveddir방향으로 1칸씩 연쇄적으로 밀려남 
-            Interact(i,movedir,0); 
+            Interact(i,movedir,1); 
         }
      }
      
