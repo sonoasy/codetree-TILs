@@ -54,15 +54,7 @@ void Interact(int movedsanta,int movedir,int kind){
 
   queue<int>q; 
   q.push(movedsanta);
-   //차례로 1칸씩 밀려남 
-  /* for(int i=0;i<p;i++){
-    if(i==movedsanta)continue; 
-    if(!santas[i].isout && santas[movedsanta].x==santas[i].x && santas[movedsanta].y==santas[i].y){
-        q.push(i); break; 
-    }
-   }
-  }
-*/
+
    while(!q.empty()){
      int curn=q.front();
      int cur=santas[curn].x; 
@@ -139,7 +131,7 @@ void Collision(int movedsanta,int kind,int movedir,int turn){
      santas[movedsanta].x=nr;
      santas[movedsanta].y=nc; 
      if(nr<0 || nc<0 || nr>n || nc>n){
-      //  santas[movedsanta].isout=true; cout<<movedsanta<<"아웃3\n";
+        santas[movedsanta].isout=true; //cout<<movedsanta<<"아웃3\n";
         return; 
      }//이 위치에 누가 있으면 상호작용 
   //   if(turn>=5)cout<<"산타때문"<<movedsanta<<"여기로 이동"<<nr<<' '<<nc<<'\n';
