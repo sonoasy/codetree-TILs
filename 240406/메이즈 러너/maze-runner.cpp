@@ -31,10 +31,7 @@ int exitc;
 
 bool cmp(info a,info b){
   if(a.dist==b.dist){
-     if(a.r==b.r){
-       return a.c<b.c;
-     }
-     return a.r<b.r;
+     return a.dir<b.dir;
   }
   return a.dist<b.dist;
 }
@@ -64,7 +61,7 @@ bool isok(int r,int c,int len){
 
   if(exitcnt==1 && cnt>=1){
     //바꾸기 
-    //cout<<r<<' '<<c<<' '<<len<<"됨";
+   // cout<<r<<' '<<c<<' '<<len<<"됨\n";
     //출구 
     int t=(len-(exitr-r)-1);
     exitr=r+exitc-c;
@@ -122,6 +119,8 @@ void Move(){
      //현재 출구와의 거리 
      int curdist=abs(cur-exitr)+abs(cuc-exitc);
      vector<info>tmp; 
+
+     //이부분!!!! 
      for(int j=0;j<4;j++){
         int nr=cur+dr[j];
         int nc=cuc+dc[j]; 
@@ -134,11 +133,10 @@ void Move(){
      if(tmp.size()==0)continue;
      sort(tmp.begin(),tmp.end(),cmp);
      int godir=tmp[0].dir; 
-     runs[runners[i].x][runners[i].y]={0,0};
-
+     
      runners[i].x=cur+dr[godir];
      runners[i].y=cuc+dc[godir]; 
-     runs[runners[i].x][runners[i].y]={1,i}; 
+
      //출구라면 끝
      runners[i].movecnt+=1; 
      if(exitr==runners[i].x && exitc==runners[i].y)runners[i].out=true; 
@@ -148,6 +146,7 @@ void Move(){
 
 void print(){
   for(int i=0;i<m;i++){
+    if(runners[i].out)continue;
     cout<<runners[i].x<<' '<<runners[i].y<<' '<<runners[i].movecnt<<'\n';
   }
   cout<<'\n';
@@ -180,8 +179,7 @@ int main() {
 
    for(int i=0;i<m;i++){
      cin>>r>>c;
-     runners.push_back({r,c,0,0}); 
-     runs[r][c]={1,i}; 
+     runners.push_back({r,c,0,0});  
    }
    cin>>exitr>>exitc; 
 
@@ -191,11 +189,11 @@ int main() {
      // cout<<i+1<<"번째\n";
       Move(); 
      // cout<<"움직임\n";
-    //  print();
 
       Rotate(); 
-     // cout<<"회전후\n";
     //  print();
+     // cout<<"회전후\n";
+     // print();
     //  cout<<"벽 위치\n";
      // for(int j=1;j<=n;j++){
       //  for(int k=1;k<=n;k++){
@@ -203,7 +201,7 @@ int main() {
       //  }
        // cout<<'\n';
    //   }
-     // cout<<"출구"<<exitr<<' '<<exitc<<'\n';
+    //  cout<<"출구"<<exitr<<' '<<exitc<<'\n';
      
    }
    Answer(); 
