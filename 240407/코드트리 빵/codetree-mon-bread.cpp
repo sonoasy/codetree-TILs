@@ -204,7 +204,8 @@ void goBase(int cnt){
     //cnt번 사람 자기가 가고싶은 편의점과 가장 가까운 베이스켐프가기 
     int destr=destination[cnt].first;
     int destc=destination[cnt].second;
-
+   
+     map<ci,int>visited; 
     queue<pair<int,ci>>q;
     q.push({0,{destr,destc}});
     vector<ci>tmp; 
@@ -215,6 +216,7 @@ void goBase(int cnt){
        int cur=q.front().second.first;
        int cuc=q.front().second.second; 
        int cul=q.front().first;
+       visited[{cur,cuc}]=1;
        q.pop();
        if(mins<cul)continue; 
       
@@ -229,6 +231,7 @@ void goBase(int cnt){
         int nr=cur+dr[i];
         int nc=cuc+dc[i]; 
         if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
+        if(visited[{nr,nc}])continue; 
         //if(basecamp[nr][nc].second || store[nr][nc].second)continue;
         if(basecamp[{nr,nc}].second)continue;
         q.push({cul+1,{nr,nc}}); 
@@ -252,7 +255,7 @@ void Go(int cnt){
    //cnt분이 <=m 이면 cnt번 사람 가고싶은 편의점과 가장 가까운 베이스켐프 이동 
    if(cnt<=m){
      
-     goBase(cnt);
+     goBase(cnt); //이게 안됨 
    }
 
 }
@@ -288,7 +291,8 @@ int main() {
     while(1){
        Go(cnts);
        //cout<<cnts<<"분\n";
-      // print(); 
+      //if(cnts>=26)print(); 
+     // cout<<'\n';
        
        if(isend)break;
        cnts++;
