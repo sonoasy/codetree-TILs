@@ -10,7 +10,7 @@ typedef pair<int,int> ci;
 bool isend=false;
 vector<vector<ci>>basecamp; 
 //vector<vector<bool>>base_visited;
-vector<vector<ci>>store; //편의점인지  
+//vector<vector<ci>>store; //편의점인지  
 int cnts=1; 
 //각 사람들의 위치 
 struct info{
