@@ -188,6 +188,7 @@ bool check(){
    for(int i=0;i<m;i++){
     if(!person[i].arrive)flag=false; 
    }
+  // if(flag)cout<<"다도착";
    return flag; 
 }
 void print(){
@@ -221,9 +222,9 @@ int main() {
     while(1){
        
        Go(cnt);
-      // print(); 
-      if(check())break; 
-      cnt++; 
+       //print(); 
+       cnt++; 
+       if(check())break; 
     }
     cout<<cnt; 
 
