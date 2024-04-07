@@ -53,7 +53,7 @@ int bfs(int nr,int nc,int destr,int destc,int len, vector<pair<ci,int>>no_store)
     map<ci,int>visited; 
     
     for(int i=0;i<no_store.size();i++){
-       // visited[no_store[i].first]=1;
+      //  visited[no_store[i].first]=1;
     }
     
     queue<pair<int,ci>>q;
@@ -169,6 +169,8 @@ void Move(int cnt){
     //해당 방향으로 감 
     //갈수 없는 경우? 
     
+    
+
     int dir=tmp[0].second; 
     
    // cout<<i<<' '<<dir<<"방향으로 감\n";
@@ -308,9 +310,9 @@ int main() {
     
     while(1){
        Go(cnts);
-      // cout<<cnts<<"분\n";
+     //  cout<<cnts<<"분\n";
       //if(cnts>=26)
-    //   print(); 
+    //  print(); 
      // cout<<'\n';
        
        if(isend)break;
