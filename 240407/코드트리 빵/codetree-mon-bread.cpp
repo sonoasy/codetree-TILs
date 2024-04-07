@@ -50,15 +50,17 @@ void print(){
 int bfs(int nr,int nc,int destr,int destc,int len){
     
     //못가는 베이스캠프, 편의점 고려해서 가기 
+    map<ci,int>visited; 
     queue<pair<int,ci>>q;
     q.push({len,{nr,nc}});
     
-    if(cnts==3)return 0;
+    //if(cnts==3)return 0;
     while(!q.empty()){
       
       int cur=q.front().second.first;
       int cuc=q.front().second.second;
       int cul=q.front().first;
+      visited[{cur,cuc}]=1;
       q.pop();
       if(cur==destr && cuc==destc){
           //작은걸 봐야하나...? 
@@ -70,10 +72,12 @@ int bfs(int nr,int nc,int destr,int destc,int len){
         int nc=cuc+dc[i]; 
         if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
         if(basecamp[{nr,nc}].second)continue; //|| store[nr][nc].second
+        if(visited[{nr,nc}])continue; 
         q.push({cul+1,{nr,nc}}); 
       }
 
-    }    
+    }   
+    if(q.empty())return -1;  
 }
 
 bool cmp(ci a, ci b){
@@ -90,9 +94,9 @@ void Move(int cnt){
   vector<ci>no_base;
  // vector<ci>no_store;
 //if(cnt>=5)return;
-
+ 
   for(int i=1;i<=m;i++){
-    
+   // if(i>3)break;
     if(arrived[i])continue; 
     
     if(person[i].x<=0 || person[i].y<=0 || person[i].x>n || person[i].y>n)continue; 
@@ -108,7 +112,9 @@ void Move(int cnt){
     //거리-방향 
     deque<ci>tmp;
     int mins=10000000;
+
     bool fff=false; 
+
     for(int j=0;j<4;j++){
       if(arrived[i])continue;  
       int nr=cur+dr[j];
@@ -119,22 +125,32 @@ void Move(int cnt){
       
       //목적지면 바로가기 
       fff=false;
+     // cout<<i<<"여기와?"<<nr<<' '<<nc<<destr<<' '<<destc;
+     // if(cnt==4)return;
       if(nr==destr && nc==destc){
          arrived[i]=true;
       //   cout<<"도착"<<i<<' '<<nr<<' '<<nc<<'\n';
          person[i].x=nr; person[i].y=nc; 
          basecamp[{nr,nc}]={2,1};fff=true; 
+    
          break; 
-      }
-      if(fff)break;
-      //if(cnt==3 && i==2)cout<<"왔다!!";
-      // if(cnt==3)return;
-
-      int distance=bfs(nr,nc,destr,destc,1);
-
-   
-      tmp.push_back({distance,j}); 
+       }
+       if(fff)break;
+      
+       //if(cnt==4)return;
+      int distance=bfs(nr,nc,destr,destc,1); //길이 없을수도 있음 
+     // cout<<distance; 
+      //if(cnt==4 && i==3)return;
+      
+      if(distance>0)tmp.push_back({distance,j}); 
+     
+      
     }
+    //if(cnt==4)return;
+    //if(cnt==4 & i==3){
+    //    cout<<person[i].x<<' '<<person[i].y<<"여기 이동"; return;
+   // }
+
    if(fff)continue;
    if(tmp.size()==0)continue; 
    sort(tmp.begin(),tmp.end(),cmp); 
@@ -271,7 +287,7 @@ int main() {
     
     while(1){
        Go(cnts);
-      // cout<<cnts<<"분\n";
+       //cout<<cnts<<"분\n";
       // print(); 
        
        if(isend)break;
