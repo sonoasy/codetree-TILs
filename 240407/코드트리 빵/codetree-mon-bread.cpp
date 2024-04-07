@@ -95,11 +95,19 @@ void Move(int cnt){
     //거리-방향 
     deque<ci>tmp;
     int mins=10000000;
+    bool tf=false; 
     for(int j=0;j<4;j++){
       int nr=cur+dr[j];
       int nc=cuc+dc[j]; 
       if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
       if(basecamp[{nr,nc}].second)continue;
+      if(nr==destr && nc==destc){
+        arrived[i]=true; 
+        tf=true;
+        break;
+      }
+      if(tf)break; 
+
       int distance=bfs(nr,nc,destr,destc,1);
       tmp.push_back({distance,j}); 
       //if(mins>distance){
@@ -111,11 +119,16 @@ void Move(int cnt){
        // }
      // }
     }
-
+    if(check()){
+     //cout<<cnts; 
+     isend=true;
+     return;
+    }
+   if(tmp.size()==0)continue; 
    sort(tmp.begin(),tmp.end(),cmp); 
     //해당 방향으로 감 
     //갈수 없는 경우? 
-    if(tmp.size()==0)continue; 
+    
     int dir=tmp[0].second; 
    // cout<<i<<' '<<dir<<"방향으로 감\n";
     //i 사람이 dir 방향에 감 
@@ -139,7 +152,9 @@ void Move(int cnt){
        arrived[i]=true;
        no_base.push_back({nx,ny}); 
     }
-
+    if(check()){
+        isend=true; return;
+    }
   }
   //이동 끝나고 편의점 도착한 칸 더이상 못가게 하기   
   for(int i=0;i<no_base.size();i++){
@@ -243,10 +258,10 @@ int main() {
         basecamp[{x,y}]={2,0};
     }
     
-    while(1){
+    while(cnts<=6){
        Go(cnts);
-     //  cout<<cnts<<"분\n";
-      // print(); 
+       cout<<cnts<<"분\n";
+       print(); 
        if(isend)break;
        cnts++;
        if(check())break;//cnt++;  
