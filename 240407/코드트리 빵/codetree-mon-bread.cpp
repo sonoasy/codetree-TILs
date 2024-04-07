@@ -252,6 +252,9 @@ void Go(int cnt){
 
 int main() {
     
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
     cin>>n>>m;
    // basecamp.assign(n+1,vector<ci>(n+1,{0,0}));
    // base_visited.assign(n+1,vector<bool>(n+1,0));
