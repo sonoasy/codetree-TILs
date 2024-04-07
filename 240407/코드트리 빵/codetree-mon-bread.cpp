@@ -108,17 +108,20 @@ void Move(int cnt){
     //거리-방향 
     deque<ci>tmp;
     int mins=10000000;
+    bool fff=false; 
     for(int j=0;j<4;j++){
-        
+      if(arrived[i])continue;  
       int nr=cur+dr[j];
       int nc=cuc+dc[j]; 
       if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
+
       if(basecamp[{nr,nc}].second)continue;
       
       //목적지면 바로가기 
-      bool fff=false;
+      fff=false;
       if(nr==destr && nc==destc){
          arrived[i]=true;
+         cout<<"도착"<<i<<' '<<nr<<' '<<nc<<'\n';
          person[i].x=nr; person[i].y=nc; 
          basecamp[{nr,nc}]={2,1};fff=true; 
          break; 
@@ -129,18 +132,10 @@ void Move(int cnt){
 
       int distance=bfs(nr,nc,destr,destc,1);
 
-     // if(cnt==3)return;
-      tmp.push_back({distance,j}); 
-      //if(mins>distance){
-      //  mins=distance;
-      //  if(tmp.size()==0)tmp.push_back({distance,j});  
-       // else{
-       //     tmp.pop_front();
-        //    tmp.push_back({distance,j}); 
-       // }
-     // }
-    }
    
+      tmp.push_back({distance,j}); 
+    }
+   if(fff)continue;
    if(tmp.size()==0)continue; 
    sort(tmp.begin(),tmp.end(),cmp); 
     //해당 방향으로 감 
@@ -207,7 +202,7 @@ void goBase(int cnt){
        q.pop();
        if(mins<cul)continue; 
       
-       if(basecamp[{cur,cuc}].first==1){
+       if(basecamp[{cur,cuc}].first==1 && basecamp[{cur,cuc}].second!=1){
          if(mins>cul){
             mins=min(mins,cul); 
             tmp.push_back({cur,cuc});
