@@ -31,7 +31,7 @@ vector<info>person;
 
 bool check(){
    bool flag=true;
-   for(int i=0;i<m;i++){
+   for(int i=1;i<=m;i++){
     if(!arrived[i])flag=false; 
    }
    //if(flag)cout<<"다도착";
@@ -83,7 +83,7 @@ void Move(int cnt){
   vector<ci>no_base;
  // vector<ci>no_store;
 //if(cnt>=5)return;
-  for(int i=0;i<m;i++){
+  for(int i=1;i<=m;i++){
     if(arrived[i])continue; 
     if(person[i].x<=0 || person[i].y<=0 || person[i].x>n || person[i].y>n)continue; 
     int cur=person[i].x;
@@ -101,17 +101,18 @@ void Move(int cnt){
       if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
       if(basecamp[{nr,nc}].second)continue;
       int distance=bfs(nr,nc,destr,destc,1);
-
-      if(mins>distance){
-        mins=distance;
-        if(tmp.size()==0)tmp.push_back({distance,j});  
-        else{
-            tmp.pop_front();
-            tmp.push_back({distance,j}); 
-        }
-      }
+      tmp.push_back({distance,j}); 
+      //if(mins>distance){
+      //  mins=distance;
+      //  if(tmp.size()==0)tmp.push_back({distance,j});  
+       // else{
+       //     tmp.pop_front();
+        //    tmp.push_back({distance,j}); 
+       // }
+     // }
     }
-   //sort(tmp.begin(),tmp.end(),cmp); 
+
+   sort(tmp.begin(),tmp.end(),cmp); 
     //해당 방향으로 감 
     //갈수 없는 경우? 
     if(tmp.size()==0)continue; 
@@ -157,8 +158,8 @@ void Move(int cnt){
 void goBase(int cnt){
     if(arrived[cnt])return; 
     //cnt번 사람 자기가 가고싶은 편의점과 가장 가까운 베이스켐프가기 
-    int destr=destination[cnt-1].first;
-    int destc=destination[cnt-1].second;
+    int destr=destination[cnt].first;
+    int destc=destination[cnt].second;
 
     queue<pair<int,ci>>q;
     q.push({0,{destr,destc}});
@@ -212,7 +213,7 @@ void Go(int cnt){
 }
 
 void print(){
-    for(int i=0;i<m;i++){
+    for(int i=1;i<=m;i++){
         cout<<person[i].x<<' '<<person[i].y<<' '<<arrived[i]<<'\n';
     }
     cout<<'\n';
@@ -233,7 +234,7 @@ int main() {
           
       }
     }
-
+    person.push_back({0,-1,-1});
     for(int i=1;i<=m;i++){
         cin>>x>>y; 
         person.push_back({i,-1,-1}); 
@@ -244,7 +245,7 @@ int main() {
     
     while(1){
        Go(cnts);
-      // cout<<cnts<<"분\n";
+     //  cout<<cnts<<"분\n";
       // print(); 
        if(isend)break;
        cnts++;
