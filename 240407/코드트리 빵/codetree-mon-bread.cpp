@@ -2,7 +2,7 @@
 #include<vector>
 #include<queue>
 #include<algorithm>
-
+#include<deque> 
 using namespace std;
 int n,m;  //1 베이스 캠프
 int x,y; 
@@ -88,16 +88,25 @@ void Move(){
     int destc=person[i].desty; 
     
     //거리-방향 
-    vector<ci>tmp;
+    deque<ci>tmp;
+    int mins=10000000;
     for(int j=0;j<4;j++){
       int nr=cur+dr[j];
       int nc=cuc+dc[j]; 
       if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
       if(basecamp[nr][nc].second)continue;
       int distance=bfs(nr,nc,destr,destc,1);
-      tmp.push_back({distance,j});  
+
+      if(mins>distance){
+        mins=distance;
+        if(tmp.size()==0)tmp.push_back({distance,j});  
+        else{
+            tmp.pop_front();
+            tmp.push_back({distance,j}); 
+        }
+      }
     }
-    sort(tmp.begin(),tmp.end(),cmp); 
+   //sort(tmp.begin(),tmp.end(),cmp); 
     //해당 방향으로 감 
     //갈수 없는 경우? 
     if(tmp.size()==0)continue; 
