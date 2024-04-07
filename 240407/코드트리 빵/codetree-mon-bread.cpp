@@ -52,7 +52,8 @@ int bfs(int nr,int nc,int destr,int destc,int len){
     //못가는 베이스캠프, 편의점 고려해서 가기 
     queue<pair<int,ci>>q;
     q.push({len,{nr,nc}});
-
+    
+    if(cnts==3)return 0;
     while(!q.empty()){
       
       int cur=q.front().second.first;
@@ -91,8 +92,11 @@ void Move(int cnt){
 //if(cnt>=5)return;
 
   for(int i=1;i<=m;i++){
+    
     if(arrived[i])continue; 
+    
     if(person[i].x<=0 || person[i].y<=0 || person[i].x>n || person[i].y>n)continue; 
+   
     int cur=person[i].x;
     int cuc=person[i].y; 
     //4방향 중 최단거리로 갈수 있는 칸 수 -> 상좌우하 순 
@@ -100,25 +104,32 @@ void Move(int cnt){
     int destr=destination[i].first;
     int destc=destination[i].second; 
     
-
-
+   
     //거리-방향 
     deque<ci>tmp;
     int mins=10000000;
     for(int j=0;j<4;j++){
+        
       int nr=cur+dr[j];
       int nc=cuc+dc[j]; 
       if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
-      if(basecamp[{nr,nc}].first==1 && basecamp[{nr,nc}].second)continue;
+      if(basecamp[{nr,nc}].second)continue;
+      
       //목적지면 바로가기 
       bool fff=false;
       if(nr==destr && nc==destc){
          arrived[i]=true;
+         person[i].x=nr; person[i].y=nc; 
          basecamp[{nr,nc}]={2,1};fff=true; 
          break; 
       }
-      if(fff)continue;
+      if(fff)break;
+      //if(cnt==3 && i==2)cout<<"왔다!!";
+      // if(cnt==3)return;
+
       int distance=bfs(nr,nc,destr,destc,1);
+
+      if(cnt==3)return;
       tmp.push_back({distance,j}); 
       //if(mins>distance){
       //  mins=distance;
@@ -129,11 +140,12 @@ void Move(int cnt){
        // }
      // }
     }
-
+   
+   if(tmp.size()==0)continue; 
    sort(tmp.begin(),tmp.end(),cmp); 
     //해당 방향으로 감 
     //갈수 없는 경우? 
-    if(tmp.size()==0)continue; 
+    
     int dir=tmp[0].second; 
     
    // cout<<i<<' '<<dir<<"방향으로 감\n";
