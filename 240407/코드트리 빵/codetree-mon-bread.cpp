@@ -220,6 +220,8 @@ void Move(int cnt){
 }
 
 void goBase(int cnt){
+
+    //이거는 우선순위 없음 뱡향에 
     if(arrived[cnt])return; 
     //cnt번 사람 자기가 가고싶은 편의점과 가장 가까운 베이스켐프가기 
     int destr=destination[cnt].first;
@@ -241,7 +243,7 @@ void goBase(int cnt){
        if(mins<cul)continue; 
       
        if(basecamp[{cur,cuc}].first==1 && basecamp[{cur,cuc}].second!=1){
-         if(mins>cul){
+         if(mins>=cul){
             mins=min(mins,cul); 
             tmp.push_back({cur,cuc});
          } 
@@ -310,9 +312,9 @@ int main() {
     
     while(1){
        Go(cnts);
-     //  cout<<cnts<<"분\n";
+      // cout<<cnts<<"분\n";
       //if(cnts>=26)
-    //  print(); 
+   //  print(); 
      // cout<<'\n';
        
        if(isend)break;
