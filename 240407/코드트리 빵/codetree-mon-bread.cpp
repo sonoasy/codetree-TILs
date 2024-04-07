@@ -217,15 +217,15 @@ int main() {
         person.push_back({i,-1,-1,0,x,y}); 
         basecamp[x][y].first=2; 
     }
-    int cnt=1; 
+    int cnt=0; 
     while(1){
-       if(check())break; 
+       cnt++;
        Go(cnt);
       // print(); 
-       cnt++;
+      if(check())break; 
 
     }
-    cout<<cnt-1; 
+    cout<<cnt; 
 
     return 0;
 }
