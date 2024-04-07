@@ -49,7 +49,7 @@ int bfs(int nr,int nc,int destr,int destc,int len){
         int nr=cur+dr[i];
         int nc=cuc+dc[i]; 
         if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
-        if(basecamp[nr][nc].second || store[nr][nc].second)continue;
+        if(basecamp[nr][nc].second)continue; //|| store[nr][nc].second
         q.push({cul+1,{nr,nc}}); 
       }
 
@@ -68,7 +68,7 @@ void Move(){
   //격자 내에 있고, 편의점에 도착하지 않은 사람들 이동 
   //못지나가는 베이스캠프,편의점 목록
   vector<ci>no_base;
-  vector<ci>no_store;
+ // vector<ci>no_store;
 
   for(int i=0;i<m;i++){
     if(person[i].arrive)continue; 
@@ -85,7 +85,7 @@ void Move(){
       int nr=cur+dr[j];
       int nc=cuc+dc[j]; 
       if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
-      if(basecamp[nr][nc].second || store[nr][nc].second)continue;
+      if(basecamp[nr][nc].second)continue;
       int distance=bfs(nr,nc,destr,destc,1);
       tmp.push_back({distance,j});  
     }
@@ -105,24 +105,24 @@ void Move(){
     if(basecamp[nx][ny].first==1){
       //  person[i].x=nx;
       //  person[i].y=ny; 
-        no_base.push_back({nx,ny});
+       no_base.push_back({nx,ny});
     }
     //편의점일 경우 
-    if(store[nx][ny].first==1){
+    if(basecamp[nx][ny].first==2){
      //  person[i].x=nx;
      //  person[i].y=ny; 
        person[i].arrive=true;
-       no_store.push_back({nx,ny}); 
+       no_base.push_back({nx,ny}); 
     }
 
   }
   //이동 끝나고 편의점 도착한 칸 더이상 못가게 하기   
   for(int i=0;i<no_base.size();i++){
-    basecamp[no_base[i].first][no_base[i].second].second=true; 
+   // basecamp[no_base[i].first][no_base[i].second].second=true; 
   } 
-  for(int i=0;i<no_store.size();i++){
-    store[no_store[i].first][no_store[i].second].second=true;
-  } 
+ // for(int i=0;i<no_store.size();i++){
+   // basecamp[no_store[i].first][no_store[i].second].second=true;
+ // } 
 
 }
 
@@ -137,6 +137,7 @@ void goBase(int cnt){
     vector<ci>tmp; 
     //갈수 없는거 잘피해서 가기 
     int mins=10000000; 
+
     while(!q.empty()){
        int cur=q.front().second.first;
        int cuc=q.front().second.second; 
@@ -155,8 +156,8 @@ void goBase(int cnt){
         int nr=cur+dr[i];
         int nc=cuc+dc[i]; 
         if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
-        if(basecamp[nr][nc].second || store[nr][nc].second)continue;
-        
+        //if(basecamp[nr][nc].second || store[nr][nc].second)continue;
+        if(basecamp[nr][nc].second)continue;
         q.push({cul+1,{nr,nc}}); 
 
        }
@@ -201,7 +202,7 @@ int main() {
     cin>>n>>m;
     basecamp.assign(n+1,vector<ci>(n+1,{0,0}));
    // base_visited.assign(n+1,vector<bool>(n+1,0));
-    store.assign(n+1,vector<ci>(n+1,{0,0}));
+   // store.assign(n+1,vector<ci>(n+1,{0,0}));
    // store_visited.assign(n+1,vector<bool>(n+1,0)); 
 
     for(int i=1;i<=n;i++){
@@ -214,7 +215,7 @@ int main() {
     for(int i=1;i<=m;i++){
         cin>>x>>y; 
         person.push_back({i,-1,-1,0,x,y}); 
-        store[x][y].first=1; 
+        basecamp[x][y].first=2; 
     }
     int cnt=1; 
     while(1){
