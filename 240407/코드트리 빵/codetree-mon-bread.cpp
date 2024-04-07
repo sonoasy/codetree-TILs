@@ -92,7 +92,7 @@ void Move(int cnt){
   //격자 내에 있고, 편의점에 도착하지 않은 사람들 이동 
   //못지나가는 베이스캠프,편의점 목록
   vector<ci>no_base;
- // vector<ci>no_store;
+  vector<pair<ci,int>>no_store;
 //if(cnt>=5)return;
  
   for(int i=1;i<=m;i++){
@@ -125,13 +125,17 @@ void Move(int cnt){
       
       //목적지면 바로가기 
       fff=false;
+      int fnr,fnc;
      // cout<<i<<"여기와?"<<nr<<' '<<nc<<destr<<' '<<destc;
      // if(cnt==4)return;
       if(nr==destr && nc==destc){
-         arrived[i]=true;
+        no_store.push_back({{nr,nc},i});
+        // arrived[i]=true;
       //   cout<<"도착"<<i<<' '<<nr<<' '<<nc<<'\n';
-         person[i].x=nr; person[i].y=nc; 
-         basecamp[{nr,nc}]={2,1};fff=true; 
+      //이걸 나중에 해줘야됨!!!!! 
+        // person[i].x=nr; person[i].y=nc; 
+        // basecamp[{nr,nc}]={2,1};
+        fff=true; 
     
          break; 
        }
@@ -188,6 +192,12 @@ void Move(int cnt){
   //if(cnt==6)cout<<"여기까지왔어?";
   // if(cnt==6)return; // print(); 
   
+  for(int i=0;i<no_store.size();i++){
+    arrived[no_store[i].second]=1; 
+    basecamp[{no_store[i].first.first,no_store[i].first.second}].second=1;
+  }
+
+
   //이동 끝나고 편의점 도착한 칸 더이상 못가게 하기   
   for(int i=0;i<no_base.size();i++){
     basecamp[{no_base[i].first,no_base[i].second}].second=1; 
@@ -290,8 +300,9 @@ int main() {
     
     while(1){
        Go(cnts);
-       //cout<<cnts<<"분\n";
-      //if(cnts>=26)print(); 
+      // cout<<cnts<<"분\n";
+      //if(cnts>=26)
+    //  print(); 
      // cout<<'\n';
        
        if(isend)break;
