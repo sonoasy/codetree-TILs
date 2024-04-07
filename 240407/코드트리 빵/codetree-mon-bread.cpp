@@ -7,10 +7,11 @@ using namespace std;
 int n,m;  //1 베이스 캠프
 int x,y; 
 typedef pair<int,int> ci; 
+bool isend=false;
 vector<vector<ci>>basecamp; 
 //vector<vector<bool>>base_visited;
 vector<vector<ci>>store; //편의점인지  
-
+int cnts=1; 
 //각 사람들의 위치 
 struct info{
     int num; 
@@ -125,8 +126,12 @@ void Move(){
   }
   //이동 끝나고 편의점 도착한 칸 더이상 못가게 하기   
   for(int i=0;i<no_base.size();i++){
-   // basecamp[no_base[i].first][no_base[i].second].second=true; 
+    basecamp[no_base[i].first][no_base[i].second].second=true; 
   } 
+  if(check()){
+     //cout<<cnts; 
+     isend=true;
+  }
  // for(int i=0;i<no_store.size();i++){
    // basecamp[no_store[i].first][no_store[i].second].second=true;
  // } 
@@ -217,15 +222,16 @@ int main() {
         person.push_back({i,-1,-1,0,x,y}); 
         basecamp[x][y].first=2; 
     }
-    int cnt=1; 
+    
     while(1){
-       Go(cnt);
-      // cout<<cnt<<"분\n";
+       Go(cnts);
+      // cout<<cnts<<"분\n";
       // print(); 
-       cnt++;
+       if(isend)break;
+       cnts++;
        if(check())break;//cnt++;  
     }
-    cout<<cnt; 
+    cout<<cnts; 
 
     return 0;
 }
