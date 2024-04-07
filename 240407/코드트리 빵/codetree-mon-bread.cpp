@@ -258,10 +258,10 @@ int main() {
         basecamp[{x,y}]={2,0};
     }
     
-    while(cnts<=6){
+    while(1){
        Go(cnts);
-       cout<<cnts<<"분\n";
-       print(); 
+      // cout<<cnts<<"분\n";
+     //  print(); 
        if(isend)break;
        cnts++;
        if(check())break;//cnt++;  
