@@ -129,7 +129,7 @@ void Move(int cnt){
 
       int distance=bfs(nr,nc,destr,destc,1);
 
-      if(cnt==3)return;
+     // if(cnt==3)return;
       tmp.push_back({distance,j}); 
       //if(mins>distance){
       //  mins=distance;
@@ -185,10 +185,7 @@ void Move(int cnt){
      //cout<<cnts; 
      isend=true;
   }
- // for(int i=0;i<no_store.size();i++){
-   // basecamp[no_store[i].first][no_store[i].second].second=true;
- // } 
- 
+
 }
 
 void goBase(int cnt){
