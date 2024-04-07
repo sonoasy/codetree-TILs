@@ -23,7 +23,14 @@ struct info{
     int desty; 
 };
 vector<info>person;
-
+bool check(){
+   bool flag=true;
+   for(int i=0;i<m;i++){
+    if(!person[i].arrive)flag=false; 
+   }
+  // if(flag)cout<<"다도착";
+   return flag; 
+}
 int dr[4]={-1,0,0,1};
 int dc[4]={0,-1,1,0}; 
 
@@ -183,14 +190,6 @@ void Go(int cnt){
 
 }
 
-bool check(){
-   bool flag=true;
-   for(int i=0;i<m;i++){
-    if(!person[i].arrive)flag=false; 
-   }
-  // if(flag)cout<<"다도착";
-   return flag; 
-}
 void print(){
     for(int i=0;i<m;i++){
         cout<<person[i].x<<' '<<person[i].y<<'\n';
@@ -220,11 +219,11 @@ int main() {
     }
     int cnt=1; 
     while(1){
-       
        Go(cnt);
-       //print(); 
-       cnt++; 
-       if(check())break; 
+      // cout<<cnt<<"분\n";
+      // print(); 
+       cnt++;
+       if(check())break;//cnt++;  
     }
     cout<<cnt; 
 
