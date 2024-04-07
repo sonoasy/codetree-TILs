@@ -121,7 +121,7 @@ void Move(int cnt){
       fff=false;
       if(nr==destr && nc==destc){
          arrived[i]=true;
-         cout<<"도착"<<i<<' '<<nr<<' '<<nc<<'\n';
+      //   cout<<"도착"<<i<<' '<<nr<<' '<<nc<<'\n';
          person[i].x=nr; person[i].y=nc; 
          basecamp[{nr,nc}]={2,1};fff=true; 
          break; 
