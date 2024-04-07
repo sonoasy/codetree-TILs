@@ -53,7 +53,7 @@ int bfs(int nr,int nc,int destr,int destc,int len, vector<pair<ci,int>>no_store)
     map<ci,int>visited; 
     
     for(int i=0;i<no_store.size();i++){
-        visited[no_store[i].first]=1;
+       // visited[no_store[i].first]=1;
     }
     
     queue<pair<int,ci>>q;
