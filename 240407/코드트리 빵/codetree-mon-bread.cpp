@@ -47,11 +47,17 @@ void print(){
     cout<<'\n';
 }
 //최단거리 출력 
-int bfs(int nr,int nc,int destr,int destc,int len){
+int bfs(int nr,int nc,int destr,int destc,int len, vector<pair<ci,int>>no_store){
     
     //못가는 베이스캠프, 편의점 고려해서 가기 
     map<ci,int>visited; 
+    
+    for(int i=0;i<no_store.size();i++){
+        visited[no_store[i].first]=1;
+    }
+    
     queue<pair<int,ci>>q;
+
     q.push({len,{nr,nc}});
     
     //if(cnts==3)return 0;
@@ -140,10 +146,12 @@ void Move(int cnt){
          break; 
        }
        if(fff)break;
-      
+
+      //나중에 하긴해야하는데 길이 없으면 안됨  
+
        //if(cnt==4)return;
-      int distance=bfs(nr,nc,destr,destc,1); //길이 없을수도 있음 
-     // cout<<distance; 
+      int distance=bfs(nr,nc,destr,destc,1,no_store); //길이 없을수도 있음 
+      // if(cnt==3 && i==2)cout<<j<<' '<<distance<<'\n'; 
       //if(cnt==4 && i==3)return;
       
       if(distance>0)tmp.push_back({distance,j}); 
@@ -302,7 +310,7 @@ int main() {
        Go(cnts);
       // cout<<cnts<<"분\n";
       //if(cnts>=26)
-    //  print(); 
+    //   print(); 
      // cout<<'\n';
        
        if(isend)break;
