@@ -15,24 +15,26 @@ map<ci,ci>basecamp;
 //vector<vector<ci>>store; //편의점인지  
 int cnts=1; 
 //각 사람들의 위치 
+map<int,int>arrived;
+map<int,ci>destination; 
 struct info{
     int num; 
     int x;
     int y; 
     //편의점에 도착했는지 
-    bool arrive; 
+  //  bool arrive; 
     //가려는 편의점 위치 
-    int destx;
-    int desty; 
+  //  int destx;
+   // int desty; 
 };
 vector<info>person;
 
 bool check(){
    bool flag=true;
    for(int i=0;i<m;i++){
-    if(!person[i].arrive)flag=false; 
+    if(!arrived[i])flag=false; 
    }
-  // if(flag)cout<<"다도착";
+   //if(flag)cout<<"다도착";
    return flag; 
 }
 int dr[4]={-1,0,0,1};
@@ -75,20 +77,20 @@ bool cmp(ci a, ci b){
 }
 
 
-void Move(){
+void Move(int cnt){
   //격자 내에 있고, 편의점에 도착하지 않은 사람들 이동 
   //못지나가는 베이스캠프,편의점 목록
   vector<ci>no_base;
  // vector<ci>no_store;
-
+//if(cnt>=5)return;
   for(int i=0;i<m;i++){
-    if(person[i].arrive)continue; 
+    if(arrived[i])continue; 
     if(person[i].x<=0 || person[i].y<=0 || person[i].x>n || person[i].y>n)continue; 
     int cur=person[i].x;
     int cuc=person[i].y; 
     //4방향 중 최단거리로 갈수 있는 칸 수 -> 상좌우하 순 
-    int destr=person[i].destx;
-    int destc=person[i].desty; 
+    int destr=destination[i].first;
+    int destc=destination[i].second; 
     
     //거리-방향 
     deque<ci>tmp;
@@ -120,6 +122,8 @@ void Move(){
     int ny=cuc+dc[dir];
     person[i].x=nx;
     person[i].y=ny;  
+    
+
     //베이스캠프나 편의점에 갔는가? -> 더이상 거기 아무도 못지나감, 이거 다 움직이고 
     //베이스일 경우
     if(basecamp[{nx,ny}].first==1){
@@ -131,7 +135,7 @@ void Move(){
     if(basecamp[{nx,ny}].first==2){
      //  person[i].x=nx;
      //  person[i].y=ny; 
-       person[i].arrive=true;
+       arrived[i]=true;
        no_base.push_back({nx,ny}); 
     }
 
@@ -151,10 +155,10 @@ void Move(){
 }
 
 void goBase(int cnt){
-    if(person[cnt-1].arrive)return; 
+    if(arrived[cnt])return; 
     //cnt번 사람 자기가 가고싶은 편의점과 가장 가까운 베이스켐프가기 
-    int destr=person[cnt-1].destx;
-    int destc=person[cnt-1].desty; 
+    int destr=destination[cnt-1].first;
+    int destc=destination[cnt-1].second;
 
     queue<pair<int,ci>>q;
     q.push({0,{destr,destc}});
@@ -189,8 +193,8 @@ void goBase(int cnt){
     //tmp 중에 r,c 가장 작은곳으로 
     sort(tmp.begin(),tmp.end(),cmp);
     if(tmp.size()>=1){
-        person[cnt-1].x=tmp[0].first;
-        person[cnt-1].y=tmp[0].second; 
+        person[cnt].x=tmp[0].first;
+        person[cnt].y=tmp[0].second; 
         basecamp[{tmp[0].first,tmp[0].second}].second=true; 
     } 
 }
@@ -199,7 +203,7 @@ void goBase(int cnt){
 void Go(int cnt){
 
    //격자 내에 있는 사람 움직이기 
-   Move(); 
+   Move(cnt); 
    //cnt분이 <=m 이면 cnt번 사람 가고싶은 편의점과 가장 가까운 베이스켐프 이동 
    if(cnt<=m){
      goBase(cnt);
@@ -209,7 +213,7 @@ void Go(int cnt){
 
 void print(){
     for(int i=0;i<m;i++){
-        cout<<person[i].x<<' '<<person[i].y<<'\n';
+        cout<<person[i].x<<' '<<person[i].y<<' '<<arrived[i]<<'\n';
     }
     cout<<'\n';
 }
@@ -232,7 +236,9 @@ int main() {
 
     for(int i=1;i<=m;i++){
         cin>>x>>y; 
-        person.push_back({i,-1,-1,0,x,y}); 
+        person.push_back({i,-1,-1}); 
+        arrived[i]=0; 
+        destination[i]={x,y};
         basecamp[{x,y}]={2,0};
     }
     
