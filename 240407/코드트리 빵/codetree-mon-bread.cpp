@@ -40,6 +40,12 @@ bool check(){
 int dr[4]={-1,0,0,1};
 int dc[4]={0,-1,1,0}; 
 
+void print(){
+    for(int i=1;i<=m;i++){
+        cout<<person[i].x<<' '<<person[i].y<<' '<<arrived[i]<<'\n';
+    }
+    cout<<'\n';
+}
 //최단거리 출력 
 int bfs(int nr,int nc,int destr,int destc,int len){
     
@@ -83,31 +89,35 @@ void Move(int cnt){
   vector<ci>no_base;
  // vector<ci>no_store;
 //if(cnt>=5)return;
+
   for(int i=1;i<=m;i++){
     if(arrived[i])continue; 
     if(person[i].x<=0 || person[i].y<=0 || person[i].x>n || person[i].y>n)continue; 
     int cur=person[i].x;
     int cuc=person[i].y; 
     //4방향 중 최단거리로 갈수 있는 칸 수 -> 상좌우하 순 
+    //가려는 편의점 
     int destr=destination[i].first;
     int destc=destination[i].second; 
     
+
+
     //거리-방향 
     deque<ci>tmp;
     int mins=10000000;
-    bool tf=false; 
     for(int j=0;j<4;j++){
       int nr=cur+dr[j];
       int nc=cuc+dc[j]; 
       if(nr<=0 || nc<=0 || nr>n || nc>n)continue; 
-      if(basecamp[{nr,nc}].second)continue;
+      if(basecamp[{nr,nc}].first==1 && basecamp[{nr,nc}].second)continue;
+      //목적지면 바로가기 
+      bool fff=false;
       if(nr==destr && nc==destc){
-        arrived[i]=true; 
-        tf=true;
-        break;
+         arrived[i]=true;
+         basecamp[{nr,nc}]={2,1};fff=true; 
+         break; 
       }
-      if(tf)break; 
-
+      if(fff)continue;
       int distance=bfs(nr,nc,destr,destc,1);
       tmp.push_back({distance,j}); 
       //if(mins>distance){
@@ -119,43 +129,42 @@ void Move(int cnt){
        // }
      // }
     }
-    if(check()){
-     //cout<<cnts; 
-     isend=true;
-     return;
-    }
-   if(tmp.size()==0)continue; 
+
    sort(tmp.begin(),tmp.end(),cmp); 
     //해당 방향으로 감 
     //갈수 없는 경우? 
-    
+    if(tmp.size()==0)continue; 
     int dir=tmp[0].second; 
+    
    // cout<<i<<' '<<dir<<"방향으로 감\n";
     //i 사람이 dir 방향에 감 
     int nx=cur+dr[dir];
     int ny=cuc+dc[dir];
     person[i].x=nx;
     person[i].y=ny;  
-    
-
+  //  cout<<i<<"여기로 이동"<<nx<<' '<<ny<<'\n';
+   
     //베이스캠프나 편의점에 갔는가? -> 더이상 거기 아무도 못지나감, 이거 다 움직이고 
     //베이스일 경우
     if(basecamp[{nx,ny}].first==1){
       //  person[i].x=nx;
       //  person[i].y=ny; 
-       no_base.push_back({nx,ny});
+       no_base.push_back({nx,ny}); 
     }
     //편의점일 경우 
-    if(basecamp[{nx,ny}].first==2){
+     
+    //자기가 가려는 편의점일때만!!!! 
+    if(basecamp[{nx,ny}].first==2 && nx==destr && ny==destc){
      //  person[i].x=nx;
      //  person[i].y=ny; 
        arrived[i]=true;
        no_base.push_back({nx,ny}); 
     }
-    if(check()){
-        isend=true; return;
-    }
+
   }
+  //if(cnt==6)cout<<"여기까지왔어?";
+  // if(cnt==6)return; // print(); 
+  
   //이동 끝나고 편의점 도착한 칸 더이상 못가게 하기   
   for(int i=0;i<no_base.size();i++){
     basecamp[{no_base[i].first,no_base[i].second}].second=1; 
@@ -167,7 +176,7 @@ void Move(int cnt){
  // for(int i=0;i<no_store.size();i++){
    // basecamp[no_store[i].first][no_store[i].second].second=true;
  // } 
-
+ 
 }
 
 void goBase(int cnt){
@@ -222,17 +231,12 @@ void Go(int cnt){
    Move(cnt); 
    //cnt분이 <=m 이면 cnt번 사람 가고싶은 편의점과 가장 가까운 베이스켐프 이동 
    if(cnt<=m){
+     
      goBase(cnt);
    }
 
 }
 
-void print(){
-    for(int i=1;i<=m;i++){
-        cout<<person[i].x<<' '<<person[i].y<<' '<<arrived[i]<<'\n';
-    }
-    cout<<'\n';
-}
 
 int main() {
     
@@ -258,10 +262,11 @@ int main() {
         basecamp[{x,y}]={2,0};
     }
     
-    while(1){
+    while(cnts<=7){
        Go(cnts);
       // cout<<cnts<<"분\n";
-     //  print(); 
+      // print(); 
+       
        if(isend)break;
        cnts++;
        if(check())break;//cnt++;  
