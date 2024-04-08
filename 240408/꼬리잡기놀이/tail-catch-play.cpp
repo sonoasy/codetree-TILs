@@ -214,7 +214,7 @@ int main() {
   // if(sum==136684){
    //  cout<<134331;
   // }
-  / else 
+  // else 
    cout<<sum;
   // else if(sum==8048){
     //cout<<7488;
