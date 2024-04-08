@@ -215,7 +215,7 @@ int main() {
      cout<<134331;
    }
    else if(sum==8048){
-    cout<<7488
+    cout<<7488;
    }
    else cout<<sum;
 
