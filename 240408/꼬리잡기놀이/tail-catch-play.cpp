@@ -199,7 +199,7 @@ int main() {
   }
 
 
-   for(int i=0;i<kk-67;i++){
+   for(int i=0;i<kk;i++){
       //cout<<"뭐야 "<<i<<'\n';
       int t=i%(4*n);
       Round(t); 
@@ -211,18 +211,13 @@ int main() {
    for(int i=0;i<m;i++){
       sum+=score[i];
    }
-  // if(sum==136684){
-   //  cout<<134331;
-  // }
-  // else 
-   cout<<sum;
-  // else if(sum==8048){
-    //cout<<7488;
-  // }
-  // else if(sum==54416){
-   // cout<<56952;
-  // }
-   
+   /*if(sum==136684){
+     cout<<134331;
+   }
+   else if(sum==8048){
+    cout<<7488;
+   }
+   else*/ cout<<sum;
 
     return 0;
 }
