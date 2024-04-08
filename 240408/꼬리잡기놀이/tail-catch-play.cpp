@@ -28,7 +28,7 @@ struct person{
 map<int,int>dir; 
 map<int,vector<person>>info; 
 //그룹수만큼? 
-int arrs[401][4];
+int arrs[401][4]={{-1}};
 void print(){
    vector<vector<int>>rrr;
    rrr.assign(n+1,vector<int>(n+1,0)); 
@@ -71,8 +71,8 @@ void dfs(int i,int j,int cnt,int num){
 }
 
 void Round(int round){
-   
-   
+   int t=round;
+   round=round%(4*n);
    //방향대로 한칸 이동하기 
    for(int i=0;i<info.size();i++){
       int d=dir[i];// cout<<"방향"<<d;
@@ -86,24 +86,14 @@ void Round(int round){
       }
    }
     
-    
-   //이동 
-   for(int i=0;i<info.size();i++){
-      int d=dir[i];// cout<<"방향"<<d;
-     // cout<<"그룹: "<<i<<' '<<dir[i]<<'\n';
-      for(int j=0;j<info[i].size();j++){
-         //cout<<info[i][j].x<<' '<<info[i][j].y<<'\n';
-         }
-        // cout<<'\n';
-   }
+  
 
    //공 보내면서 처음 맞는사람 찾고 
    int br=balls[round].r; 
    int bc=balls[round].c;
    int bdir=balls[round].dirr;
    int bdic=balls[round].dirc; 
-  // cout<<"라운드 횟수"<<round<<'\n';
-  // cout<<"볼쏘는 방향 "<<br<<' '<<bc<<' '<<bdir<<' '<<bdic<<'\n';
+
     //cout<<"이동 잘됐나확인\n";//print();cout<<'\n';//if(round==3)return;
 
    bool flag=false;
@@ -118,7 +108,8 @@ void Round(int round){
                // score[j]+=((info[j][k].num+1)*(info[j][k].num+1));
                 score[j]+=(k+1)*(k+1); 
                // cout<<br<<' '<<bc<<"일때\n";
-             //  cout<<"점수얻음"<<j<<' '<<k+1<<' '<<(k+1)*(k+1)<<'\n';
+               //if(t>400)
+     
                 flag=true; 
                 fcnt=j; 
                 break; 
@@ -133,20 +124,27 @@ void Round(int round){
    if(!flag)return;
 
    //방향바꾸기 
-   if(dir[fcnt]==1){
-     dir[fcnt]=-1;
-   }
-   else if(dir[fcnt]==-1)dir[fcnt]=1;
+  // if(dir[fcnt]==1){
+   //  dir[fcnt]=-1;
+ //  }
+   //else if(dir[fcnt]==-1)dir[fcnt]=1;
    //1번과 3번까지  
    vector<person>tmp;
    for(int i=info[fcnt].size()-1;i>=0;i--){
       tmp.push_back(info[fcnt][i]);
    }
    for(int i=0;i<info[fcnt].size();i++){
-     info[fcnt][i]=tmp[i]; 
+     info[fcnt][i]=tmp[i];//info[fcnt][i].num=i;
    }
-
-
+   dir[fcnt]*=-1;
+   //dir 정하기 
+   //route상에서 
+  // cout<<info[fcnt][0].num<<' '<<info[fcnt][1].num<<'\n';
+  // if(info[fcnt][0].num<info[fcnt][1].num){
+ //      dir[fcnt]=-1;
+  // }
+  // else dir[fcnt]=1;
+   
 }
 
 int main() {
@@ -168,11 +166,20 @@ int main() {
          if(!dfs_visited[i][j]&& arr[i][j]==1){
             cnt++; 
             //dfs_visited[i][j]=1; 
+            //이어지지않은경우 
             dfs(i,j,cnt,0); 
+            if(arrs[cnt][3]==-1){
+                //초기화
+                vector<person>empty;
+                info[cnt]=empty; 
+                arrs[cnt][1]=-1;arrs[cnt][2]=-1;
+                cnt--;
+            }
          }
          
       }
     }
+  
    //공 방향 정하기 
    int dx[4]={0,-1,0,1};
    int dy[4]={1,0,-1,0};
@@ -193,19 +200,16 @@ int main() {
      balls.push_back({fr,fc,dx[3],dy[3]});      
   }
  
-  for(int i=0;i<=cnt;i++){
-     if(arr[i][1]<arr[i][3])dir[i]=1;
-     else dir[i]=-1;
+  for(int i=0;i<m;i++){
+     dir[i]=-1;
   }
 
 
    for(int i=0;i<kk;i++){
       //cout<<"뭐야 "<<i<<'\n';
-      int t=i%(4*n);
-      Round(t); 
+      
+      Round(i); 
      
-     // print();
-
    }
    int sum=0;
    for(int i=0;i<m;i++){
