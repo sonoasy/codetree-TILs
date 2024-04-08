@@ -117,7 +117,7 @@ void Round(int round){
                // score[j]+=((info[j][k].num+1)*(info[j][k].num+1));
                 score[j]+=(k+1)*(k+1); 
                // cout<<br<<' '<<bc<<"일때\n";
-                //cout<<"점수얻음"<<j<<' '<<k+1<<' '<<(k+1)*(k+1)<<'\n';
+               // cout<<"점수얻음"<<j<<' '<<k+1<<' '<<(k+1)*(k+1)<<'\n';
                 flag=true; 
                 fcnt=j; 
                 break; 
