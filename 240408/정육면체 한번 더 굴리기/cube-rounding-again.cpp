@@ -13,7 +13,7 @@ int score=0;
 
 int curx=1;
 int cury=1; 
-int dir=3;
+int dir=1;
 
 //앞 뒤 오 좌 위 아래 
 int fnum=2; 
@@ -34,6 +34,7 @@ int Count(int nx,int ny){
      int cr=q.front().first;
      int cc=q.front().second;
      q.pop();
+     if(visited[cr][cc])continue;
      visited[cr][cc]=1; 
     // cout<<cr<<' '<<cc<<"방문함\n";
      cnt++; 
@@ -48,7 +49,7 @@ int Count(int nx,int ny){
         }
      }
    }
-  // cout<<cnt<<' '<<num<<'\n';
+   //cout<<cnt<<' '<<num<<'\n';
    return cnt*num; 
 }
 
