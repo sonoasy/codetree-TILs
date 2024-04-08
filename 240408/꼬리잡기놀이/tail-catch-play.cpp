@@ -211,10 +211,7 @@ int main() {
    for(int i=0;i<m;i++){
       sum+=score[i];
    }
-   if(sum==512){
-      cout<<18441;
-   }
-   else cout<<sum;
+   cout<<sum;
 
     return 0;
 }
