@@ -49,7 +49,7 @@ int Count(int nx,int ny){
         }
      }
    }
-   //cout<<cnt<<' '<<num<<'\n';
+  // cout<<cnt<<' '<<num<<'\n';
    return cnt*num; 
 }
 
@@ -118,27 +118,26 @@ void Round(int turn){
         dir=(dir-1+4)%4; 
       }
   }
-  //주사위 굴려서 상태바꾸기 
-  Roll(dir); 
-
   //다음위치 
   int nx=curx+dr[dir];
   int ny=cury+dc[dir]; 
   //다음위치가 격자밖이면 반대방향으로 수정하기 
   if(nx<=0 || ny<=0 || nx>n || ny>n){
-    if(dir==0){
+    if(dir==0){ //상 -> 하 
        dir=2;
     }
-    else if(dir==1){
+    else if(dir==1){ //우-> 좌 
        dir=3;
     }
-    else if(dir==2){
+    else if(dir==2){ //하-> 상
        dir=0;
     }
-    else dir=1; 
+    else dir=1; //좌-> 우 
+
     nx=curx+dr[dir];ny=cury+dc[dir];
   }
-  
+  //주사위 굴려서 상태바꾸기 
+  Roll(dir); 
   //다음 위치에 도착해서 얻은 점수 계산 
   score+=Count(nx,ny); 
   curx=nx; cury=ny;  
@@ -155,6 +154,8 @@ int main() {
     }
     for(int i=1;i<=m;i++){
         Round(i);
+      //  cout<<i<<"번째끝나고\n";
+       // cout<<curx<<' '<<cury<<' '<<dir<<'\n';
     }
     cout<<score;
 
