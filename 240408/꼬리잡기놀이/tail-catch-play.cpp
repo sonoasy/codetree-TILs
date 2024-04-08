@@ -29,7 +29,23 @@ map<int,int>dir;
 map<int,vector<person>>info; 
 //그룹수만큼? 
 int arrs[401][4];
+void print(){
+   vector<vector<int>>rrr;
+   rrr.assign(n+1,vector<int>(n+1,0)); 
+   for(int i=0;i<info.size();i++){
+      for(int j=0;j<info[i].size();j++){
+         //cout<<info[i][j].x<<' '<<info[i][j].y<<'\n';
+         rrr[info[i][j].x][info[i][j].y]=i+1;
+      }
+   }
+   for(int i=1;i<=n;i++){
+      for(int j=1;j<=n;j++){
+         cout<<rrr[i][j];
+      }
+      cout<<'\n';
+   }
 
+}
 void dfs(int i,int j,int cnt,int num){
    dfs_visited[i][j]=1;
    routes[cnt].push_back({i,j});
@@ -68,8 +84,9 @@ void Round(int round){
          info[i][j].num=nnum;
       }
    }
+    
+    
    //이동 
-  // cout<<"이동 잘됐나확인\n";
    for(int i=0;i<info.size();i++){
       int d=dir[i];// cout<<"방향"<<d;
      // cout<<"그룹: "<<i<<' '<<dir[i]<<'\n';
@@ -85,7 +102,8 @@ void Round(int round){
    int bdir=balls[round].dirr;
    int bdic=balls[round].dirc; 
   // cout<<"라운드 횟수"<<round<<'\n';
- //  cout<<"볼쏘는 방향 "<<br<<' '<<bc<<' '<<bdir<<' '<<bdic<<'\n';
+  // cout<<"볼쏘는 방향 "<<br<<' '<<bc<<' '<<bdir<<' '<<bdic<<'\n';
+    //cout<<"이동 잘됐나확인\n";//print();cout<<'\n';//if(round==3)return;
 
    bool flag=false;
    int fcnt=-1; 
@@ -99,7 +117,7 @@ void Round(int round){
                // score[j]+=((info[j][k].num+1)*(info[j][k].num+1));
                 score[j]+=(k+1)*(k+1); 
                // cout<<br<<' '<<bc<<"일때\n";
-               // cout<<"점수얻음"<<j<<' '<<k+1<<' '<<score[j]<<'\n';
+                //cout<<"점수얻음"<<j<<' '<<k+1<<' '<<(k+1)*(k+1)<<'\n';
                 flag=true; 
                 fcnt=j; 
                 break; 
@@ -111,7 +129,7 @@ void Round(int round){
       if(flag)break; 
       br+=bdir; bc+=bdic;  
    } 
- 
+   if(!flag)return;
 
    //방향바꾸기 
    if(dir[fcnt]==1){
@@ -183,6 +201,9 @@ int main() {
    for(int i=0;i<kk;i++){
       //cout<<"뭐야 "<<i<<'\n';
       Round(i); 
+
+     // print();
+
    }
    int sum=0;
    for(int i=0;i<m;i++){
