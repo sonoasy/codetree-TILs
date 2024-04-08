@@ -20,10 +20,10 @@ vector<ball_info>balls;
 map<int,int>score;
 
 struct person{
-  int nn; 
+  int nn; //꼬리번호 
   int x;
   int y;
-  int num; 
+  int num; //몇번째인지 
 };
 map<int,int>dir; 
 map<int,vector<person>>info; 
@@ -61,11 +61,22 @@ void Round(int round){
       int d=dir[i];// cout<<"방향"<<d;
       for(int j=0;j<info[i].size();j++){
          //위치를 inf[i][j].num + dir 의 route위치로 바꾸기 
-         int nnum=(info[i][j].num+d)%(routes[i].size());
+         int nnum=(info[i][j].num+d+routes[i].size())%(routes[i].size());
         // cout<<info[i][j].num<<' '<<nnum<<'\n';
          info[i][j].x=routes[i][nnum].first;
          info[i][j].y=routes[i][nnum].second; 
+         info[i][j].num=nnum;
       }
+   }
+   //이동 
+  // cout<<"이동 잘됐나확인\n";
+   for(int i=0;i<info.size();i++){
+      int d=dir[i];// cout<<"방향"<<d;
+     // cout<<"그룹: "<<i<<' '<<dir[i]<<'\n';
+      for(int j=0;j<info[i].size();j++){
+         //cout<<info[i][j].x<<' '<<info[i][j].y<<'\n';
+         }
+        // cout<<'\n';
    }
 
    //공 보내면서 처음 맞는사람 찾고 
@@ -85,9 +96,10 @@ void Round(int round){
          for(k=0;k<info[j].size();k++){ //1->2->2->3.. 
             if(info[j][k].x==br && info[j][k].y==bc){
                //j팀에게 점수 가기 - 머리사람부터 떨어진 위치 
-                score[j]+=((info[j][k].num+1)*(info[j][k].num+1));
-              //  cout<<br<<' '<<bc<<"일때\n";
-               // cout<<"점수얻음"<<j<<' '<<k<<' '<<score[j]<<'\n';
+               // score[j]+=((info[j][k].num+1)*(info[j][k].num+1));
+                score[j]+=(k+1)*(k+1); 
+               // cout<<br<<' '<<bc<<"일때\n";
+               // cout<<"점수얻음"<<j<<' '<<k+1<<' '<<score[j]<<'\n';
                 flag=true; 
                 fcnt=j; 
                 break; 
@@ -97,7 +109,7 @@ void Round(int round){
 
       }
       if(flag)break; 
-      br+=bdir; bc+=bdic; 
+      br+=bdir; bc+=bdic;  
    } 
  
 
@@ -106,6 +118,16 @@ void Round(int round){
      dir[fcnt]=-1;
    }
    else if(dir[fcnt]==-1)dir[fcnt]=1;
+   //1번과 3번까지  
+   vector<person>tmp;
+   for(int i=info[fcnt].size()-1;i>=0;i--){
+      tmp.push_back(info[fcnt][i]);
+   }
+   for(int i=0;i<info[fcnt].size();i++){
+     info[fcnt][i]=tmp[i]; 
+   }
+
+
 }
 
 int main() {
@@ -132,10 +154,6 @@ int main() {
          
       }
     }
-   for(int i=0;i<=cnt;i++){
-      if(arrs[i][2]<arr[i][1])dir[i]=1;
-      else dir[i]=-1;
-   }
    //공 방향 정하기 
    int dx[4]={0,-1,0,1};
    int dy[4]={1,0,-1,0};
@@ -157,10 +175,8 @@ int main() {
   }
  
   for(int i=0;i<=cnt;i++){
-     for(int j=1;j<=3;j++){
-      //cout<<arrs[i][j]<<' ';
-     }
-    // cout<<'\n';
+     if(arr[i][1]<arr[i][3])dir[i]=1;
+     else dir[i]=-1;
   }
 
 
