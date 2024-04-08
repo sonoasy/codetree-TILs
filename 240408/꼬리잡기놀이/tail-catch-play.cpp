@@ -72,6 +72,7 @@ void dfs(int i,int j,int cnt,int num){
 
 void Round(int round){
    
+   
    //방향대로 한칸 이동하기 
    for(int i=0;i<info.size();i++){
       int d=dir[i];// cout<<"방향"<<d;
@@ -117,7 +118,7 @@ void Round(int round){
                // score[j]+=((info[j][k].num+1)*(info[j][k].num+1));
                 score[j]+=(k+1)*(k+1); 
                // cout<<br<<' '<<bc<<"일때\n";
-               // cout<<"점수얻음"<<j<<' '<<k+1<<' '<<(k+1)*(k+1)<<'\n';
+             //  cout<<"점수얻음"<<j<<' '<<k+1<<' '<<(k+1)*(k+1)<<'\n';
                 flag=true; 
                 fcnt=j; 
                 break; 
@@ -200,8 +201,9 @@ int main() {
 
    for(int i=0;i<kk;i++){
       //cout<<"뭐야 "<<i<<'\n';
-      Round(i); 
-
+      int t=i%(4*n);
+      Round(t); 
+     
      // print();
 
    }
