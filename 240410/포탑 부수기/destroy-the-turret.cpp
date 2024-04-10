@@ -190,6 +190,7 @@ void Go(int gonum, int destroynum,int turn){
        if(info[fnum].power<=0){
         info[fnum].destroyturn=turn; 
         arr[nr][nc]=0; 
+        info[fnum].destroy=true;
        }
        cr=nr;
        cc=nc;
@@ -260,22 +261,24 @@ int main() {
          if(info[j].destroy)continue;
          candi.push_back(info[j]);
        }
+
        sort(candi.begin(),candi.end(),cmp); 
        int gonum=candi[0].num; 
        int destroynum=candi[candi.size()-1].num; 
-     //  cout<< info[gonum].r<<' '<< info[gonum].c<<'\n';
-     //  cout<< info[destroynum].r<<' '<< info[destroynum].c<<'\n';
+      // cout<<"공격자:"<< info[gonum].r<<' '<< info[gonum].c<<'\n';
+      // cout<<"공격대상:"<< info[destroynum].r<<' '<< info[destroynum].c<<'\n';
        //공격자 공격력 증가 
        info[gonum].power+=(n+m);
+       arr[info[gonum].r][info[gonum].c]=info[gonum].power;
       // pt();
        //공격하기 
        arr[info[gonum].r][info[gonum].c]=info[gonum].power;
-     //  pt(); cout<<'\n';
+    //   pt(); cout<<'\n';
        Go(gonum,destroynum,i); 
        //회복
-      // pt();cout<<'\n';
+    //   pt();cout<<'\n';
        Recover(i); 
-      // pt();cout<<'\n';
+     //  pt();cout<<'\n';
     }
     print(); 
 
