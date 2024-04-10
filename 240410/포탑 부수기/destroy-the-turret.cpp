@@ -25,7 +25,7 @@ struct castle{
 vector<castle>info; 
 
 bool cmp(castle a,castle b){
-  if(a.destroy==b.destroy){ 
+ 
    if(a.power==b.power){
     if(a.goturn==b.goturn){
       if((a.r+a.c)==(b.r+b.c)){
@@ -37,8 +37,8 @@ bool cmp(castle a,castle b){
    }
 
    return a.power<b.power;
-  }
-  return a.destroy<b.destroy; 
+  
+  
 }
 void pt(){
    for(int i=0;i<n;i++){
@@ -82,7 +82,7 @@ void potan(int gonum,int destroynum,int turn){
           fnum=j; break; 
          }
        } 
-
+      // cout<<"포탄 공격받음"<<nr<<' '<<nc<<'\n';
 
         info[fnum].power-=(info[gonum].power)/2;
         info[fnum].destroyturn=turn;
@@ -186,7 +186,7 @@ void Go(int gonum, int destroynum,int turn){
        info[fnum].power-=(info[gonum].power)/2;
        arr[nr][nc]=info[fnum].power;
      //  cout<<"후: "<<info[fnum].power<<'\n';
- 
+       info[fnum].destroyturn=turn; 
        if(info[fnum].power<=0){
         info[fnum].destroyturn=turn; 
         arr[nr][nc]=0; 
@@ -209,7 +209,8 @@ void Recover(int turn){
     if(info[i].destroy)continue;
     if(info[i].goturn!=turn && info[i].destroyturn!=turn){
        //공격력+1 
-       info[i].power+=1;
+       info[i].power+=1;// cout<<"왜안돼";
+       arr[info[i].r][info[i].c]+=1;
     }
   }
 }
@@ -222,7 +223,15 @@ void print(){
   }
   cout<<maxs;
 }
-
+int check(){
+  int cnt=0;
+  for(int i=0;i<n;i++){
+    for(int j=0;j<m;j++){
+      if(arr[i][j]>0)cnt++;
+    }
+  }
+  return cnt;
+}
 
 int main() {
     int cnt=0; 
@@ -239,28 +248,34 @@ int main() {
          }
       }
     }
-    for(int i=0;i<info.size();i++){
-   //   cout<<info[i].r<<' '<<info[i].c<<"의 넘버 "<<info[castle_num[info[i].r][info[i].c]].r<<' '<<info[castle_num[info[i].r][info[i].c]].c<<'\n';
-    }
+  
 
 
     for(int i=1;i<=k;i++){
-    
+       if(check()==1)break; 
        //공격자 선정  & 피공격자 선정 
        //부서진 포탑 제외하기 
-
-       sort(info.begin(),info.end(),cmp); 
-       int gonum=info[0].num;
-       int destroynum=info[info.size()-1].num; 
+       vector<castle>candi;
+       for(int j=0;j<info.size();j++){
+         if(info[j].destroy)continue;
+         candi.push_back(info[j]);
+       }
+       sort(candi.begin(),candi.end(),cmp); 
+       int gonum=candi[0].num; 
+       int destroynum=candi[candi.size()-1].num; 
+     //  cout<< info[gonum].r<<' '<< info[gonum].c<<'\n';
+     //  cout<< info[destroynum].r<<' '<< info[destroynum].c<<'\n';
        //공격자 공격력 증가 
        info[gonum].power+=(n+m);
       // pt();
        //공격하기 
+       arr[info[gonum].r][info[gonum].c]=info[gonum].power;
+     //  pt(); cout<<'\n';
        Go(gonum,destroynum,i); 
        //회복
-      // pt();
+      // pt();cout<<'\n';
        Recover(i); 
-
+      // pt();cout<<'\n';
     }
     print(); 
 
