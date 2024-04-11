@@ -16,7 +16,7 @@ struct info{
   int destc; 
   bool isout;
 };
-
+ vector<ci>nocandi; //더이상 못갈 편의점목록 
 vector<info>person;
 int n,m;
 int bfs(int r,int c,int destr,int destc){
@@ -56,7 +56,8 @@ void Move(){
   //격자에 있는 모든 사람들이 가려는 편의점 향해서 
   //1. 가장 짧은 거리
   //2. 여러개면 상좌우하 순으로 가기 
-  vector<ci>nocandi; //더이상 못갈 편의점목록 
+ vector<ci>tt;
+ nocandi=tt; 
   
   for(int i=1;i<=m;i++){
     if(person[i].isout)continue;
@@ -68,12 +69,14 @@ void Move(){
     for(int j=0;j<4;j++){
       int nr=r+dr[j];
       int nc=c+dc[j];
+      if(visited[nr][nc])continue;
       if(nr<=0 || nc<=0 || nr>n || nc>n)continue;
       int ndistance=bfs(nr,nc,destr,destc); 
       if(ndistance<0)continue; 
       if(mins>ndistance){
          mins=ndistance; mindir=j; 
-      }
+     }
+     //mindir=j; break;
     }
     //mindir로 이동 
     person[i].r+=dr[mindir];
@@ -81,16 +84,14 @@ void Move(){
     //편의점에 도착했는가? 
     if(person[i].r==person[i].destr && person[i].c==person[i].destc){
         nocandi.push_back({person[i].r,person[i].c}); 
+        visited[person[i].r][person[i].c]=1;
         person[i].isout=true;
     }
     //베이스에 도착했는가? 
     if(base[person[i].r][person[i].c]==1)nocandi.push_back({person[i].r,person[i].c}); 
   }
 
-   //모두 움직인 후에 갈수없는 편의점 지정하기 -> 베이스 > 
-  for(int i=0;i<nocandi.size();i++){
-    visited[nocandi[i].first][nocandi[i].second]=1; 
-  }
+  
 }
 
 void goBase(int t){
@@ -125,7 +126,10 @@ void goBase(int t){
    if(gor<0)return;
    person[t].r=gor;person[t].c=goc;
    visited[person[t].r][person[t].c]=1; 
-  
+   //모두 움직인 후에 갈수없는 편의점 지정하기 -> 베이스 > 
+  for(int i=0;i<nocandi.size();i++){
+    visited[nocandi[i].first][nocandi[i].second]=1; 
+  }
 }
 
 bool check(){
@@ -165,19 +169,17 @@ int main() {
     int t=0;
     while(1){
        t++; 
-     //  cout<<t<<"초일때\n"; 
+    //cout<<t<<"초일때\n"; 
        if(check())break; 
        Move();
       // print(); 
        if(check())break; 
        if(t<=m)goBase(t); 
      // cout<<"베이스 가기\n";
+    // print();
       // if(t>=49)print(); 
     }
-    if(t==50){
-        cout<<54;
-    }
-    else cout<<t; 
+   cout<<t; 
 
     return 0;
 }
