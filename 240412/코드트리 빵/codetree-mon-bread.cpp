@@ -24,7 +24,7 @@ int bfs(int r,int c,int destr,int destc){
     vector<vector<bool>>visited2;
     visited2.assign(n+1,vector<bool>(n+1,false)); 
     queue<pair<ci,int>>qq;
-    qq.push({{r,c},1}); 
+    qq.push({{r,c},0}); 
     visited2[r][c]=1; 
     
     while(!qq.empty()){
@@ -68,8 +68,8 @@ void Move(){
     for(int j=0;j<4;j++){
       int nr=r+dr[j];
       int nc=c+dc[j];
-      if(visited[nr][nc])continue;
       if(nr<=0 || nc<=0 || nr>n || nc>n)continue;
+      if(visited[nr][nc])continue;
       int ndistance=bfs(nr,nc,destr,destc); 
       if(ndistance<0)continue; 
       if(mins>ndistance){
@@ -102,7 +102,7 @@ void goBase(int t){
    int destr=person[t].destr;
    int destc=person[t].destc;
    //갈수 있는 베이스 중에 
-   int gor; int goc;
+   int gor=-1; int goc=-1;
    int mins=10000000;
    for(int i=1;i<=n;i++){
     for(int j=1;j<=n;j++){
@@ -122,6 +122,8 @@ void goBase(int t){
         }
      }
    }
+   //갈수 있는 베이스 없으면 통과 
+   if(gor<0)return;
    person[t].r=gor;person[t].c=goc;
    visited[person[t].r][person[t].c]=1; 
   
@@ -139,7 +141,7 @@ bool check(){
 void print(){
    //각 사람들의 위치 파악 
    for(int i=1;i<=m;i++){
-    cout<<person[i].r<<' '<<person[i].c<<'\n';
+    cout<<person[i].r<<' '<<person[i].c<<' '<<person[i].isout<<'\n';
    }
 
 }
@@ -171,9 +173,9 @@ int main() {
        if(check())break; 
        if(t<=m)goBase(t); 
      // cout<<"베이스 가기\n";
-    // print(); 
+      // if(t>=49)print(); 
     }
-    cout<<t; 
+   cout<<t; 
 
     return 0;
 }
