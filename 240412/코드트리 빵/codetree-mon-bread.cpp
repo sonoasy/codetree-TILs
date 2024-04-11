@@ -24,7 +24,7 @@ int bfs(int r,int c,int destr,int destc){
     vector<vector<bool>>visited2;
     visited2.assign(n+1,vector<bool>(n+1,false)); 
     queue<pair<ci,int>>qq;
-    qq.push({{r,c},0}); 
+    qq.push({{r,c},1}); 
     visited2[r][c]=1; 
     
     while(!qq.empty()){
@@ -90,7 +90,10 @@ void Move(){
     //베이스에 도착했는가? 
     if(base[person[i].r][person[i].c]==1)nocandi.push_back({person[i].r,person[i].c}); 
   }
-
+   //모두 움직인 후에 갈수없는 편의점 지정하기 -> 베이스 > 
+  for(int i=0;i<nocandi.size();i++){
+    visited[nocandi[i].first][nocandi[i].second]=1; 
+  }
   
 }
 
@@ -126,10 +129,7 @@ void goBase(int t){
    if(gor<0)return;
    person[t].r=gor;person[t].c=goc;
    visited[person[t].r][person[t].c]=1; 
-   //모두 움직인 후에 갈수없는 편의점 지정하기 -> 베이스 > 
-  for(int i=0;i<nocandi.size();i++){
-    visited[nocandi[i].first][nocandi[i].second]=1; 
-  }
+   
 }
 
 bool check(){
