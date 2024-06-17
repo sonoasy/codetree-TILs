@@ -80,11 +80,11 @@ pair<int,vector<ci>> bfs(int r,int c,vector<vector<int>>&visited,vector<vector<i
   queue<ci>q;
   q.push({r,c}); 
   int nn=rtmp[r][c];
-  
+  visited[r][c]=true; 
   while(!q.empty()){
     int cr=q.front().first;
     int cc=q.front().second;
-    visited[cr][cc]=true; 
+    //if(visited[cr][cc])q.pop(); 
     tlist.push_back({cr,cc}); 
     q.pop(); 
     cnt++; 
@@ -95,6 +95,7 @@ pair<int,vector<ci>> bfs(int r,int c,vector<vector<int>>&visited,vector<vector<i
        if(nr<0 || nc<0 || nr>=5 || nc>=5)continue;
        if(visited[nr][nc])continue;
        if(rtmp[nr][nc]!=nn)continue;
+       visited[nr][nc]=true;
        q.push({nr,nc}); 
     }
   }
@@ -197,25 +198,37 @@ int main() {
     maxc=infos[0].c;
     max_list=infos[0].arrs; 
     maxnum=infos[0].num; 
-    //cout<<max_score<<' '<<maxr<<' '<<maxc<<' '<<maxnum<<'\n';
+   // cout<<max_score<<' '<<maxr<<' '<<maxc<<' '<<maxnum<<'\n';
+    //cout<<"유물 목록\n";
+   // for(int i=0;i<max_list.size();i++){
+     //   cout<<max_list[i].first<<' '<<max_list[i].second<<'\n';
+   // }
     maxtmp=infos[0].arr;
     //1차에서 유물이 없으면 걍 끝내기 
     if(max_score==0){
         break; 
     }  
     turnscore+=max_score; 
+   // cout<<"회전 후<<'\n";
+   // for(int i=0;i<5;i++){
+    //    for(int j=0;j<5;j++){
+     //       cout<<maxtmp[i][j]<<" ";
+    //  }
+    //   cout<<'\n';
+   // }
+
     //3.빈 공간 채우기 
     fill(max_list,maxtmp);
 
 
     //cout<<"채운후\n";
-   // for(int i=0;i<5;i++){
-    //    for(int j=0;j<5;j++){
-         //   cout<<maxtmp[i][j]<<" ";
-    //    }
-      //  cout<<'\n';
- //   }
-    cout<<turn<<"턴 1차: "<<turnscore<<'\n';
+  //  for(int i=0;i<5;i++){
+   //     for(int j=0;j<5;j++){
+    ////        cout<<maxtmp[i][j]<<" ";
+    //   }
+     //  cout<<'\n';
+    //}
+   // cout<<turn<<"턴 1차: "<<turnscore<<'\n';
 
     //4. 연쇄적으로 유물이 생겼는가?그럼 획득하고 3으로 돌아가기 
     //아니면 다음 턴으로 가기 
@@ -242,22 +255,22 @@ int main() {
        }
         //채우기  
         if(score2==0)break; 
-       cout<<turn<<"턴 추가 점수 "<<score2<<'\n';
+       //cout<<turn<<"턴 추가 점수 "<<score2<<'\n';
         turnscore+=score2;
-        cout<<turn<<"턴 현황: "<<turnscore<<'\n';
+       // cout<<turn<<"턴 현황: "<<turnscore<<'\n';
         fill(lists2,maxtmp);
-     //   cout<<"채울 목록\n";
+      //  cout<<"채울 목록\n";
       //  for(int i=0;i<lists2.size();i++){
-      //      cout<<lists2[i].first<<' '<<lists[i].second<<'\n';
-       // }
+      //      cout<<lists2[i].first<<' '<<lists2[i].second<<'\n';
+      //  }
 
        // cout<<"추가로  채운후\n";
        // for(int i=0;i<5;i++){
-       //     for(int j=0;j<5;j++){
-        //        cout<<maxtmp[i][j]<<' ';
-        //    }
-       //     cout<<'\n';
-      //  }
+        //    for(int j=0;j<5;j++){
+         //      cout<<maxtmp[i][j]<<' ';
+         //   }
+        //   cout<<'\n';
+       // }
        // cout<<'\n';
     } 
  
