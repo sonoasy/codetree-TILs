@@ -38,6 +38,7 @@ void Move(int num){
 
      //1.남쪽으로 이동 
    // cout<<num<<" 출발위치 "<<cur<<' '<<cuc<<'\n';
+
     while(1){
       
       if(cur==(r-1))break; //올수 있는데까지 다옴 
@@ -46,12 +47,17 @@ void Move(int num){
       for(int i=0;i<3;i++){
         int nr=cur+sr[i];
         int nc=cuc+sc[i];
+        
         if(nr>r || nc<=0 || nc>c){
             flag=true; // 못감
             continue;
         } 
-       if(forest[nr][nc]!=0)flag=true; //공간 없음 
-      
+       if(forest[nr][nc]!=0){
+        flag=true; //공간 없음 
+        
+      //  cout<<"어디?";
+       }
+    //   cout<<nr<<' '<<nc<<' '<<flag<<'\n';
       }
 
       if(!flag){ //이동 가능 
@@ -62,7 +68,7 @@ void Move(int num){
       
 
      }
-   //  cout<<"남쪽으로 이동"<<cur<<' '<<cuc<<'\n';
+    // cout<<"남쪽으로 이동"<<cur<<' '<<cuc<<'\n';
 
     
      //2.서쪽으로 이동 남 -반시계  
@@ -181,7 +187,7 @@ int bfs(int num){
 int main() {
 
     cin>>r>>c>>k;
-    forest.assign(r+1,vector<int>(k+1,0)); 
+    forest.assign(r+1,vector<int>(c+1,0)); 
 
     int cc,dd;
     gollems.push_back({0,0,0,0}); 
@@ -189,13 +195,13 @@ int main() {
         cin>>cc>>dd;
         gollems.push_back({i,dd,-1,cc});     
     }
-
+    
     for(int i=1;i<=k;i++){ //차례로 골렘 움직이기 
     
       //1. 움직이기 
       Move(i); 
      // cout<<"움직이고 위치\n";
-    //  cout<<gollems[i].r<<' '<<gollems[i].c<<' '<<gollems[i].exit<<'\n';
+     // cout<<gollems[i].r<<' '<<gollems[i].c<<' '<<gollems[i].exit<<'\n';
       
       //움직인 위치가 격자 밖이면 숲 정리하기 
       if(gollems[i].r<=1){
