@@ -81,6 +81,10 @@ void Move(int num){
         for(int i=0;i<5;i++){
             int nr=cur+wr[i];
             int nc=cuc+wc[i];
+            if(i<=1 && nr<=0){
+                if(nc<0)flag=true;
+                continue;
+            }
             if(nr<0 || nc<=0 || nr>r || nc>c){
                flag=true; // 못감
                continue;
@@ -201,12 +205,12 @@ int main() {
       //1. 움직이기 
       Move(i); 
      // cout<<"움직이고 위치\n";
-     // cout<<gollems[i].r<<' '<<gollems[i].c<<' '<<gollems[i].exit<<'\n';
+    //  cout<<gollems[i].r<<' '<<gollems[i].c<<' '<<gollems[i].exit<<'\n';
       
       //움직인 위치가 격자 밖이면 숲 정리하기 
       if(gollems[i].r<=1){
         forest.assign(r+1,vector<int>(k+1,0)); 
-        //cout<<"숲정리!\n";
+       // cout<<"숲정리!\n";
         continue; 
      }
       //숲에 지금 골렘 세기기 
@@ -220,7 +224,7 @@ int main() {
       
       //정령이 움직일수 있는 최대 아래 탐색하기 
       int lastposition=bfs(i); 
-      //cout<<i<<"의 최대 행:"<<lastposition<<'\n'; 
+     // cout<<i<<"의 최대 행:"<<lastposition<<'\n'; 
       total+=lastposition; 
 
     }
