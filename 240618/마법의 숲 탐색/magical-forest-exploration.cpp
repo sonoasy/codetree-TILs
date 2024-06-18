@@ -29,26 +29,16 @@ vector<vector<int>>forest;
 vector<gollem>gollems;
 int total=0; 
 
-void Move(int num){
-
-     int cur=gollems[num].r;
-     int cuc=gollems[num].c; 
-     int curexit=gollems[num].exit; 
-     //이걸 계속 반복 하는건가!!!!!!!!? 
-
-     //1.남쪽으로 이동 
-   // cout<<num<<" 출발위치 "<<cur<<' '<<cuc<<'\n';
-
-    while(1){
-      
-      if(cur==(r-1))break; //올수 있는데까지 다옴 
+bool South(int cur,int cuc){
+    
+      if(cur==(r-1))return true; //올수 있는데까지 다옴 
       //현재 위치에서 동서남이 비어있어야함 
       bool flag=false; 
       for(int i=0;i<3;i++){
         int nr=cur+sr[i];
         int nc=cuc+sc[i];
         
-        if(nr>r || nc<=0 || nc>c){
+        if(nr>r || nc>c){
             flag=true; // 못감
             continue;
         } 
@@ -59,53 +49,31 @@ void Move(int num){
        }
     //   cout<<nr<<' '<<nc<<' '<<flag<<'\n';
       }
+      return flag; 
 
-      if(!flag){ //이동 가능 
-         cur+=1;  
-        
-      }
-      else break;
-      
+}
 
-     }
-    // cout<<"남쪽으로 이동"<<cur<<' '<<cuc<<'\n';
-
-    
-     //2.서쪽으로 이동 남 -반시계  
-     while(1){
-         //1,-1 지점임 
-         
-        if(cur==(r-1) || cuc==2)break; //못감 
+bool West(int cur,int cuc,int curexit){
+       if(cur==(r-1) || cuc==2)return true; //못감 
         //cout<<"여기 안와?";
         bool flag=false; 
         for(int i=0;i<5;i++){
             int nr=cur+wr[i];
             int nc=cuc+wc[i];
             if(i<=1 && nr<=0){
-                if(nc<0)flag=true;
                 continue;
             }
-            if(nr<0 || nc<=0 || nr>r || nc>c){
+            if(nr>r || nc>c){
                flag=true; // 못감
                continue;
             } 
             if(forest[nr][nc]!=0)flag=true;
         }
-        if(!flag){ //이동 가능 
-         cur+=1;  
-         cuc-=1; 
-         //반시계 방향
-         curexit=((curexit-1)+4)%4; 
-      //    cout<<"서쪽으로 이동 "<<cur<<' '<<cuc<<'\n';
-       }
-       else break; 
-      
-     } 
-     
-     //3.동쪽으로 이동 남 -시계 
-     while(1){
-         //1,1 지점임 
-        if(cur==(r-1) || cuc==(c-1))break; //못감 
+       return flag; 
+}
+
+bool East(int cur,int cuc,int curexit){
+       if(cur==(r-1) || cuc==(c-1))return true; //못감 
        // cout<<"여긴안와???";
 
         bool flag=false; 
@@ -113,23 +81,58 @@ void Move(int num){
             int nr=cur+er[i];
             int nc=cuc+ec[i];
             //cout<<"동쪽 목록: "<<nr<<' '<<nc<<'\n';
+             if(i<=1 && nr<=0){
+                continue;
+            }
             if(nr<=0 || nc<=0 || nr>r || nc>c){
                flag=true; // 못감
             continue;
             } 
             if(forest[nr][nc]!=0)flag=true;
         }
-        if(!flag){ //이동 가능 
-         cur+=1;  
-         cuc+=1; 
-         //반시계 방향
-         curexit=((curexit+1)+4)%4; 
-      //   cout<<"동쪽으로 이동 "<<cur<<' '<<cuc<<'\n';
-       }
-       else break; 
-      
-     } 
+        return flag; 
+}
+
+
+void Move(int num){
+
+     int cur=gollems[num].r;
+     int cuc=gollems[num].c; 
+     int curexit=gollems[num].exit; 
     
+    while(1){
+
+       if(South(cur,cuc) && West(cur,cuc,curexit) && East(cur,cuc,curexit))break; 
+       if(!South(cur,cuc)){
+         cur+=1; 
+       }
+       else{
+          if(!West(cur,cuc,curexit)){
+              cur+=1;  
+              cuc-=1; 
+              //반시계 방향
+              curexit=((curexit-1)+4)%4; 
+             // continue; 
+          }
+          else{
+             if(!East(cur,cuc,curexit)){
+                cur+=1;  
+                cuc+=1; 
+                //반시계 방향
+                curexit=((curexit+1)+4)%4; 
+             }   
+             else{
+                 gollems[num].r=cur;
+                 gollems[num].c=cuc;
+                 gollems[num].exit=curexit;
+                 break;
+              }
+          }
+         
+       }
+    }
+        
+
     gollems[num].r=cur;
     gollems[num].c=cuc;
     gollems[num].exit=curexit;    
@@ -204,8 +207,8 @@ int main() {
     
       //1. 움직이기 
       Move(i); 
-     // cout<<"움직이고 위치\n";
-    //  cout<<gollems[i].r<<' '<<gollems[i].c<<' '<<gollems[i].exit<<'\n';
+    //  cout<<"움직이고 위치\n";
+     // cout<<gollems[i].r<<' '<<gollems[i].c<<' '<<gollems[i].exit<<'\n';
       
       //움직인 위치가 격자 밖이면 숲 정리하기 
       if(gollems[i].r<=1){
