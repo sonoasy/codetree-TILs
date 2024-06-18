@@ -159,6 +159,7 @@ int bfs(int num){
        for(int i=0;i<4;i++){
            int nr=exitr+dr[i];
            int nc=exitc+dc[i]; 
+           if(nr<=0 ||nc<=0 || nr>r ||nc>c)continue;
            //그냥 숲이면 패스 
            if(forest[nr][nc]==0)continue; 
            if(forest[nr][nc]!=nn && !visited[forest[nr][nc]]){ //또다른 골렘 
@@ -193,13 +194,13 @@ int main() {
     
       //1. 움직이기 
       Move(i); 
-    //  cout<<"움직이고 위치\n";
-     // cout<<gollems[i].r<<' '<<gollems[i].c<<' '<<gollems[i].exit<<'\n';
+     // cout<<"움직이고 위치\n";
+    //  cout<<gollems[i].r<<' '<<gollems[i].c<<' '<<gollems[i].exit<<'\n';
       
       //움직인 위치가 격자 밖이면 숲 정리하기 
       if(gollems[i].r<=1){
         forest.assign(r+1,vector<int>(k+1,0)); 
-      //  cout<<"숲정리!\n";
+        //cout<<"숲정리!\n";
         continue; 
      }
       //숲에 지금 골렘 세기기 
@@ -210,10 +211,10 @@ int main() {
         //cout<<gollems[i].r+dr[j]<<' '<<gollems[i].c+dc[j]<<'\n';
         forest[gollems[i].r+dr[j]][gollems[i].c+dc[j]]=i;
       }
-
+      
       //정령이 움직일수 있는 최대 아래 탐색하기 
       int lastposition=bfs(i); 
-     // cout<<i<<"의 최대 행:"<<lastposition<<'\n'; 
+      //cout<<i<<"의 최대 행:"<<lastposition<<'\n'; 
       total+=lastposition; 
 
     }
