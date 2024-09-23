@@ -1,5 +1,6 @@
 #include <iostream>
 #include<vector>
+#include<queue> 
 #include<map>
 
 using namespace std;
@@ -7,6 +8,14 @@ typedef pair<int,int>ci;
 vector<vector<int>>graph;
 map<int,ci>info; 
 int start=0;
+
+//queue struct 잘 모르겟.. 
+void dikjstra(){
+
+
+
+}
+
 int main() {
   
 
@@ -24,6 +33,8 @@ int main() {
              graph[v][u]=w;
              graph[u][v]=w; 
           }
+           dikjstra(); 
+
        }
        else if(num==200){ //여행 상품 생성  3만  -> 0(1)
         int id,revenue,dest;
@@ -37,8 +48,9 @@ int main() {
           info[id]={0,0}; 
        }
        else if(num==400){//최적의 여행 상품 판매  3만 
-             
-
+          //id별로 revenue-cost[dest](최단거리)  
+         
+          //최적의 여행상품 출력, 없으면(가는 거리가 없거나 비용<0) -1 
 
 
        }
