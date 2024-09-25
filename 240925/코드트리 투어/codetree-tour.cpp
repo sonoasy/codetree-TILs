@@ -20,6 +20,7 @@ int start=0;
 vector<int>dist; 
 int maxid;
 int mins=1e9; 
+int n,m,v,u,w; 
 //queue struct 잘 모르겟.. 
 void dikjstra(){
 
@@ -54,7 +55,7 @@ int main() {
        int num;
        cin>>num;
        if(num==100){  //코드트리 랜드 건설 - 1번만 
-          int n,m,v,u,w; 
+          
           cin>>n>>m; 
           //각 정점까지 최단거리 
           dist.assign(n+1,1e9);
@@ -85,17 +86,29 @@ int main() {
           else cout<<maxid<<'\n';
           //최적의 여행상품 출력, 없으면(가는 거리가 없거나 비용<0) -1 
           //모든 dest에 대하여 - 2000개 
-
-          
+          int selectedid=-1;
+          int maxs=-1; 
+            for(int j=0;j<n;j++){
+             //info[j]에서 가장 첫번째 
+            if(info[j].size()==0)continue;
+            if(info[j].begin()->second>maxs){
+                maxs=info[j].begin()->second;
+                selectedid=info[j].begin()->first;
+            }
+          }
+          //선택되면 아이디 출력 
+          cout<<selectedid<<'\n';
+          //아니면 -1출력 
 
        }
        else{//500  //출발지 변경  
          int s;
          cin>>s;
          start=s;
-         dikjstra();
+         dikjstra();//dest 갱신 
          //그러면 최적의 상품 어떻게 다시 구함? 그냥 여기서 다시? 
-          
+         //cost 갱신하기 
+         //?????  
 
        }
     }
