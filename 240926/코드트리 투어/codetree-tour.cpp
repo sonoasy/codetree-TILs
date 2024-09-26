@@ -19,9 +19,9 @@ struct myOrder
 	}
 };
 vector<ci>graph[2001];
-//dest -> {id.cost} set 목적지에 대한 상품,수익 
+//dest -> {id.cost} set 목적지에 대한 상품,수익  -> 2000
 map<int,set<ci,myOrder>>info; 
-//id -> (dest,cost) 삭제하는거 때문 
+//id -> (dest,cost) 삭제하는거 때문  -> 3만 
 map<int,ci>deletes;
 
 int start=0;
@@ -59,6 +59,8 @@ void dikjstra(){
    //cout<<'\n';
 }
 
+//200,400일떄 안됨 
+
 int main() {
   
 
@@ -79,16 +81,17 @@ int main() {
              graph[u].push_back({v,w});
           }
           dikjstra(); 
-         
 
        }
-       else if(num==200){ //여행 상품 생성  3만  -> 0(1)
+       else if(num==200){ //여행 상품 생성  3만  -> 0(1)   //3만 x 3만 - 안됨!!!!! 
+
         int id,revenue,dest;
         cin>>id>>revenue>>dest; 
       //  cout<<"id: "<<id<<" revenue:"<<revenue<<" dest: "<<dest<<"추가\n";
         info[dest].insert({id,revenue-dist[dest]}); //같은 목적지에 여러개 아이디가 있을수 있으므로 
         deletes[id]={dest,revenue};
        // cout<<"추가 후 목록\n";
+
           for(auto it=deletes.begin();it!=deletes.end();it++){
             //dest      id, revenue-dist[dest]
        //     cout<<"dest:"<<it->second.first<<" id,revenue "<<it->first<<" "<<it->second.second<<"\n";
@@ -97,7 +100,7 @@ int main() {
          //14 왜 튀어나오는거야!!!!!!!!!!!
 
        }
-       else if(num==300){ //여행 상품 취소  3만  -> o(1)
+       else if(num==300){ //여행 상품 취소  3만  -> o(1) ->ok 
           int id; 
           cin>>id;
           
@@ -110,7 +113,7 @@ int main() {
             deletes.erase(id);
           }
        }
-       else if(num==400){//최적의 여행 상품 판매  3만 
+       else if(num==400){//최적의 여행 상품 판매  3만 ->ok 
           //id별로 revenue-cost[dest](최단거리)  
          
           //최적의 여행상품 출력, 없으면(가는 거리가 없거나 비용<0) -1 
@@ -123,7 +126,7 @@ int main() {
           int mid=1e9;
         //  cout<<"400이윤 목록\n";  
           //최대 n개만 돌면됨 
-          for(auto it=info.begin();it!=info.end();it++){
+          for(auto it=info.begin();it!=info.end();it++){  //6000 0000
              //비어있으면 넘어가기 
              if(it->second.size()==0)continue;
              tid=it->second.begin()->first;
@@ -162,14 +165,14 @@ int main() {
              deletes.erase(selectedid);
           }
          // cout<<"선택 후 목록\n";
-          for(auto it=deletes.begin();it!=deletes.end();it++){
+        //  for(auto it=deletes.begin();it!=deletes.end();it++){
             //dest      id, revenue-dist[dest]
          //   cout<<"dest:"<<it->second.first<<" id,revenue "<<it->first<<" "<<it->second.second<<"\n";
-            info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
-         }
+        // //   info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
+       //  }
 
        }
-       else{//500  //출발지 변경  
+       else{//500  //출발지 변경  ->ok 
          int s;
          cin>>s;
 
@@ -184,13 +187,13 @@ int main() {
           //id -> (dest,cost) 삭제하는거 때문 
           //map<int,ci>deletes;   //id - dest,revenue 
           //deletes는 그대로 ,info 를 다시 갱신 
-         for(auto it=info.begin();it!=info.end();it++){
+         for(auto it=info.begin();it!=info.end();it++){ //2000 
             it->second.clear();
          }
 //
         // cout<<"새로갱신\n";
-        //  //15번이라서 2만번 다써도 됨 
-         for(auto it=deletes.begin();it!=deletes.end();it++){
+        //  //15번이라서 3만번 다써도 됨 
+         for(auto it=deletes.begin();it!=deletes.end();it++){ //3만 
             //dest      id, revenue-dist[dest]
           //  cout<<"dest:"<<it->second.first<<" id,revenue "<<it->first<<" "<<it->second.second<<"\n";
             info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
