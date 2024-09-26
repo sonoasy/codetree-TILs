@@ -96,11 +96,15 @@ int main() {
         int id,revenue,dest;
         cin>>id>>revenue>>dest; 
         idmatch[id]=dest;
-      //  cout<<"id: "<<id<<" revenue:"<<revenue<<" dest: "<<dest<<"추가\n";
+      // cout<<"id: "<<id<<" revenue:"<<revenue-dist[dest]<<"추가\n";
         info[dest].insert({id,revenue-dist[dest]}); //같은 목적지에 여러개 아이디가 있을수 있으므로 
         deletes[id]={dest,revenue};
-        total.insert({id,revenue-dist[dest]});
-        if((revenue-dist[dest])>0)total.insert({id,revenue-dist[dest]});
+        //total.insert({id,revenue-dist[dest]}); 
+        
+        if((revenue-dist[dest])>=0){
+         total.insert({id,revenue-dist[dest]});
+        // cout<<"추가 "<<id<<" "<<revenue-dist[dest]<<'\n';
+        }
        // cout<<"추가 후 목록\n";
 
          // for(auto it=deletes.begin();it!=deletes.end();it++){
@@ -142,12 +146,17 @@ int main() {
          if(total.size()==0){
             cout<<-1<<'\n'; continue; 
          }
+         else{
+            
+              selectedid=total.begin()->first;
+              target=idmatch[selectedid];
+              maxs=total.begin()->second;
+              cout<<selectedid<<'\n';
+              //삭제까지 하기 
+              total.erase({selectedid,maxs});
 
-         selectedid=total.begin()->first;
-         target=idmatch[selectedid];
-         maxs=total.begin()->second;
-         //삭제까지 하기 
-         total.erase({selectedid,maxs});
+         }
+         
          /*
           for(auto it=info.begin();it!=info.end();it++){  //6000 0000 -> 줄이기... 
              //비어있으면 넘어가기 
@@ -179,7 +188,7 @@ int main() {
           }
 */
 
-          cout<<selectedid<<'\n';
+         // cout<<selectedid<<'\n';
           //선택되면 지우기 info에서 
           if(selectedid!=-1){
          //   cout<<"선택하고 삭제 ";
@@ -217,6 +226,7 @@ int main() {
             it->second.clear();
          }
          total.clear(); 
+        // idmatch.clear();
 //       
         // cout<<"새로갱신\n";
         //  //15번이라서 3만번 다써도 됨 
@@ -224,7 +234,12 @@ int main() {
             //dest      id, revenue-dist[dest]
           //  cout<<"dest:"<<it->second.first<<" id,revenue "<<it->first<<" "<<it->second.second<<"\n";
             info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
-            total.insert({it->second.first,it->second.second-dist[it->second.first]});
+            int c=it->second.second-dist[it->second.first];
+            idmatch[it->first]=it->second.first;
+            if(c>=0){
+               total.insert({it->first,it->second.second-dist[it->second.first]});
+             //  cout<<"새로 추가"<<it->first<<" "<<it->second.second-dist[it->second.first]<<'\n';
+            }
          }
        }
     }
