@@ -146,7 +146,7 @@ int main() {
          target=idmatch[selectedid];
          maxs=total.begin()->second;
          //삭제까지 하기 
-
+         total.erase({selectedid,maxs});
          /*
           for(auto it=info.begin();it!=info.end();it++){  //6000 0000 -> 줄이기... 
              //비어있으면 넘어가기 
