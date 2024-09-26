@@ -91,7 +91,7 @@ int main() {
        // cout<<"추가 후 목록\n";
           for(auto it=deletes.begin();it!=deletes.end();it++){
             //dest      id, revenue-dist[dest]
-         //   cout<<"dest:"<<it->second.first<<" id,revenue "<<it->first<<" "<<it->second.second<<"\n";
+       //     cout<<"dest:"<<it->second.first<<" id,revenue "<<it->first<<" "<<it->second.second<<"\n";
             info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
          }
          //14 왜 튀어나오는거야!!!!!!!!!!!
@@ -116,7 +116,7 @@ int main() {
           //최적의 여행상품 출력, 없으면(가는 거리가 없거나 비용<0) -1 
           //모든 dest에 대하여 - 2000개 
           int selectedid=-1;
-          int maxs=-1;
+          int maxs=0;
           int tid; 
           int tcost; 
           int target;
