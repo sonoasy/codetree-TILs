@@ -44,11 +44,11 @@ void dikjstra(){
      }
    }
    //dist 
-   cout<<"dist 목록\n";
-   for(int i=0;i<n;i++){
-      cout<<dist[i]<<' ';
-   }
-   cout<<'\n';
+ //  cout<<"dist 목록\n";
+  // for(int i=0;i<n;i++){
+  //    cout<<dist[i]<<' ';
+  / }
+  // cout<<'\n';
 }
 
 int main() {
