@@ -44,11 +44,11 @@ void dikjstra(){
      }
    }
    //dist 
-   cout<<"dist 목록\n";
-   for(int i=0;i<n;i++){
-      cout<<dist[i]<<' ';
-   }
-   cout<<'\n';
+ //  cout<<"dist 목록\n";
+  // for(int i=0;i<n;i++){
+   //   cout<<dist[i]<<' ';
+  // }
+  // cout<<'\n';
 }
 
 int main() {
@@ -83,6 +83,9 @@ int main() {
        else if(num==300){ //여행 상품 취소  3만  -> o(1)
           int id; 
           cin>>id;
+          //id가 존재할때만
+          if(deletes[id].first==0 && deletes[id].second==0)continue;
+
           info[deletes[id].first].erase({id,deletes[id].second-dist[deletes[id].first]});
           deletes.erase(id);
        }
@@ -97,14 +100,14 @@ int main() {
           int tcost; 
           int target;
           int mid=1e9;
-          cout<<"이윤 목록\n";  
+         // cout<<"이윤 목록\n";  
           //최대 n개만 돌면됨 
           for(auto it=info.begin();it!=info.end();it++){
              //비어있으면 넘어가기 
              if(it->second.size()==0)continue;
              tid=it->second.begin()->first;
              tcost=it->second.begin()->second;
-            cout<<"id: "<<tid<<"이윤 "<<tcost<<'\n';
+            //cout<<"id: "<<tid<<"이윤 "<<tcost<<'\n';
              if(tcost>=maxs){ //set이 정렬이 안되는거야??????
                //if(mid>tid){ 
                   //값이 같을땐 id가 작은 경우에면 
@@ -131,6 +134,8 @@ int main() {
             //도착지 id dldbs 
            // cout<<target<<" "<<selectedid<<" "<<maxs<<'\n';
              info[target].erase({selectedid,maxs});
+             //deletes에서도 삭제하기 
+             deletes.erase(selectedid);
           }
 
        }
