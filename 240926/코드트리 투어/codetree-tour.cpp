@@ -83,7 +83,7 @@ int main() {
           dikjstra(); 
 
        }
-       else if(num==200){ //여행 상품 생성  3만  -> 0(1)   //3만 x 3만 - 안됨!!!!! 
+       else if(num==200){ //여행 상품 생성  3만  -> 0(1)   
 
         int id,revenue,dest;
         cin>>id>>revenue>>dest; 
@@ -92,11 +92,11 @@ int main() {
         deletes[id]={dest,revenue};
        // cout<<"추가 후 목록\n";
 
-          for(auto it=deletes.begin();it!=deletes.end();it++){
+         // for(auto it=deletes.begin();it!=deletes.end();it++){
             //dest      id, revenue-dist[dest]
        //     cout<<"dest:"<<it->second.first<<" id,revenue "<<it->first<<" "<<it->second.second<<"\n";
-            info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
-         }
+         //   info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
+        // }
          //14 왜 튀어나오는거야!!!!!!!!!!!
 
        }
