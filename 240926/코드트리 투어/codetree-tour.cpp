@@ -6,13 +6,21 @@
 
 using namespace std;
 typedef pair<int,int>ci;
-bool operator < (const  ci a, const ci b) { //id, 비용 
-		if (a.second == b.second)return a.first<b.first;
-		return a.second>b.second;
-} 
+struct myOrder
+{
+	bool operator() (const ci& left, const ci& right) const
+	{
+		if (left.second == right.second) {
+			return left.first < right.first;
+		}
+		
+		return left.second > right.second;
+		
+	}
+};
 vector<ci>graph[2001];
 //dest -> {id.cost} set 목적지에 대한 상품,수익 
-map<int,set<ci>>info; 
+map<int,set<ci,myOrder>>info; 
 //id -> (dest,cost) 삭제하는거 때문 
 map<int,ci>deletes;
 
@@ -71,24 +79,36 @@ int main() {
              graph[u].push_back({v,w});
           }
           dikjstra(); 
+         
 
        }
        else if(num==200){ //여행 상품 생성  3만  -> 0(1)
         int id,revenue,dest;
         cin>>id>>revenue>>dest; 
-     //   cout<<"id: "<<id<<" revenue:"<<revenue<<" dest: "<<dest<<"추가\n";
+      //  cout<<"id: "<<id<<" revenue:"<<revenue<<" dest: "<<dest<<"추가\n";
         info[dest].insert({id,revenue-dist[dest]}); //같은 목적지에 여러개 아이디가 있을수 있으므로 
-        deletes[id]={dest,revenue}; 
+        deletes[id]={dest,revenue};
+       // cout<<"추가 후 목록\n";
+          for(auto it=deletes.begin();it!=deletes.end();it++){
+            //dest      id, revenue-dist[dest]
+         //   cout<<"dest:"<<it->second.first<<" id,revenue "<<it->first<<" "<<it->second.second<<"\n";
+            info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
+         }
+         //14 왜 튀어나오는거야!!!!!!!!!!!
 
        }
        else if(num==300){ //여행 상품 취소  3만  -> o(1)
           int id; 
           cin>>id;
+          
           //id가 존재할때만
-          if(deletes[id].first==0 && deletes[id].second==0)continue;
+          if(deletes.find(id) == deletes.end())continue; //이게 문제인듯 
+          
         //  cout<<"삭제 id:"<<id<<" dest:"<<deletes[id].first<<'\n';
-          info[deletes[id].first].erase({id,deletes[id].second-dist[deletes[id].first]});
-          deletes.erase(id);
+          if(info[deletes[id].first].size()!=0){
+            info[deletes[id].first].erase({id,deletes[id].second-dist[deletes[id].first]});
+            deletes.erase(id);
+          }
        }
        else if(num==400){//최적의 여행 상품 판매  3만 
           //id별로 revenue-cost[dest](최단거리)  
@@ -101,7 +121,7 @@ int main() {
           int tcost; 
           int target;
           int mid=1e9;
-       //   cout<<"이윤 목록\n";  
+        //  cout<<"400이윤 목록\n";  
           //최대 n개만 돌면됨 
           for(auto it=info.begin();it!=info.end();it++){
              //비어있으면 넘어가기 
@@ -109,6 +129,8 @@ int main() {
              tid=it->second.begin()->first;
              tcost=it->second.begin()->second;
          //   cout<<"id: "<<tid<<"이윤 "<<tcost<<'\n';
+            //마지막 갱신에서 이윤이 잘못됨 
+
              if(tcost>=maxs){ //set이 정렬이 안되는거야??????
                //if(mid>tid){ 
                   //값이 같을땐 id가 작은 경우에면 
@@ -123,6 +145,7 @@ int main() {
                      mid=tid;
                      target=it->first; 
                      maxs=tcost;selectedid=tid;
+                  
                   }
                  
               // }
@@ -133,16 +156,23 @@ int main() {
           if(selectedid!=-1){
          //   cout<<"선택하고 삭제 ";
             //도착지 id dldbs 
-           // cout<<target<<" "<<selectedid<<" "<<maxs<<'\n';
+         //   cout<<target<<" "<<selectedid<<" "<<maxs<<'\n';
              info[target].erase({selectedid,maxs});
              //deletes에서도 삭제하기 
              deletes.erase(selectedid);
           }
+         // cout<<"선택 후 목록\n";
+          for(auto it=deletes.begin();it!=deletes.end();it++){
+            //dest      id, revenue-dist[dest]
+         //   cout<<"dest:"<<it->second.first<<" id,revenue "<<it->first<<" "<<it->second.second<<"\n";
+            info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
+         }
 
        }
        else{//500  //출발지 변경  
          int s;
          cin>>s;
+
          start=s;
          dist.assign(n+1,1e9);
          dikjstra();//dest 갱신 
@@ -154,14 +184,15 @@ int main() {
           //id -> (dest,cost) 삭제하는거 때문 
           //map<int,ci>deletes;   //id - dest,revenue 
           //deletes는 그대로 ,info 를 다시 갱신 
-         for(int j=0;j<n;j++){
-            info[j].clear();
+         for(auto it=info.begin();it!=info.end();it++){
+            it->second.clear();
          }
-      //   cout<<"새로갱신\n";
-          //15번이라서 2만번 다써도 됨 
+//
+        // cout<<"새로갱신\n";
+        //  //15번이라서 2만번 다써도 됨 
          for(auto it=deletes.begin();it!=deletes.end();it++){
             //dest      id, revenue-dist[dest]
-          //  cout<<"dest:"<<it->second.first<<"id,revenue "<<it->first<<" "<<it->second.second<<"\n";
+          //  cout<<"dest:"<<it->second.first<<" id,revenue "<<it->first<<" "<<it->second.second<<"\n";
             info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
          }
        }
