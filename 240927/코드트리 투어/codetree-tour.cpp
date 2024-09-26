@@ -3,9 +3,16 @@
 #include<queue> 
 #include<map>
 #include<set> 
+#include<tuple>
 
 using namespace std;
 typedef pair<int,int>ci;
+//전체 
+struct items{
+  int id; //id
+  int score; //비용  
+};
+
 struct myOrder
 {
 	bool operator() (const ci& left, const ci& right) const
@@ -23,7 +30,8 @@ vector<ci>graph[2001];
 map<int,set<ci,myOrder>>info; 
 //id -> (dest,cost) 삭제하는거 때문  -> 3만 
 map<int,ci>deletes;
-
+map<int,int>idmatch; 
+set<ci,myOrder>total; 
 int start=0;
 vector<int>dist; 
 int maxid;
@@ -87,9 +95,11 @@ int main() {
 
         int id,revenue,dest;
         cin>>id>>revenue>>dest; 
+        idmatch[id]=dest;
       //  cout<<"id: "<<id<<" revenue:"<<revenue<<" dest: "<<dest<<"추가\n";
         info[dest].insert({id,revenue-dist[dest]}); //같은 목적지에 여러개 아이디가 있을수 있으므로 
         deletes[id]={dest,revenue};
+        if((revenue-dist[dest])>0)total.insert({id,revenue-dist[dest]});
        // cout<<"추가 후 목록\n";
 
          // for(auto it=deletes.begin();it!=deletes.end();it++){
@@ -111,6 +121,8 @@ int main() {
           if(info[deletes[id].first].size()!=0){
             info[deletes[id].first].erase({id,deletes[id].second-dist[deletes[id].first]});
             deletes.erase(id);
+            idmatch.erase(id);
+            total.erase({id,deletes[id].second-dist[deletes[id].first]});
           }
        }
        else if(num==400){//최적의 여행 상품 판매  3만 ->ok 
@@ -126,7 +138,17 @@ int main() {
           int mid=1e9;
         //  cout<<"400이윤 목록\n";  
           //최대 n개만 돌면됨 
-          for(auto it=info.begin();it!=info.end();it++){  //6000 0000
+         if(total.size()==0){
+            cout<<-1<<'\n'; continue; 
+         }
+
+         selectedid=total.begin()->first;
+         target=idmatch[selectedid];
+         maxs=total.begin()->second;
+         //삭제까지 하기 
+
+         /*
+          for(auto it=info.begin();it!=info.end();it++){  //6000 0000 -> 줄이기... 
              //비어있으면 넘어가기 
              if(it->second.size()==0)continue;
              tid=it->second.begin()->first;
@@ -154,6 +176,8 @@ int main() {
               // }
              }
           }
+*/
+
           cout<<selectedid<<'\n';
           //선택되면 지우기 info에서 
           if(selectedid!=-1){
@@ -164,6 +188,7 @@ int main() {
              //deletes에서도 삭제하기 
              deletes.erase(selectedid);
           }
+
          // cout<<"선택 후 목록\n";
         //  for(auto it=deletes.begin();it!=deletes.end();it++){
             //dest      id, revenue-dist[dest]
