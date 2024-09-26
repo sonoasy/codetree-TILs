@@ -157,11 +157,11 @@ int main() {
          for(int j=0;j<n;j++){
             info[j].clear();
          }
-
+         cout<<"새로갱신\n";
           //15번이라서 2만번 다써도 됨 
          for(auto it=deletes.begin();it!=deletes.end();it++){
             //dest      id, revenue-dist[dest]
-            
+            cout<<"dest:"<<it->second.first<<"id,revenue "<<it->first<<" "<<it->second.second<<"\n";
             info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
          }
        }
