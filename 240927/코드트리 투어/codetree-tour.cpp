@@ -99,6 +99,7 @@ int main() {
       //  cout<<"id: "<<id<<" revenue:"<<revenue<<" dest: "<<dest<<"추가\n";
         info[dest].insert({id,revenue-dist[dest]}); //같은 목적지에 여러개 아이디가 있을수 있으므로 
         deletes[id]={dest,revenue};
+        total.insert({id,revenue-dist[dest]});
         if((revenue-dist[dest])>0)total.insert({id,revenue-dist[dest]});
        // cout<<"추가 후 목록\n";
 
@@ -215,13 +216,15 @@ int main() {
          for(auto it=info.begin();it!=info.end();it++){ //2000 
             it->second.clear();
          }
-//
+         total.clear(); 
+//       
         // cout<<"새로갱신\n";
         //  //15번이라서 3만번 다써도 됨 
          for(auto it=deletes.begin();it!=deletes.end();it++){ //3만 
             //dest      id, revenue-dist[dest]
           //  cout<<"dest:"<<it->second.first<<" id,revenue "<<it->first<<" "<<it->second.second<<"\n";
             info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
+            total.insert({it->second.first,it->second.second-dist[it->second.first]});
          }
        }
     }
