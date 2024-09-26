@@ -83,7 +83,7 @@ int main() {
           dikjstra(); 
 
        }
-       else if(num==200){ //여행 상품 생성  3만  -> 0(1)   
+       else if(num==200){ //여행 상품 생성  3만  -> 0(1)   ->ok 
 
         int id,revenue,dest;
         cin>>id>>revenue>>dest; 
@@ -100,7 +100,7 @@ int main() {
          //14 왜 튀어나오는거야!!!!!!!!!!!
 
        }
-       else if(num==300){ //여행 상품 취소  3만  -> o(1) ->ok 
+       else if(num==300){ //여행 상품 취소  3만  -> o(1) ->ok  //set,map의 erase 시간복잡도? logn 됨 
           int id; 
           cin>>id;
           
@@ -126,7 +126,7 @@ int main() {
           int mid=1e9;
         //  cout<<"400이윤 목록\n";  
           //최대 n개만 돌면됨 
-          for(auto it=info.begin();it!=info.end();it++){  //6000 0000
+          for(auto it=info.begin();it!=info.end();it++){  //dest 2000개 탐색 x 최대 3만번 쿼리  = 60000000 -> ok 
              //비어있으면 넘어가기 
              if(it->second.size()==0)continue;
              tid=it->second.begin()->first;
@@ -171,8 +171,8 @@ int main() {
         // //   info[it->second.first].insert({it->first,it->second.second-dist[it->second.first]});
        //  }
 
-       }
-       else{//500  //출발지 변경  ->ok 
+       }  //1000 00000
+       else{//500  //출발지 변경  ->ok   -> 15번 쿼리 x (dij + 3만 + 3만)
          int s;
          cin>>s;
 
@@ -187,6 +187,8 @@ int main() {
           //id -> (dest,cost) 삭제하는거 때문 
           //map<int,ci>deletes;   //id - dest,revenue 
           //deletes는 그대로 ,info 를 다시 갱신 
+
+          //둘중에 하나만 날려도 될듯 
          for(auto it=info.begin();it!=info.end();it++){ //2000 
             it->second.clear();
          }
