@@ -97,14 +97,14 @@ int main() {
           int tcost; 
           int target;
           int mid=1e9;
-          cout<<"이윤 목록\n";  
+         // cout<<"이윤 목록\n";  
           //최대 n개만 돌면됨 
           for(auto it=info.begin();it!=info.end();it++){
              //비어있으면 넘어가기 
              if(it->second.size()==0)continue;
              tid=it->second.begin()->first;
              tcost=it->second.begin()->second;
-            cout<<"id: "<<tid<<"이윤 "<<tcost<<'\n';
+           // cout<<"id: "<<tid<<"이윤 "<<tcost<<'\n';
              if(tcost>=maxs){ //set이 정렬이 안되는거야??????
                //if(mid>tid){ 
                   //값이 같을땐 id가 작은 경우에면 
