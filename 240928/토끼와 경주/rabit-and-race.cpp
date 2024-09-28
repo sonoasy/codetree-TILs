@@ -55,13 +55,13 @@ bool cmp2(info a,info b){
        if((a.r+a.c)==(b.r+b.c)){
             if(a.r==b.r){
                 if(a.c==b.c){
-                    return a.number>b.number;
+                    return a.number<b.number;
                 }     
-                return a.c>b.c;
+                return a.c<b.c;
             }
-            return a.r>b.r;
+            return a.r<b.r;
        }
-       return (a.r+a.c)>(b.r+b.c);
+       return (a.r+a.c)<(b.r+b.c);
  
 }
 
@@ -166,7 +166,7 @@ int main() {
          cin>>k>>s; 
          priority_queue<info,vector<info>,cmp3>pq2;
 
-         for(int kk=1;kk<=k;kk++){ //2000 
+         for(int kk=1;kk<=k;kk++){ //100
          
           //토끼 하나 정하기 - cmp  
           info select=pq.top();pq.pop(); 
@@ -188,6 +188,7 @@ int main() {
           total+=add; 
          
         }
+        
         //점프한 토끼 하나 s 더해주기 
         dist[pq2.top().number].second+=s;
 
