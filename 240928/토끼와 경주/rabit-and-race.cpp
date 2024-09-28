@@ -96,15 +96,30 @@ info move(info select){
         int dcc=dc[i];
 
              //하상좌우 
-        for(int j=0;j<curn;j++){ //이거...? 
-            if(i==0 || i==1){
-                if((nr+drr)<0 || (nr+drr)>=n)drr*=-1;
+       // for(int j=0;j<curn;j++){ //이거...? 줄여야됨 
+            if(i==0){ //하
+               nr+=curn*drr;
+               nr%=(2*(n-1));
+               if(nr>(n-1)){
+                  nr=(2*(n-1)-nr); 
+               }
+            } 
+            if(i==1){ //상
+               nr=abs(nr-curn*drr)%(2*(n-1));
+               
             }
-            if(i==2 || i==3){
-                if((nc+dcc)<0 || (nc+dcc)>=m)dcc*=-1;
+            if(i==2){ //좌
+              nc=abs(nc-curn*dcc)%(2*(n-1));
             }
-            nr+=drr; nc+=dcc;
-        }
+            if(i==3){ //우 
+               nc+=curn*dcc;
+               nc%=(2*(n-1));
+               if(nc>(n-1)){
+                  nc=(2*(n-1)-nc); 
+               }
+            }
+           //nr+=drr; nc+=dcc;
+        //}
 
 
 
@@ -114,10 +129,12 @@ info move(info select){
         else{
             if((min_r+min_c)<(nr+nc)){
                 min_r=nr; min_c=nc;
+                continue;
             }
             else if((min_r+min_c)==(nr+nc)){
                 if(min_r<nr){
                    min_r=nr; min_c=nc; 
+                   continue;
                 }
                 else if(min_r==nr){
                   if(min_c<nc){
@@ -173,24 +190,25 @@ int main() {
            
          //움직이기 
           //1억 = 100,000,000
-          select=move(select);  //4000*2000*16?  = 80,000,000
-          pq2.push(select);
+          select=move(select); //2000 * 4 * 길이(1억) 
+              //4000*2000*16?  = 80,000,000
+       //   pq2.push(select);
        
 
-          pq.push(select); 
+         // pq.push(select); 
 
          //나머지 토끼 점수 더해주기 
-          int selected_number=select.number; 
-          int add=select.r+select.c+2;
+         //int selected_number=select.number; 
+         //int add=select.r+select.c+2;
           
           //이거? 
-          dist[selected_number].second-=add; 
-          total+=add; 
-         
+          //dist[selected_number].second-=add; 
+          //total+=add; 
+        // 
         }
         
         //점프한 토끼 하나 s 더해주기 
-        dist[pq2.top().number].second+=s;
+        //dist[pq2.top().number].second+=s;
 
     }
     
