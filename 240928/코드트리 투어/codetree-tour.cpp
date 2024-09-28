@@ -84,10 +84,11 @@ int main() {
         int id,revenue,dest;
         cin>>id>>revenue>>dest;
         idinfo[id]={revenue,dest};
+       // cout<<"추가: "<<idinfo[id].first<<" "<<idinfo[id].second<<" "<<dist[idinfo[id].second]<<'\n';
        
         if((revenue-dist[dest])>=0){
          total.insert({revenue-dist[dest],id});
-        //cout<<"total에 추가 "<<id<<":"<<revenue-dist[dest]<<'\n';
+      //  cout<<"total에 추가 "<<id<<":"<<revenue-dist[dest]<<'\n';
         }
 
        }
@@ -97,9 +98,11 @@ int main() {
           
           if(idinfo.find(id)==idinfo.end())continue; 
           //idinfo에서 삭제 
-          idinfo.erase(id); 
+          
+          //이거 이상함.... 
           total.erase({idinfo[id].first-dist[idinfo[id].second],id});
-        //  cout<<id<<"삭제\n";
+           idinfo.erase(id);
+      //    cout<<idinfo[id].first<<" "<<dist[idinfo[id].second]<<","<<id<<"삭제\n";
        }
        else if(num==400){//최적의 여행 상품 판매  3만 ->ok 
           //id별로 revenue-cost[dest](최단거리)  
