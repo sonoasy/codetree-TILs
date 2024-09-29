@@ -28,17 +28,23 @@ bool check(int r,int c,int d,int turn){
    int nr=r+dr[d]; int nc=c+dc[d]; 
  //  cout<<r<<","<<c<<'\n';
   // cout<<d<<"일때 "<<nr<<","<<nc<<'\n';
-   if(nr<=0 || nc<=0 || nr>n ||nc>n)flag=true;
-    
-   if(pr==nr && pc==nc)flag=true;
-         //사체 
-  
+   if(nr<=0 || nc<=0 || nr>n ||nc>n){ //격자 밖
+    flag=true;
+    return flag;
+   }
+   if(pr==nr && pc==nc){ //팩맨 있을떄
+    flag=true;
+    return flag;      
+   }     
+  //사라지지 않은 사체가 있는경우 
    for(int k=0;k<info.size();k++){
       // cout<<"안와??";
      //  cout<<info[k].r<<","<<info[k].c<<" "<<info[k].deleted<<'\n';
-        if(info[k].deleted && info[k].r==nr && info[k].c==nc){
+        if(!info[k].vanish && info[k].deleted && info[k].r==nr && info[k].c==nc){
          //   cout<<"안와??2";
-         flag=true; break;
+         flag=true;
+         return flag;  
+        //  break;
         }
     }
     
@@ -48,7 +54,7 @@ int counts(int r,int c){
     //여기에 살아있는 몬스터가 몇개인지
     int cnt=0;
     for(int i=0;i<info.size();i++){
-        if(info[i].deleted)continue; 
+        if(info[i].deleted)continue; //사체+사라진사체 
         if(info[i].r==r && info[i].c==c)cnt++;
     }
     return cnt; 
@@ -70,7 +76,7 @@ int main() {
       //1.몬스터 복제시도 
       vector<monster>dup; 
       for(int j=0;j<info.size();j++){
-        if(!info[i].deleted){
+        if(!info[j].deleted){
             dup.push_back(info[j]);
         }
       }
@@ -166,27 +172,24 @@ int main() {
 
       //4.시체소멸 
       //사체중에 turn이 된거는 이제 장애물이 될수 없음 
-      vector<monster>newinfo; 
+     // vector<monster>newinfo; 
       for(int j=0;j<info.size();j++){
         if(info[j].vanish)continue;
         if(info[j].deleted){
 
-          if(info[j].until>=i){
+          if(info[j].until==i){
             info[j].vanish=1; //완전 사라짐 
           }
-          newinfo.push_back(info[j]);
-        }
-        else{ 
-          newinfo.push_back(info[j]);
+      //    newinfo.push_back(info[j]);
         }
       }
 
       //5.몬스터복제 완성 
       for(int j=0;j<dup.size();j++){
-        newinfo.push_back(dup[j]);
+        info.push_back(dup[j]);
       }
-      info.clear();
-      info=newinfo; 
+      //info.clear();
+      //info=newinfo; 
      // cout<<i<<"턴 후 살아있는 몬스터 목록\n";
       for(int j=0;j<info.size();j++){
         if(!info[j].deleted){
