@@ -63,7 +63,7 @@ int main() {
       vector<monster>dup; 
       for(int j=0;j<info.size();j++){
         if(!info[i].deleted){
-            dup.push_back(info[i]);
+            dup.push_back(info[j]);
         }
       }
 
@@ -124,6 +124,7 @@ int main() {
      // cout<<ans[0]<<" "<<ans[1]<<" "<<ans[2]<<"순으로 움직임\n"; 
      // cout<<maxs<<"몬스터 잡음\n";
     //  cout<<"팩맨"<<tpr<<" "<<tpc<<"로 움직임\n";
+      pr=tpr; pc=tpc;
       //몬스터 죽이기 
       for(int j=0;j<3;j++){
          for(int k=0;k<info.size();k++){
@@ -143,10 +144,13 @@ int main() {
       vector<monster>newinfo; 
       for(int j=0;j<info.size();j++){
         if(info[j].vanish)continue;
-        if(info[j].deleted && info[j].until==i){
+        if(info[j].deleted){
+
+          if(info[j].until==i){
             info[j].vanish=1; //완전 사라짐 
+          }
         }
-        else{
+        else{ 
           newinfo.push_back(info[j]);
         }
       }
@@ -155,7 +159,14 @@ int main() {
       for(int j=0;j<dup.size();j++){
         newinfo.push_back(dup[j]);
       }
+      info.clear();
       info=newinfo; 
+      //cout<<i<<"턴 후 살아있는 몬스터 목록\n";
+      for(int j=0;j<info.size();j++){
+        if(!info[j].deleted){
+         //   cout<<info[j].r<<","<<info[j].c<<"에 있음\n";
+        }
+      }
    }
 
    //사체가 아닌 몬스터 
