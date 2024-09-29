@@ -26,14 +26,22 @@ vector<monster>info;
 bool check(int r,int c,int d,int turn){
    bool flag=false; 
    int nr=r+dr[d]; int nc=c+dc[d]; 
+ //  cout<<r<<","<<c<<'\n';
+  // cout<<d<<"일때 "<<nr<<","<<nc<<'\n';
    if(nr<=0 || nc<=0 || nr>n ||nc>n)flag=true;
+    
    if(pr==nr && pc==nc)flag=true;
          //사체 
+  
    for(int k=0;k<info.size();k++){
-        if(info[k].deleted && info[k].until<=turn){
-            flag=true; break; 
+      // cout<<"안와??";
+     //  cout<<info[k].r<<","<<info[k].c<<" "<<info[k].deleted<<'\n';
+        if(info[k].deleted && info[k].r==nr && info[k].c==nc){
+         //   cout<<"안와??2";
+         flag=true; break;
         }
     }
+    
     return flag;   
 }
 int counts(int r,int c){
@@ -78,10 +86,14 @@ int main() {
          
          if(!check(cur,cuc,curd,i)){
             info[j].r=cur+dr[curd]; info[j].c=cuc+dc[curd]; //이 방향으로 가기 
+
+            //1,2로 가면 안된다고!!!!!!!!!!!!!!!!!!!!!
+         //    cout<<cur<<","<<cuc<<" "<<curd<<"탐색\n";
          }
          else{ //45 반시계로 돌면서 나오는데 찾기 
              for(int s=1;s<=7;s++){
                 int nd=(curd+s)%8; 
+               // cout<<cur<<","<<cuc<<" "<<nd<<"탐색\n";
                 if(!check(cur,cuc,nd,i)){
                   //여기로 가기 
                   info[j].r=cur+dr[nd]; info[j].c=cuc+dc[nd];
@@ -90,7 +102,7 @@ int main() {
                 }
              }
          }
-        // cout<<"몬스터 "<<info[j].r<<","<<info[j].c<<"로감 방향:"<<info[j].dir<<'\n';
+       //  cout<<"몬스터 "<<info[j].r<<","<<info[j].c<<"로감 방향:"<<info[j].dir<<'\n';
       }
 
       //3.팩맨 이동
@@ -106,16 +118,28 @@ int main() {
         for(int k=0;k<4;k++){
             int nr2=nr1+dir[k]; int nc2=nc1+dic[k]; 
             if(nr2<=0 || nc2<=0 || nr2>4 || nc2>4)continue; 
-            int cnt2=counts(nr2,nc2)+cnt1;
+            int cnt2=counts(nr2,nc2);
             for(int p=0;p<4;p++){
               int nr3=nr2+dir[p]; int nc3=nc2+dic[p]; 
               if(nr3<=0 || nc3<=0 || nr3>4 || nc3>4)continue; 
-              int cnt3=counts(nr3,nc3)+cnt2;
+              int cnt3=counts(nr3,nc3);
+              //중복일 경우 제외해주기 
+              if(nr1==nr2 && nc1==nc2){
+                 cnt3+=cnt1;
+              }
+              else if(nr1==nr3 && nc1==nc3){
+                 cnt3+=cnt2;
+              }
+              else if(nr2==nr3 && nc2==nc3){
+                cnt3+=cnt1;
+              }
+              else cnt3+=(cnt1+cnt2);
+
               if(maxs<cnt3){
                 maxs=cnt3;
                 ans[0]={nr1,nc1}; ans[1]={nr2,nc2}; ans[2]={nr3,nc3};
                 tpr=nr3; tpc=nc3; 
-              //  cout<<j<<" "<<k<<" "<<p<<"순으로 움직임\n";
+             //   cout<<nr1<<","<<nc1<<" "<<nr2<<","<<nc2<<" "<<nr3<<","<<nc3<<"순으로 움직임\n";
              //   cout<<cnt3<<"있음\n";
               }
             }
@@ -123,7 +147,7 @@ int main() {
       }
      // cout<<ans[0]<<" "<<ans[1]<<" "<<ans[2]<<"순으로 움직임\n"; 
      // cout<<maxs<<"몬스터 잡음\n";
-    //  cout<<"팩맨"<<tpr<<" "<<tpc<<"로 움직임\n";
+   //  cout<<"팩맨"<<tpr<<" "<<tpc<<"로 움직임\n";
       pr=tpr; pc=tpc;
       //몬스터 죽이기 
       for(int j=0;j<3;j++){
@@ -132,6 +156,7 @@ int main() {
                 if(info[k].deleted)continue;
                 info[k].deleted=1;
                 info[k].until=i+2; 
+           //    cout<<info[k].r<<","<<info[k].c<<"죽임\n";
             }
          }  
 
@@ -146,9 +171,10 @@ int main() {
         if(info[j].vanish)continue;
         if(info[j].deleted){
 
-          if(info[j].until==i){
+          if(info[j].until>=i){
             info[j].vanish=1; //완전 사라짐 
           }
+          newinfo.push_back(info[j]);
         }
         else{ 
           newinfo.push_back(info[j]);
@@ -161,10 +187,10 @@ int main() {
       }
       info.clear();
       info=newinfo; 
-      //cout<<i<<"턴 후 살아있는 몬스터 목록\n";
+     // cout<<i<<"턴 후 살아있는 몬스터 목록\n";
       for(int j=0;j<info.size();j++){
         if(!info[j].deleted){
-         //   cout<<info[j].r<<","<<info[j].c<<"에 있음\n";
+       //     cout<<info[j].r<<","<<info[j].c<<"에 있음\n";
         }
       }
    }
