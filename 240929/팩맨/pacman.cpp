@@ -41,10 +41,11 @@ int counts(int r,int c){
     int cnt=0;
     for(int i=0;i<info.size();i++){
         if(info[i].deleted)continue; 
-        cnt++;
+        if(info[i].r==r && info[i].c==c)cnt++;
     }
     return cnt; 
 }
+
 
 int main() {
 
@@ -79,8 +80,8 @@ int main() {
             info[j].r=cur+dr[curd]; info[j].c=cuc+dc[curd]; //이 방향으로 가기 
          }
          else{ //45 반시계로 돌면서 나오는데 찾기 
-             for(int s=0;s<7;s++){
-                int nd=(curd+1)%8; 
+             for(int s=1;s<=7;s++){
+                int nd=(curd+s)%8; 
                 if(!check(cur,cuc,nd,i)){
                   //여기로 가기 
                   info[j].r=cur+dr[nd]; info[j].c=cuc+dc[nd];
@@ -89,53 +90,53 @@ int main() {
                 }
              }
          }
-
+        // cout<<"몬스터 "<<info[j].r<<","<<info[j].c<<"로감 방향:"<<info[j].dir<<'\n';
       }
 
       //3.팩맨 이동
       //64가지 
-      int tr,tc; int maxs=-1; 
-      ci nexts[3]; 
+      int tpr=pr; int tpc=pc; 
+      int maxs=-1;
       ci ans[3];
+      //사체처리 안함? 
       for(int j=0;j<4;j++){
-        int totalmonster=0; 
-        if(check(pr,pc,j,i))continue; 
-        pr+=dir[j]; pc+=dic[j]; 
-        nexts[0]={pr,pc};
-        totalmonster+=counts(pr,pc); 
-        for(int s=0;s<4;s++){
-            if(check(pr,pc,s,i))continue; 
-            pr+=dir[s]; pc+=dic[s]; 
-             totalmonster+=counts(pr,pc); 
-             nexts[1]={pr,pc};
+        int nr1=pr+dir[j]; int nc1=pc+dic[j];
+        if(nr1<=0 || nc1<=0 || nr1>4 || nc1>4)continue; 
+        int cnt1=counts(nr1,nc1);
+        for(int k=0;k<4;k++){
+            int nr2=nr1+dir[k]; int nc2=nc1+dic[k]; 
+            if(nr2<=0 || nc2<=0 || nr2>4 || nc2>4)continue; 
+            int cnt2=counts(nr2,nc2)+cnt1;
             for(int p=0;p<4;p++){
-              if(check(pr,pc,p,i))continue; 
-              pr+=dir[p]; pc+=dic[p];
-              totalmonster+=counts(pr,pc); 
-              nexts[0]={pr,pc};
-              if(maxs<totalmonster){
-                maxs=totalmonster;
-                tr=pr; tc=pc; 
-                ans[0]=nexts[0];
-                ans[1]=nexts[1];
-                ans[2]=nexts[2]; 
+              int nr3=nr2+dir[p]; int nc3=nc2+dic[p]; 
+              if(nr3<=0 || nc3<=0 || nr3>4 || nc3>4)continue; 
+              int cnt3=counts(nr3,nc3)+cnt2;
+              if(maxs<cnt3){
+                maxs=cnt3;
+                ans[0]={nr1,nc1}; ans[1]={nr2,nc2}; ans[2]={nr3,nc3};
+                tpr=nr3; tpc=nc3; 
+              //  cout<<j<<" "<<k<<" "<<p<<"순으로 움직임\n";
+             //   cout<<cnt3<<"있음\n";
               }
             }
         }
       }
-      //여기로 이동 
-      pr=tr; pc=tc; 
-      //사체로 바꾸기 
-      for(int j=0;j<info.size();j++){
-        if(info[j].deleted)continue; 
-        for(int k=0;k<3;k++){
-            if(info[j].r==ans[k].first && info[j].c==ans[k].second){
-                //사체로 변함 
-                info[j].deleted=1;
-                info[j].until=i+2; 
+     // cout<<ans[0]<<" "<<ans[1]<<" "<<ans[2]<<"순으로 움직임\n"; 
+     // cout<<maxs<<"몬스터 잡음\n";
+    //  cout<<"팩맨"<<tpr<<" "<<tpc<<"로 움직임\n";
+      //몬스터 죽이기 
+      for(int j=0;j<3;j++){
+         for(int k=0;k<info.size();k++){
+            if(info[k].r==ans[j].first && info[k].c==ans[j].second){
+                if(info[k].deleted)continue;
+                info[k].deleted=1;
+                info[k].until=i+2; 
             }
-        }
+         }  
+
       }
+      
+     
 
       //4.시체소멸 
       //사체중에 turn이 된거는 이제 장애물이 될수 없음 
@@ -156,6 +157,8 @@ int main() {
       }
       info=newinfo; 
    }
+
+   //사체가 아닌 몬스터 
    int cnt=0;
    for(int i=0;i<info.size();i++){
       if(!info[i].deleted)cnt++;
