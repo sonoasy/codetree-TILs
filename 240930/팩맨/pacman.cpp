@@ -1,5 +1,7 @@
 #include <iostream>
 #include<vector>
+#include<map> 
+
 using namespace std;
 typedef pair<int,int>ci; 
 int dr[8]={-1,-1,0,1,1,1,0,-1};
@@ -22,6 +24,8 @@ struct monster{
 }; 
 int n=4;
 vector<monster>info; 
+map<ci,int>deadmonster; 
+
 
 bool check(int r,int c,int d,int turn){
    bool flag=false; 
@@ -36,17 +40,21 @@ bool check(int r,int c,int d,int turn){
     flag=true;
     return flag;      
    }     
+
+   //이거를 O(1)로 하는 방법? 
   //사라지지 않은 사체가 있는경우 
-   for(int k=0;k<info.size();k++){
+  //map[r][c].cnt++; 
+   if(deadmonster[{r,c}]>0)return true;
+  // for(int k=0;k<info.size();k++){
       // cout<<"안와??";
      //  cout<<info[k].r<<","<<info[k].c<<" "<<info[k].deleted<<'\n';
-        if(!info[k].vanish && info[k].deleted && info[k].r==nr && info[k].c==nc){
+    //    if(!info[k].vanish && info[k].deleted && info[k].r==nr && info[k].c==nc){
          //   cout<<"안와??2";
-         flag=true;
-         return flag;  
+      //   flag=true;
+        // return flag;  
         //  break;
-        }
-    }
+        //}
+   // }
     
     return flag;   
 }
@@ -162,6 +170,7 @@ int main() {
                 if(info[k].deleted)continue;
                 info[k].deleted=1;
                 info[k].until=i+2; 
+                deadmonster[{info[k].r,info[k].c}]++;
            //    cout<<info[k].r<<","<<info[k].c<<"죽임\n";
             }
          }  
@@ -179,6 +188,7 @@ int main() {
 
           if(info[j].until==i){
             info[j].vanish=1; //완전 사라짐 
+            deadmonster[{info[j].r,info[j].c}]--;
           }
       //    newinfo.push_back(info[j]);
         }
@@ -191,11 +201,7 @@ int main() {
       //info.clear();
       //info=newinfo; 
      // cout<<i<<"턴 후 살아있는 몬스터 목록\n";
-      for(int j=0;j<info.size();j++){
-        if(!info[j].deleted){
-       //     cout<<info[j].r<<","<<info[j].c<<"에 있음\n";
-        }
-      }
+     
    }
 
    //사체가 아닌 몬스터 
