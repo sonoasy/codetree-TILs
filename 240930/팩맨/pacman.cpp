@@ -44,7 +44,7 @@ bool check(int r,int c,int d,int turn){
    //이거를 O(1)로 하는 방법? 
   //사라지지 않은 사체가 있는경우 
   //map[r][c].cnt++; 
-   if(deadmonster[{r,c}]>0)return true;
+   if(deadmonster[{nr,nc}]>0)return true;
   // for(int k=0;k<info.size();k++){
       // cout<<"안와??";
      //  cout<<info[k].r<<","<<info[k].c<<" "<<info[k].deleted<<'\n';
