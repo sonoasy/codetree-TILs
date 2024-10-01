@@ -49,11 +49,11 @@ int main() {
        int nr=(cur+dr[d]*p)%n;
        int nc=(cuc+dc[d]*p)%n;
        med[j].first=nr; med[j].second=nc;
-       nu[nr][nc]=1; 
        arr[nr][nc]++;
-       //cout<<nr<<" "<<nc<<"\n";
+      // cout<<nr<<" "<<nc<<"\n";
+       nu[nr][nc]=1; 
      }    
- 
+     
      //2.특수 영양제 투입 
      // 투입한 리브로수에서 씨앗이면 +1, 그 이상이면 대각선 인접한 방향 리브로수 있는 만큼 높이 올라감 격자 밖x 
      for(int j=0;j<med.size();j++){
@@ -75,25 +75,21 @@ int main() {
          arr[cur][cuc]+=cnt; 
       
      } 
-     med.clear(); 
-
+     //med.clear(); 
+     vector<ci>new_med;
      //3. 특수 영양제 없는 높이 2이상 리브로스는 2이상 깎고 거기에 -> 최적화 필요? 
      //새로 특수 영양제 뿌리기 
       for(int j=0;j<n;j++){
         for(int k=0;k<n;k++){
-           if(nu[j][k]==1)continue; //이전에 약뿌린곳 
+           if(nu[j][k])continue; 
            if(arr[j][k]>=2){
              arr[j][k]-=2;
-             med.push_back({j,k});
+             new_med.push_back({j,k});
            }
         }
       }
       nu.assign(n,vector<int>(n,0));
-     
-      for(int j=0;j<med.size();j++){
-        nu[med[j].first][med[j].second]=1; 
-      }
-
+      med=new_med;
    }
    int total=0;
    for(int i=0;i<n;i++){
