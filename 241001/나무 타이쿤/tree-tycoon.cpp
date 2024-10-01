@@ -30,8 +30,7 @@ int main() {
         cin>>arr[i][j]; 
     }
    }
-   cin>>d>>p; 
-   d--; 
+  
    //초기 영양제 위치 
    for(int i=n-2;i<n;i++){
      for(int j=0;j<2;j++){
@@ -43,19 +42,20 @@ int main() {
    for(int i=0;i<m;i++){
      //1.특수 영양제 이동
    //  cout<<"영양제 이동\n";
+    cin>>d>>p; //매년 다른 이동방향 
+    d--; 
      for(int j=0;j<med.size();j++){
        int cur=med[j].first;
        int cuc=med[j].second; 
-       int nr=(cur+dr[d]*p)%n;
-       int nc=(cuc+dc[d]*p)%n;
+       int nr=(cur+dr[d]*p+2*n)%n; //음수가 될수도 있음// 
+       int nc=(cuc+dc[d]*p+2*n)%n;
        med[j].first=nr; med[j].second=nc;
-       arr[nr][nc]++;
+       arr[nr][nc]++; //1씩자람 
       // cout<<nr<<" "<<nc<<"\n";
-       nu[nr][nc]=1; 
-     }    
-     
-     //2.특수 영양제 투입 
-     // 투입한 리브로수에서 씨앗이면 +1, 그 이상이면 대각선 인접한 방향 리브로수 있는 만큼 높이 올라감 격자 밖x 
+       nu[nr][nc]=1; //나중에 여기 제외하고 영양제 투입하려고 
+     }      
+     //2.특수 영양제 대각선 방향  
+
      for(int j=0;j<med.size();j++){
        int cur=med[j].first;
        int cuc=med[j].second; 
@@ -73,24 +73,28 @@ int main() {
          }
          //cout<<cur<<" "<<cuc<<"에"<<cnt<<"개 있음\n";
          arr[cur][cuc]+=cnt; 
-      
      } 
+     //arr=tmp;
+    
+    
      //med.clear(); 
      vector<ci>new_med;
      //3. 특수 영양제 없는 높이 2이상 리브로스는 2이상 깎고 거기에 -> 최적화 필요? 
      //새로 특수 영양제 뿌리기 
       for(int j=0;j<n;j++){
         for(int k=0;k<n;k++){
-           if(nu[j][k])continue; 
+           if(nu[j][k]==1)continue; 
            if(arr[j][k]>=2){
              arr[j][k]-=2;
-             new_med.push_back({j,k});
+             new_med.push_back({j,k}); //새롭게 영양제 투입할곳 
            }
         }
       }
       nu.assign(n,vector<int>(n,0));
       med=new_med;
+    
    }
+
    int total=0;
    for(int i=0;i<n;i++){
     for(int j=0;j<n;j++){
