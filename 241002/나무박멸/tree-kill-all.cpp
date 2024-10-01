@@ -105,7 +105,8 @@ int main() {
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
                 if(arr[i][j]==-1 || arr[i][j]==0 )continue; //벅이거나 아무것도 없거나 
-                int sum=arr[i][j];
+                int sum=0;
+                if(arr[i][j]>0)sum+=arr[i][j]; 
                 
                 for(int p=0;p<4;p++){
                    //k만큼 감 
@@ -131,6 +132,8 @@ int main() {
             }
         }
         total+=maxs; 
+        deletelist[{maxr,maxc}].push_back({maxr,maxc});
+        arr[maxr][maxc]=-2;
         //박멸
         for(int i=0;i<deletelist[{maxr,maxc}].size();i++){
             arr[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=-2; 
