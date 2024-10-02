@@ -48,7 +48,7 @@ int main() {
         }
 
 
-
+        
         //1.나무 성장 
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
@@ -75,6 +75,7 @@ int main() {
       cout<<"\n";
       */
         //2.나무 복제 
+        
         vector<vector<int>>tt;
         tt=arr;
         for(int i=0;i<n;i++){
@@ -126,7 +127,7 @@ int main() {
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
                 //제초제일 경우 ? 
-
+                //이거!!!! 
                 if(arr[i][j]==-1 || arr[i][j]==0 || arr[i][j]==-2 )continue; //벅이거나 아무것도 없거나 
                 int sum=0;
                 if(arr[i][j]>0)sum+=arr[i][j]; 
@@ -163,7 +164,7 @@ int main() {
                 }
             }
         }
-        
+        if(maxs==0)break;
         total+=maxs; 
       //  deletelist[{maxr,maxc}].clear();
         deletelist[{maxr,maxc}].push_back({maxr,maxc});
@@ -177,6 +178,7 @@ int main() {
             //기존게 왜 안바뀜? 
             deletes[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=year+c+1; //나중에 꺠어날 목록
         }
+        
          /*
        cout<<year<<" 박멸 후 근황\n";
        for(int i=0;i<n;i++){
