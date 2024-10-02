@@ -18,21 +18,37 @@ int dic[4]={-1,1,-1,1};
 
 int total=0; 
 
+vector<vector<int>>deletes;
+
+
 int main() {
    
     cin>>n>>m>>k>>c; 
     arr.assign(n,vector<int>(n,0));
+    deletes.assign(n,vector<int>(n,0));
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
             cin>>arr[i][j]; 
         }
     }
-    for(int year=0;year<m;year++){
+    for(int year=1;year<=m;year++){
        //0.제조제 뿌린데 깨우기 
-        int len=wakeup[year].size(); 
-        for(int i=0;i<len;i++){
-            arr[wakeup[year][i].first][wakeup[year][i].second]=0; //아무것도 없는 상태로 만들기 
-        }           
+       // int len=wakeup[year].size(); 
+        //for(int i=0;i<len;i++){
+       //     arr[wakeup[year][i].first][wakeup[year][i].second]=0; //아무것도 없는 상태로 만들기 
+       // }          
+        //이걸 그냥 nxn으로 ? 겹치는거 있을수 있으니까 
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(deletes[i][j]==year){
+                    arr[i][j]=0; //아무것도 없는 상태로 바꾸기 
+                    deletes[i][j]=0;
+                }
+            }
+        }
+
+
+
         //1.나무 성장 
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
@@ -48,15 +64,15 @@ int main() {
             }
         }
         
-      //  cout<<"나무 자람\n";
-     //   for(int i=0;i<n;i++){
-      ////      for(int j=0;j<n;j++){
-       //       cout<<arr[i][j]<<" ";
-       //     }
-       //     cout<<"\n";
-     //   }
+       // cout<<"나무 자람\n";
+       // for(int i=0;i<n;i++){
+         //   for(int j=0;j<n;j++){
+          //    cout<<arr[i][j]<<" ";
+          //  }
+         //   cout<<"\n";
+       // }
       // cout<<"\n";
-        
+      
         //2.나무 복제 
         vector<vector<int>>tt;
         tt=arr;
@@ -97,7 +113,7 @@ int main() {
        // }
        // cout<<"\n";
       
-
+         
 
         //3.제초제 뿌리기 
         //i,j에서 박멸될 나무 목록 
@@ -137,24 +153,28 @@ int main() {
                 }
             }
         }
+        
         total+=maxs; 
       //  deletelist[{maxr,maxc}].clear();
         deletelist[{maxr,maxc}].push_back({maxr,maxc});
-        cout<<maxr<<","<<maxc<<" "<<maxs<<"선택\n";
+       // cout<<maxr<<","<<maxc<<" "<<maxs<<"선택\n";
         arr[maxr][maxc]=-2;
+        
         //박멸
         for(int i=0;i<deletelist[{maxr,maxc}].size();i++){
-            arr[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=-2; 
-            wakeup[year+c+2].push_back({deletelist[{maxr,maxc}][i].first,deletelist[{maxr,maxc}][i].second});
+            arr[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=-2; //제초제 있는곳 
+            //wakeup[year+c+2].push_back({deletelist[{maxr,maxc}][i].first,deletelist[{maxr,maxc}][i].second}); //이전에 제초제 뿌려진데면 어떡함? 
+            deletes[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=year+c+2; //나중에 꺠어날 목록
         }
-        cout<<"박멸 후 근황\n";
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-               cout<<arr[i][j]<<" ";
-            }
-            cout<<"\n";
-        }
-        cout<<"\n";
+        
+       // cout<<"박멸 후 근황\n";
+       // for(int i=0;i<n;i++){
+         //   for(int j=0;j<n;j++){
+           //    cout<<arr[i][j]<<" ";
+           // }
+           // cout<<"\n";
+       // }
+       // cout<<"\n";
     } 
     cout<<total;
 
