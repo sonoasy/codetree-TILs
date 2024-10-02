@@ -63,15 +63,15 @@ int main() {
                 arr[i][j]+=cnt;
             }
         }
-        
-    //    cout<<"나무 자람\n";
-    //    for(int i=0;i<n;i++){
-       //     for(int j=0;j<n;j++){
-         //     cout<<arr[i][j]<<" ";
-        //    }
-        //    cout<<"\n";
+      //  
+       // cout<<"나무 자람\n";
+      ////  for(int i=0;i<n;i++){
+          //  for(int j=0;j<n;j++){
+          //    cout<<arr[i][j]<<" ";
+           // }
+          ///  cout<<"\n";
        // }
-      // cout<<"\n";
+    //   cout<<"\n";
       
         //2.나무 복제 
         vector<vector<int>>tt;
@@ -104,14 +104,14 @@ int main() {
             }
         }
         arr=tt;
-        //cout<<"나무 복제\n";
-       // for(int i=0;i<n;i++){
-         //   for(int j=0;j<n;j++){
-          //     cout<<arr[i][j]<<" ";
+       // cout<<"나무 복제\n";
+     //   for(int i=0;i<n;i++){
+        //    for(int j=0;j<n;j++){
+         //      cout<<arr[i][j]<<" ";
          //   }
-        //  cout<<"\n";
+       //  cout<<"\n";
        // }
-       // cout<<"\n";
+      //  cout<<"\n";
       
          
 
@@ -170,7 +170,7 @@ int main() {
             arr[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=-2; //제초제 있는곳 
             //wakeup[year+c+2].push_back({deletelist[{maxr,maxc}][i].first,deletelist[{maxr,maxc}][i].second}); //이전에 제초제 뿌려진데면 어떡함? 
             //기존게 왜 안바뀜? 
-            deletes[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=year+c; //나중에 꺠어날 목록
+            deletes[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=year+c+1; //나중에 꺠어날 목록
         }
         
        // cout<<year<<" 박멸 후 근황\n";
