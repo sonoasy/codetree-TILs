@@ -64,12 +64,12 @@ int main() {
             }
         }
         
-       // cout<<"나무 자람\n";
-       // for(int i=0;i<n;i++){
-         //   for(int j=0;j<n;j++){
-          //    cout<<arr[i][j]<<" ";
-          //  }
-         //   cout<<"\n";
+    //    cout<<"나무 자람\n";
+    //    for(int i=0;i<n;i++){
+       //     for(int j=0;j<n;j++){
+         //     cout<<arr[i][j]<<" ";
+        //    }
+        //    cout<<"\n";
        // }
       // cout<<"\n";
       
@@ -104,10 +104,10 @@ int main() {
             }
         }
         arr=tt;
-      //  cout<<"나무 복제\n";
+        //cout<<"나무 복제\n";
        // for(int i=0;i<n;i++){
-       //     for(int j=0;j<n;j++){
-         //      cout<<arr[i][j]<<" ";
+         //   for(int j=0;j<n;j++){
+          //     cout<<arr[i][j]<<" ";
          //   }
         //  cout<<"\n";
        // }
@@ -143,6 +143,11 @@ int main() {
                          deletelist[{i,j}].push_back({nr,nc}); 
                          sum+=arr[nr][nc]; 
                        }
+                       //제초제 전에 뿌린데라도 갱신해야됨
+                       if(arr[nr][nc]==-2){
+                        deletelist[{i,j}].push_back({nr,nc}); 
+                        break;
+                       }
            
                    }
                 }
@@ -164,17 +169,27 @@ int main() {
         for(int i=0;i<deletelist[{maxr,maxc}].size();i++){
             arr[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=-2; //제초제 있는곳 
             //wakeup[year+c+2].push_back({deletelist[{maxr,maxc}][i].first,deletelist[{maxr,maxc}][i].second}); //이전에 제초제 뿌려진데면 어떡함? 
-            deletes[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=year+c+2; //나중에 꺠어날 목록
+            //기존게 왜 안바뀜? 
+            deletes[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=year+c; //나중에 꺠어날 목록
         }
         
-       // cout<<"박멸 후 근황\n";
+       // cout<<year<<" 박멸 후 근황\n";
        // for(int i=0;i<n;i++){
-         //   for(int j=0;j<n;j++){
-           //    cout<<arr[i][j]<<" ";
-           // }
-           // cout<<"\n";
+          //  for(int j=0;j<n;j++){
+          //     cout<<arr[i][j]<<" ";
+           //// }
+         //   cout<<"\n";
        // }
-       // cout<<"\n";
+       // cout<<"\n"; 
+       // cout<<"제초제 현황\n";
+      ///  for(int i=0;i<n;i++){
+        //    for(int j=0;j<n;j++){
+         //      cout<<deletes[i][j]<<" ";
+          //  }
+        //    cout<<"\n";
+     //  }
+        
+
     } 
     cout<<total;
 
