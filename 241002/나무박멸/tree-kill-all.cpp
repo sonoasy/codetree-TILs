@@ -48,14 +48,14 @@ int main() {
             }
         }
         
-       // cout<<"나무 자람\n";
-       // for(int i=0;i<n;i++){
-        //    for(int j=0;j<n;j++){
-         //      cout<<arr[i][j]<<" ";
-         //   }
-         //   cout<<"\n";
-       // }
-       // cout<<"\n";
+      //  cout<<"나무 자람\n";
+     //   for(int i=0;i<n;i++){
+      ////      for(int j=0;j<n;j++){
+       //       cout<<arr[i][j]<<" ";
+       //     }
+       //     cout<<"\n";
+     //   }
+      // cout<<"\n";
         
         //2.나무 복제 
         vector<vector<int>>tt;
@@ -88,13 +88,13 @@ int main() {
             }
         }
         arr=tt;
-       //  cout<<"나무 복제\n";
-      //  for(int i=0;i<n;i++){
+      //  cout<<"나무 복제\n";
+       // for(int i=0;i<n;i++){
        //     for(int j=0;j<n;j++){
          //      cout<<arr[i][j]<<" ";
-        //    }
-        //    cout<<"\n";
-    //    }
+         //   }
+        //  cout<<"\n";
+       // }
        // cout<<"\n";
       
 
@@ -147,12 +147,12 @@ int main() {
         }
       //  cout<<"박멸 후 근황\n";
       //  for(int i=0;i<n;i++){
-       //     for(int j=0;j<n;j++){
-         //       cout<<arr[i][j]<<" ";
-          //  }
+        //    for(int j=0;j<n;j++){
+         //      cout<<arr[i][j]<<" ";
+        //    }
        //     cout<<"\n";
       //  }
-      //  cout<<"\n";
+       // cout<<"\n";
     } 
     cout<<total;
 
