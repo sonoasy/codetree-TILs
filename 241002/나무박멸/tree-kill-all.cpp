@@ -64,15 +64,16 @@ int main() {
             }
         }
       //  
-       // cout<<"나무 자람\n";
-      ////  for(int i=0;i<n;i++){
-          //  for(int j=0;j<n;j++){
-          //    cout<<arr[i][j]<<" ";
-           // }
-          ///  cout<<"\n";
-       // }
-    //   cout<<"\n";
-      
+      /*
+        cout<<"나무 자람\n";
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+             cout<<arr[i][j]<<" ";
+            }
+            cout<<"\n";
+        }
+      cout<<"\n";
+      */
         //2.나무 복제 
         vector<vector<int>>tt;
         tt=arr;
@@ -103,16 +104,18 @@ int main() {
                 
             }
         }
+        
         arr=tt;
-       // cout<<"나무 복제\n";
-     //   for(int i=0;i<n;i++){
-        //    for(int j=0;j<n;j++){
-         //      cout<<arr[i][j]<<" ";
-         //   }
-       //  cout<<"\n";
-       // }
-      //  cout<<"\n";
-      
+       /*
+       cout<<"나무 복제\n";
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+               cout<<arr[i][j]<<" ";
+            }
+        cout<<"\n";
+       }
+       cout<<"\n";
+      */
          
 
         //3.제초제 뿌리기 
@@ -122,7 +125,9 @@ int main() {
         int maxr,maxc; 
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
-                if(arr[i][j]==-1 || arr[i][j]==0 )continue; //벅이거나 아무것도 없거나 
+                //제초제일 경우 ? 
+
+                if(arr[i][j]==-1 || arr[i][j]==0 || arr[i][j]==-2 )continue; //벅이거나 아무것도 없거나 
                 int sum=0;
                 if(arr[i][j]>0)sum+=arr[i][j]; 
                 
@@ -172,23 +177,23 @@ int main() {
             //기존게 왜 안바뀜? 
             deletes[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=year+c+1; //나중에 꺠어날 목록
         }
-        
-       // cout<<year<<" 박멸 후 근황\n";
-       // for(int i=0;i<n;i++){
-          //  for(int j=0;j<n;j++){
-          //     cout<<arr[i][j]<<" ";
-           //// }
-         //   cout<<"\n";
-       // }
-       // cout<<"\n"; 
-       // cout<<"제초제 현황\n";
-      ///  for(int i=0;i<n;i++){
-        //    for(int j=0;j<n;j++){
-         //      cout<<deletes[i][j]<<" ";
-          //  }
-        //    cout<<"\n";
-     //  }
-        
+         /*
+       cout<<year<<" 박멸 후 근황\n";
+       for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+               cout<<arr[i][j]<<" ";
+           }
+            cout<<"\n";
+        }
+        cout<<"\n"; 
+        cout<<"제초제 현황\n";
+       for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+               cout<<deletes[i][j]<<" ";
+            }
+            cout<<"\n";
+      }
+        */
 
     } 
     cout<<total;
