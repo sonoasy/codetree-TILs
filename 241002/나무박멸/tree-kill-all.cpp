@@ -47,15 +47,16 @@ int main() {
                 arr[i][j]+=cnt;
             }
         }
-        /*
+        
         cout<<"나무 자람\n";
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
-               cout<<arr[i][j];
+               cout<<arr[i][j]<<" ";
             }
             cout<<"\n";
         }
-        */
+        cout<<"\n";
+        
         //2.나무 복제 
         vector<vector<int>>tt;
         tt=arr;
@@ -87,14 +88,15 @@ int main() {
             }
         }
         arr=tt;
-       /*  cout<<"나무 복제\n";
+         cout<<"나무 복제\n";
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
-               cout<<arr[i][j];
+               cout<<arr[i][j]<<" ";
             }
             cout<<"\n";
         }
-      */
+        cout<<"\n";
+      
 
 
         //3.제초제 뿌리기 
@@ -115,8 +117,12 @@ int main() {
                        int nc=j+dic[p]*s; 
                        if(nr<0 || nc<0 || nr>=n || nc>=n)break; 
                        //벽이거나 나무가 아예 없는 칸이 있는경우 
-                       if(arr[nr][nc]==-1 || arr[nr][nc]==0)break; 
+                       if(arr[nr][nc]==-1)break; 
                        //제초제가 있는곳이면 되나봄? 
+                       if(arr[nr][nc]==0){
+                         deletelist[{i,j}].push_back({nr,nc}); 
+                         break;
+                       }
                        if(arr[nr][nc]>0){
                          deletelist[{i,j}].push_back({nr,nc}); 
                          sum+=arr[nr][nc]; 
@@ -125,7 +131,6 @@ int main() {
                    }
                 }
                 if(maxs<sum){
-                   // cout<<i<<","<<j<<"일때"<<sum<<"\n";
                     maxs=sum;
                     maxr=i; maxc=j; 
                 }
@@ -133,13 +138,21 @@ int main() {
         }
         total+=maxs; 
         deletelist[{maxr,maxc}].push_back({maxr,maxc});
+        cout<<maxr<<","<<maxc<<" "<<maxs<<"선택\n";
         arr[maxr][maxc]=-2;
         //박멸
         for(int i=0;i<deletelist[{maxr,maxc}].size();i++){
             arr[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=-2; 
             wakeup[year+c].push_back({deletelist[{maxr,maxc}][i].first,deletelist[{maxr,maxc}][i].second});
         }
-        
+        cout<<"박멸 후 근황\n";
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                cout<<arr[i][j]<<" ";
+            }
+            cout<<"\n";
+        }
+        cout<<"\n";
     } 
     cout<<total;
 
