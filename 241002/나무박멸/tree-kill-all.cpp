@@ -48,14 +48,14 @@ int main() {
             }
         }
         
-        cout<<"나무 자람\n";
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-               cout<<arr[i][j]<<" ";
-            }
-            cout<<"\n";
-        }
-        cout<<"\n";
+       // cout<<"나무 자람\n";
+       // for(int i=0;i<n;i++){
+        //    for(int j=0;j<n;j++){
+         //      cout<<arr[i][j]<<" ";
+         //   }
+         //   cout<<"\n";
+       // }
+       // cout<<"\n";
         
         //2.나무 복제 
         vector<vector<int>>tt;
@@ -88,14 +88,14 @@ int main() {
             }
         }
         arr=tt;
-         cout<<"나무 복제\n";
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-               cout<<arr[i][j]<<" ";
-            }
-            cout<<"\n";
-        }
-        cout<<"\n";
+       //  cout<<"나무 복제\n";
+      //  for(int i=0;i<n;i++){
+       //     for(int j=0;j<n;j++){
+         //      cout<<arr[i][j]<<" ";
+        //    }
+        //    cout<<"\n";
+    //    }
+       // cout<<"\n";
       
 
 
@@ -138,21 +138,21 @@ int main() {
         }
         total+=maxs; 
         deletelist[{maxr,maxc}].push_back({maxr,maxc});
-        cout<<maxr<<","<<maxc<<" "<<maxs<<"선택\n";
+       // cout<<maxr<<","<<maxc<<" "<<maxs<<"선택\n";
         arr[maxr][maxc]=-2;
         //박멸
         for(int i=0;i<deletelist[{maxr,maxc}].size();i++){
             arr[deletelist[{maxr,maxc}][i].first][deletelist[{maxr,maxc}][i].second]=-2; 
-            wakeup[year+c].push_back({deletelist[{maxr,maxc}][i].first,deletelist[{maxr,maxc}][i].second});
+            wakeup[year+c+1].push_back({deletelist[{maxr,maxc}][i].first,deletelist[{maxr,maxc}][i].second});
         }
-        cout<<"박멸 후 근황\n";
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-                cout<<arr[i][j]<<" ";
-            }
-            cout<<"\n";
-        }
-        cout<<"\n";
+      //  cout<<"박멸 후 근황\n";
+      //  for(int i=0;i<n;i++){
+       //     for(int j=0;j<n;j++){
+         //       cout<<arr[i][j]<<" ";
+          //  }
+       //     cout<<"\n";
+      //  }
+      //  cout<<"\n";
     } 
     cout<<total;
 
