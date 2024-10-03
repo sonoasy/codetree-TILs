@@ -65,7 +65,7 @@ void bfs(int id,int dir){
              //  cout<<"못움직임\n"; 
               flag=false; return;
             }
-           // if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
+            if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0)nid.insert(info[nr][nc]); 
             
         }
@@ -80,7 +80,7 @@ void bfs(int id,int dir){
               // cout<<"못움직임\n"; 
                flag=false;  return;
             }
-           // if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
+            if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0)nid.insert(info[nr][nc]); 
          }
      }
@@ -93,11 +93,11 @@ void bfs(int id,int dir){
               // cout<<"못움직임\n";
                flag=false;  return;
             }
-           // if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
+            if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0){
                 nid.insert(info[nr][nc]); 
                 
-              //  cout<<nr<<","<<nc<<" "<<info[nr][nc]<<"추가";
+               // cout<<nr<<","<<nc<<" "<<info[nr][nc]<<"추가";
             }
          }
      }
@@ -107,18 +107,18 @@ void bfs(int id,int dir){
             int nr=i;
             int nc=c-1; 
             if(nr<=0 || nc<=0 || nr>l  || nc>l || arr[nr][nc]==2){
-           //   cout<<"못움직임\n"; 
+            //  cout<<"못움직임\n"; 
               flag=false; return;
             }
-           // if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
+            if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0)nid.insert(info[nr][nc]); 
          }
      }
      if(!flag)return;
      if(!flag)break; 
       //flag가 false가 되지 않았을 경우, search에 id,damage를 넣어주고 
-      tmp.push_back({cid}); 
-     // cout<<cid<<"에 "<<damage<<"가해짐\n";
+      tmp.push_back(cid); 
+    //  cout<<cid<<"에 "<<damage<<"가해짐\n";
      //기사인 목록을 큐에 넣어준다  
       for(auto ss:nid){
        // cout<<"움직일 기사:"<<ss<<"\n";
@@ -130,39 +130,44 @@ void bfs(int id,int dir){
   if(!flag)return; 
   //person 갱신 
   for(int i=0;i<tmp.size();i++){
-    int id=tmp[i];
+    int ids=tmp[i];
    
-    person[id].r+=dr[dir];
-    person[id].c+=dc[dir];
+    person[ids].r+=dr[dir];
+    person[ids].c+=dc[dir];
    // cout<<id<<"에 "<<damage<<"가해져서"<<person[id].power<<"남음\n";
-    
+     int r=person[ids].r;
+     int c=person[ids].c;
+     int h=person[ids].h;
+     int w=person[ids].w;  
+     //여기서 데미지 갱신 
+     if(ids==id)continue;
+     int cnt=0;
+     for(int j=r;j<r+h;j++){
+        for(int k=c;k<c+w;k++){
+            
+               if(arr[j][k]==1){
+                 cnt++; 
+               }
+            
+        }
+     }
+    // cout<<ids<<"에 "<<cnt<<"데미지\n";
+     person[ids].damage+=cnt; 
+     person[ids].power-=cnt;
+     if(person[ids].power<=0){
+        person[ids].deleted=1; 
+        continue; 
+     }
   }
   //info 갱신 
   info.assign(l+1,vector<int>(l+1,0)); 
   //delete된거 삭제하기 
   for(int i=1;i<=n;i++){
      if(person[i].deleted)continue; 
-     int r=person[i].r;
+      int r=person[i].r;
      int c=person[i].c;
      int h=person[i].h;
      int w=person[i].w;  
-     //여기서 데미지 갱신 
-     int cnt=0;
-     for(int j=r;j<r+h;j++){
-        for(int k=c;k<c+w;k++){
-            if(i!=id){
-               if(arr[j][k]==1){
-                 cnt++; 
-               }
-            }
-        }
-     }
-     person[i].damage+=cnt; 
-     person[i].power-=cnt;
-     if(person[id].power<=0){
-        person[id].deleted=1; 
-        continue; 
-     }
      for(int j=r;j<r+h;j++){
         for(int k=c;k<c+w;k++){
             info[j][k]=i; 
@@ -201,9 +206,10 @@ int main() {
         cin>>id>>dir;
      //   cout<<id<<"를"<<dir<<"방향으로\n";
         //id번 dir 방향으로 이동 
+      //   cout<<i<<"번째에 현황\n";
         bfs(id,dir); 
        // if(flag){
-       //  cout<<i<<"번째에 현황\n";
+        
         // for(int j=1;j<=n;j++){
           // if(!person[j].deleted)cout<<j<<": "<<person[j].power<<"\n";
          //}
@@ -218,7 +224,10 @@ int main() {
     }
     int total=0;
     for(int i=1;i<=n;i++){
-       if(!person[i].deleted) total+=person[i].damage;
+       if(!person[i].deleted){
+           total+=person[i].damage;
+           cout<<i<<"의 데미지"<< person[i].damage<<"\n";
+       }
     }
     cout<<total;
 
