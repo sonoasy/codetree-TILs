@@ -30,7 +30,7 @@ bool flag=true;
 void bfs(int id,int dir){
   //id 기사를 dir방향으로 이동 
   //{id 별, 데미지 현황=함정 갯수 }  
-  vector<ci>tmp; 
+  vector<int>tmp; 
   queue<int>qq; 
   if(person[id].deleted)return;
   qq.push(id); 
@@ -65,7 +65,7 @@ void bfs(int id,int dir){
              //  cout<<"못움직임\n"; 
               flag=false; return;
             }
-            if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
+           // if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0)nid.insert(info[nr][nc]); 
             
         }
@@ -80,7 +80,7 @@ void bfs(int id,int dir){
               // cout<<"못움직임\n"; 
                flag=false;  return;
             }
-            if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
+           // if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0)nid.insert(info[nr][nc]); 
          }
      }
@@ -93,7 +93,7 @@ void bfs(int id,int dir){
               // cout<<"못움직임\n";
                flag=false;  return;
             }
-            if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
+           // if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0){
                 nid.insert(info[nr][nc]); 
                 
@@ -110,14 +110,15 @@ void bfs(int id,int dir){
            //   cout<<"못움직임\n"; 
               flag=false; return;
             }
-            if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
+           // if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0)nid.insert(info[nr][nc]); 
          }
      }
      if(!flag)return;
      if(!flag)break; 
       //flag가 false가 되지 않았을 경우, search에 id,damage를 넣어주고 
-      tmp.push_back({cid,damage}); 
+      tmp.push_back({cid}); 
+     // cout<<cid<<"에 "<<damage<<"가해짐\n";
      //기사인 목록을 큐에 넣어준다  
       for(auto ss:nid){
        // cout<<"움직일 기사:"<<ss<<"\n";
@@ -129,14 +130,12 @@ void bfs(int id,int dir){
   if(!flag)return; 
   //person 갱신 
   for(int i=0;i<tmp.size();i++){
-    int id=tmp[i].first;
-    int damage=tmp[i].second;
+    int id=tmp[i];
+   
     person[id].r+=dr[dir];
     person[id].c+=dc[dir];
-    person[id].damage+=damage;
-    person[id].power-=damage; 
    // cout<<id<<"에 "<<damage<<"가해져서"<<person[id].power<<"남음\n";
-    if(person[id].power<=0)person[id].deleted=1; 
+    
   }
   //info 갱신 
   info.assign(l+1,vector<int>(l+1,0)); 
@@ -147,6 +146,23 @@ void bfs(int id,int dir){
      int c=person[i].c;
      int h=person[i].h;
      int w=person[i].w;  
+     //여기서 데미지 갱신 
+     int cnt=0;
+     for(int j=r;j<r+h;j++){
+        for(int k=c;k<c+w;k++){
+            if(i!=id){
+               if(arr[j][k]==1){
+                 cnt++; 
+               }
+            }
+        }
+     }
+     person[i].damage+=cnt; 
+     person[i].power-=cnt;
+     if(person[id].power<=0){
+        person[id].deleted=1; 
+        continue; 
+     }
      for(int j=r;j<r+h;j++){
         for(int k=c;k<c+w;k++){
             info[j][k]=i; 
@@ -183,22 +199,22 @@ int main() {
     int id,dir;
     for(int i=1;i<=q;i++){
         cin>>id>>dir;
-      //  cout<<id<<"를"<<dir<<"방향으로\n";
+     //   cout<<id<<"를"<<dir<<"방향으로\n";
         //id번 dir 방향으로 이동 
         bfs(id,dir); 
-        if(i==7){
-        // cout<<i<<"번째에 현황\n";
-         for(int j=1;j<=n;j++){
+       // if(flag){
+       //  cout<<i<<"번째에 현황\n";
+        // for(int j=1;j<=n;j++){
           // if(!person[j].deleted)cout<<j<<": "<<person[j].power<<"\n";
-         }
-          for(int j=1;j<=l;j++){
-            for(int k=1;k<=l;k++){
-            //   cout<<info[j][k];
-            }
-            //cout<<'\n';
-          }
-        }
-        
+         //}
+        //  for(int j=1;j<=l;j++){
+         //   for(int k=1;k<=l;k++){
+        //       cout<<info[j][k];
+        //    }
+       //     cout<<'\n';
+       //   }
+       // }
+      //  else cout<<"못움직임\n";
     }
     int total=0;
     for(int i=1;i<=n;i++){
