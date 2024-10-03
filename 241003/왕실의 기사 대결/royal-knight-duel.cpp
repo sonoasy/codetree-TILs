@@ -226,7 +226,7 @@ int main() {
     for(int i=1;i<=n;i++){
        if(!person[i].deleted){
            total+=person[i].damage;
-           cout<<i<<"의 데미지"<< person[i].damage<<"\n";
+         //  cout<<i<<"의 데미지"<< person[i].damage<<"\n";
        }
     }
     cout<<total;
