@@ -26,14 +26,15 @@ vector<vector<int>>info;
 int l,n,q;  //배열 크기,기사 수,명령 수 
 //기사 정보 id
 map<int,knight>person; 
-
+bool flag=true; 
 void bfs(int id,int dir){
   //id 기사를 dir방향으로 이동 
   //{id 별, 데미지 현황=함정 갯수 }  
   vector<ci>tmp; 
   queue<int>qq; 
+  if(person[id].deleted)return;
   qq.push(id); 
-  bool flag=true; 
+  flag=true; 
   while(!qq.empty()){
      int cid=qq.front();
      qq.pop(); 
@@ -61,7 +62,7 @@ void bfs(int id,int dir){
             int nr=r-1;
             int nc=i; 
             if(nr<=0 || nc<=0 || nr>l  || nc>l || arr[nr][nc]==2){
-              // cout<<"못움직임\n"; 
+             //  cout<<"못움직임\n"; 
               flag=false; return;
             }
             if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
@@ -76,7 +77,7 @@ void bfs(int id,int dir){
             int nr=i;
             int nc=c+w; 
             if(nr<=0 || nc<=0 || nr>l  || nc>l || arr[nr][nc]==2){
-               //cout<<"못움직임\n"; 
+              // cout<<"못움직임\n"; 
                flag=false;  return;
             }
             if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
@@ -89,14 +90,14 @@ void bfs(int id,int dir){
             int nr=r+h;
             int nc=i; 
             if(nr<=0 || nc<=0 || nr>l  || nc>l || arr[nr][nc]==2){
-               //cout<<"못움직임\n";
+              // cout<<"못움직임\n";
                flag=false;  return;
             }
             if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0){
                 nid.insert(info[nr][nc]); 
                 
-               // cout<<nr<<","<<nc<<" "<<info[nr][nc]<<"추가";
+              //  cout<<nr<<","<<nc<<" "<<info[nr][nc]<<"추가";
             }
          }
      }
@@ -106,7 +107,7 @@ void bfs(int id,int dir){
             int nr=i;
             int nc=c-1; 
             if(nr<=0 || nc<=0 || nr>l  || nc>l || arr[nr][nc]==2){
-              // cout<<"못움직임\n"; 
+           //   cout<<"못움직임\n"; 
               flag=false; return;
             }
             if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
@@ -181,16 +182,23 @@ int main() {
     //id,방향 
     int id,dir;
     for(int i=1;i<=q;i++){
-        cin>>id>>dir; 
-       // cout<<i<<"번째에 현황\n";
-       // for(int j=1;j<=l;j++){
-        //    for(int k=1;k<=l;k++){
-          //      cout<<info[j][k];
-         //   }
-            //cout<<'\n';
-       //}
+        cin>>id>>dir;
+      //  cout<<id<<"를"<<dir<<"방향으로\n";
         //id번 dir 방향으로 이동 
         bfs(id,dir); 
+        if(i==7){
+        // cout<<i<<"번째에 현황\n";
+         for(int j=1;j<=n;j++){
+          // if(!person[j].deleted)cout<<j<<": "<<person[j].power<<"\n";
+         }
+          for(int j=1;j<=l;j++){
+            for(int k=1;k<=l;k++){
+            //   cout<<info[j][k];
+            }
+            //cout<<'\n';
+          }
+        }
+        
     }
     int total=0;
     for(int i=1;i<=n;i++){
