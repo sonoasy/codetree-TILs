@@ -61,7 +61,8 @@ void bfs(int id,int dir){
             int nr=r-1;
             int nc=i; 
             if(nr<=0 || nc<=0 || nr>l  || nc>l || arr[nr][nc]==2){
-              // cout<<"못움직임\n"; flag=false; return;
+              // cout<<"못움직임\n"; 
+              flag=false; return;
             }
             if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0)nid.insert(info[nr][nc]); 
@@ -75,7 +76,8 @@ void bfs(int id,int dir){
             int nr=i;
             int nc=c+w; 
             if(nr<=0 || nc<=0 || nr>l  || nc>l || arr[nr][nc]==2){
-               //cout<<"못움직임\n"; flag=false;  return;
+               //cout<<"못움직임\n"; 
+               flag=false;  return;
             }
             if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0)nid.insert(info[nr][nc]); 
@@ -87,7 +89,8 @@ void bfs(int id,int dir){
             int nr=r+h;
             int nc=i; 
             if(nr<=0 || nc<=0 || nr>l  || nc>l || arr[nr][nc]==2){
-               //cout<<"못움직임\n"; flag=false;  return;
+               //cout<<"못움직임\n";
+               flag=false;  return;
             }
             if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0){
@@ -103,7 +106,8 @@ void bfs(int id,int dir){
             int nr=i;
             int nc=c-1; 
             if(nr<=0 || nc<=0 || nr>l  || nc>l || arr[nr][nc]==2){
-              // cout<<"못움직임\n"; flag=false; return;
+              // cout<<"못움직임\n"; 
+              flag=false; return;
             }
             if(cid!=id && arr[nr][nc]==1)damage++; //함정일 경우 
             if(info[nr][nc]>0)nid.insert(info[nr][nc]); 
