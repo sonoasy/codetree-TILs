@@ -63,7 +63,7 @@ void Move(){
     if(person[i].isout)continue;
     int r=person[i].r; int destr=person[i].destr;
     int c=person[i].c; int destc=person[i].destc; 
-    if(r<=0 || c<=0 || r>n || c>n)continue; //격자내에 있을때만
+    if(r<=0 || c<=0 )continue; //격자내에 있을때만
 
     int mins=10000000; int mindir=-1;    
     for(int j=0;j<4;j++){
@@ -94,6 +94,8 @@ void Move(){
     visited[nocandi[i].first][nocandi[i].second]=1; 
   }
 }
+
+
 
 void goBase(int t){
  //경로에 편의점이 있어도 되나?    
@@ -139,6 +141,7 @@ bool check(){
     }
     return flag; 
 }
+//디버깅용 
 void print(){
    //각 사람들의 위치 파악 
    for(int i=1;i<=m;i++){
@@ -173,6 +176,7 @@ int main() {
        t++; 
        
     }
+
    cout<<t; 
 
     return 0;
