@@ -164,11 +164,13 @@ int findcolor(int curid,int curcolor,int time){
     //일단 내가 바껴야되는가?     
     int ncolor=curcolor; 
     int ntime=time; 
+    
     if(arr[curid].changetime>time){
       ncolor=arr[curid].changecolor; 
       ntime=arr[curid].changetime; 
+      //cout<<"여기안와?"<<ncolor<<" "<<ntime; 
     }
-    if(parent[curid]==-1)return curcolor; 
+    if(parent[curid]==-1)return ncolor; 
     return findcolor(parent[curid],ncolor,ntime); 
 
 
