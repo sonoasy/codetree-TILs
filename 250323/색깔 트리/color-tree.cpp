@@ -78,7 +78,6 @@ vector<int> checkscore(int curnode,int changecolor,int changetime){
       //기존 칼라칩도 바꾸기 
       colorlist[curnode][arr[curnode].color-1]-=1;
       arr[curnode].color=changecolor;    
-
       colorlist[curnode][arr[curnode].color-1]+=1;  //이거 괜찮음? 
        
       arr[curnode].recenttime=changetime; 
@@ -160,12 +159,28 @@ vector<int> checkscore(int curnode,int changecolor,int changetime){
     return colorlist[curnode]; 
 }
 
+int findcolor(int curid,int curcolor,int time){
+
+    //일단 내가 바껴야되는가?     
+    int ncolor=curcolor; 
+    int ntime=time; 
+    if(arr[curid].changetime>time){
+      ncolor=arr[curid].changecolor; 
+      ntime=arr[curid].changetime; 
+    }
+    if(parent[curid]==-1)return curcolor; 
+    return findcolor(parent[curid],ncolor,ntime); 
+
+
+
+}
+
 
 int main() {
   
   ios::sync_with_stdio(false);
   cin.tie(NULL); 
-  
+
   int q;
   cin>>q;
 
@@ -191,7 +206,7 @@ int main() {
        //색깔 현황 
        arr[mid].changecolor=-1; //바뀌어야하는 색깔 
        arr[mid].changetime=-1; //요청받은 시간  
-       arr[mid].recenttime=-1; //최근에 색깔 바뀐 시간 
+       arr[mid].recenttime=time; //최근에 색깔 바뀐 시간 
        colorlist[mid].assign(6,0); //초기화
        colorlist[mid][color-1]=1; 
        parent[mid]=pid; //부모 
@@ -208,19 +223,14 @@ int main() {
         arr[mid].changecolor=color;
         arr[mid].changetime=time; 
     }
-    if(cmd==300){ //색깔 조회   -> O(depth)
+    if(cmd==300){ //색깔 조회   -> O(depth)   -> 이거로 바뀍!!!!!!!!!!!!!!!! 
         //현재위치부터 위로 거슬러 올라가면서 위쪽에서 가장 최근에 바뀐 부모 찾아서 올라가기 
         // -> 그냥 가장 꼭대기 까지 간다음에 차례로 하나씩만 거슬러 내려와서 색 갱신해주기 
        cin>>mid; 
+       //그냥 거슬러 올라가서 제일 최근 색깔만 가져오기  
 
-
-      for(auto top: rootnode){
-           // cout<<top<<"탐색\n";
-            //지금 노드, 바꿔야되는 색, 바꿔야되는 시간 
-            vector<int>t=checkscore(top,arr[top].changecolor,arr[top].changetime);
-       } 
-       cout<<arr[mid].color<<"\n"; 
-
+       int mycolor=findcolor(mid,arr[mid].color,arr[mid].recenttime);  
+       cout<<mycolor<<"\n";
     }
     if(cmd==400){ //점수 조회 - 모든 노드의 가치 계산  O(N)
          //결국 점수가 이미 결정되어야함. 
