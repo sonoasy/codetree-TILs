@@ -163,6 +163,9 @@ vector<int> checkscore(int curnode,int changecolor,int changetime){
 
 int main() {
   
+  ios::sync_with_stdio(false);
+  cin.tie(NULL); 
+  
   int q;
   cin>>q;
 
@@ -210,12 +213,7 @@ int main() {
         // -> 그냥 가장 꼭대기 까지 간다음에 차례로 하나씩만 거슬러 내려와서 색 갱신해주기 
        cin>>mid; 
 
-       
 
-       //int mycolor=findcolor(mid,arr[mid].color,arr[mid].changetime);
-       //바꾸지 않고 출력만 하기 
-      // cout<<mycolor<<"\n";
-     //  //그냥 여기서 점수 돌려? 
       for(auto top: rootnode){
            // cout<<top<<"탐색\n";
             //지금 노드, 바꿔야되는 색, 바꿔야되는 시간 
