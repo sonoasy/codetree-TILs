@@ -116,27 +116,7 @@ void propagation(string turntype,ci tmaster,int x,int dir,vector<vector<int>>&af
         */
         return; //전파 종료 
        }
-       if(x<=0){
-      /*  
-        cout<<"\n";
-        cout<<"전파 후 faith\n";
-        for(int i=0;i<n;i++){
-          for(int j=0;j<n;j++){
-             cout<<faith[i][j];
-          }
-           cout<<"\n";
-        }
-        cout<<"신봉음식\n";
-        for(int i=0;i<n;i++){
-         for(int j=0;j<n;j++){
-            cout<<type[i][j];
-         }
-         cout<<"\n";
-        }
-       */
-        return; //전파 종료  
        
-       }
        if(type[nr][nc]==turntype){
           cur=nr; cuc=nc;
          // cout<<nr<<","<<nc<<"다녀감";
@@ -151,11 +131,11 @@ void propagation(string turntype,ci tmaster,int x,int dir,vector<vector<int>>&af
      //    cout<<"강한전파";
           affected[nr][nc]+=2; 
           x-=(faith[nr][nc]+1);
-          if(x<=0)return; //전파 종료 
+          
           faith[nr][nc]+=1;
           //신봉음식 바뀜 - 동화됨 
           type[nr][nc]=turntype; 
-          
+          if(x<=0)return; //전파 종료 
        }
        else{ //약한 전파 
       //    cout<<"약한전파";
@@ -357,6 +337,20 @@ void SCORE(){
    }
    for(int i=0;i<7;i++)cout<<num[i]<<" ";
    cout<<'\n';
+ /*
+   for(int i=0;i<n;i++){
+      for(int j=0;j<n;j++){
+         cout<<faith[i][j]<<" ";
+      }
+      cout<<"\n";
+   }
+   for(int i=0;i<n;i++){
+      for(int j=0;j<n;j++){
+         cout<<type[i][j]<<" ";
+      }
+      cout<<"\n";
+   }
+   */
 }
 
 int main() {
